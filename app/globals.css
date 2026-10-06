@@ -1,7 +1,51 @@
 @import "tailwindcss";
 
-/* Harita yakınlaştırma düğmeleri dokunmatik için en az 44px olsun. */
+/* Koyu tema renkleri. Harita renkleri components/map/mapStyle.ts içinde, bunlarla uyumlu tutulur. */
+@theme {
+  --color-bg: #050b16;
+  --color-surface: #0c192b;
+  --color-surface-2: #132641;
+  --color-line: #213a5a;
+  --color-ink: #e9eff8;
+  --color-muted: #8da3bf;
+  --color-accent: #34d399;
+  --color-accent-strong: #10b981;
+  --color-accent-ink: #032a1f;
+  --color-danger: #fb7185;
+  --color-danger-strong: #e11d48;
+  --color-gold: #fbbf24;
+  --color-sky: #38bdf8;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+}
+
+/* Harita yakınlaştırma düğmeleri: dokunmatik için en az 44px, koyu temaya uygun. */
+.maplibregl-ctrl-group {
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-line);
+}
+
 .maplibregl-ctrl-group button {
   width: 44px;
   height: 44px;
+  background-color: transparent;
+}
+
+.maplibregl-ctrl-group button:not(:disabled):hover {
+  background-color: var(--color-line);
+}
+
+.maplibregl-ctrl-group button + button {
+  border-top: 1px solid var(--color-line);
+}
+
+.maplibregl-ctrl-group button .maplibregl-ctrl-icon {
+  filter: invert(1);
 }

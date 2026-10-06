@@ -22,14 +22,14 @@ export default function HintList({ hints, totalHints, difficulty, canOpen, openi
     <section aria-label="İpuçları" className="flex flex-col gap-3">
       <ol className="flex flex-col gap-2">
         {hints.map((hint, index) => (
-          <li key={index} className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm leading-relaxed">
-            <span className="mb-1 block text-xs font-semibold text-emerald-700">İpucu {index + 1}</span>
+          <li key={index} className="rounded-xl border border-accent/30 bg-accent/10 p-3 text-sm leading-relaxed">
+            <span className="mb-1 block text-xs font-semibold text-accent">İpucu {index + 1}</span>
             {hint}
           </li>
         ))}
       </ol>
-      <p className="text-xs text-slate-500">
-        İpucu katsayısı şu an <strong>{formatMultiplier(multipliers[hints.length - 1])}</strong>
+      <p className="text-xs text-muted">
+        İpucu katsayısı şu an <strong className="text-ink">{formatMultiplier(multipliers[hints.length - 1])}</strong>
         {hasMore ? `; sonraki ipucunda ${formatMultiplier(multipliers[hints.length])} olur.` : "; tüm ipuçları açık."}
       </p>
       {hasMore ? (
@@ -37,7 +37,7 @@ export default function HintList({ hints, totalHints, difficulty, canOpen, openi
           type="button"
           onClick={onOpen}
           disabled={!canOpen || opening}
-          className="min-h-11 rounded-xl border border-emerald-600 px-4 font-semibold text-emerald-700 disabled:border-slate-300 disabled:text-slate-400"
+          className="min-h-11 rounded-xl border border-accent px-4 font-semibold text-accent transition hover:bg-accent/10 disabled:border-line disabled:text-muted"
         >
           {opening ? "Açılıyor…" : `Sonraki ipucunu aç (${hints.length}/${totalHints})`}
         </button>

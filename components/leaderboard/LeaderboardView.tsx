@@ -27,7 +27,7 @@ function Segmented<T extends string>({
   onChange: (value: T) => void;
 }) {
   return (
-    <div role="group" aria-label={label} className="flex gap-1 overflow-x-auto rounded-xl bg-slate-100 p-1">
+    <div role="group" aria-label={label} className="flex gap-1 overflow-x-auto rounded-xl bg-surface-2 p-1">
       {options.map((option) => (
         <button
           key={option.value}
@@ -35,7 +35,7 @@ function Segmented<T extends string>({
           onClick={() => onChange(option.value)}
           aria-pressed={option.value === value}
           className={`min-h-11 flex-1 whitespace-nowrap rounded-lg px-3 text-sm font-semibold ${
-            option.value === value ? "bg-white shadow-sm" : "text-slate-600"
+            option.value === value ? "bg-accent text-accent-ink" : "text-muted hover:text-ink"
           }`}
         >
           {option.label}
@@ -107,11 +107,11 @@ export default function LeaderboardView({ initialMap, sessionId }: LeaderboardVi
         options={(Object.keys(PERIOD_LABELS) as Period[]).map((p) => ({ value: p, label: PERIOD_LABELS[p] }))}
       />
 
-      {error ? <p className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-sm text-rose-700">{error}</p> : null}
-      {loading ? <p className="text-slate-600">Yükleniyor…</p> : null}
+      {error ? <p className="rounded-xl border border-danger/40 bg-danger/10 p-3 text-sm text-danger">{error}</p> : null}
+      {loading ? <p className="text-muted">Yükleniyor…</p> : null}
 
       {!loading && data && data.entries.length === 0 ? (
-        <p className="rounded-xl border border-slate-200 bg-white p-4 text-center text-slate-600">
+        <p className="rounded-xl border border-line bg-surface p-4 text-center text-muted">
           Bu filtrede henüz skor yok. İlk sen ol!
         </p>
       ) : null}
@@ -124,12 +124,12 @@ export default function LeaderboardView({ initialMap, sessionId }: LeaderboardVi
               <li
                 key={`${entry.rank}-${entry.nickname}-${entry.finishedAt}`}
                 className={`flex items-center gap-3 rounded-xl border p-3 ${
-                  isMe ? "border-emerald-500 bg-emerald-50" : "border-slate-200 bg-white"
+                  isMe ? "border-accent bg-accent/10" : "border-line bg-surface"
                 }`}
               >
-                <span className="w-8 text-right font-bold text-slate-500">{entry.rank}</span>
+                <span className="w-8 text-right font-bold text-muted">{entry.rank}</span>
                 <span className="flex-1 truncate font-semibold">{entry.nickname}</span>
-                <span className="text-xs text-slate-500">{DIFFICULTY_LABELS[entry.difficulty]}</span>
+                <span className="text-xs text-muted">{DIFFICULTY_LABELS[entry.difficulty]}</span>
                 <span className="font-bold">{entry.totalScore.toLocaleString("tr-TR")}</span>
               </li>
             );
@@ -138,8 +138,8 @@ export default function LeaderboardView({ initialMap, sessionId }: LeaderboardVi
       ) : null}
 
       {meOutsideTop && me ? (
-        <div className="rounded-xl border border-emerald-500 bg-emerald-50 p-3">
-          <p className="mb-1 text-xs font-semibold text-emerald-700">Senin derecen</p>
+        <div className="rounded-xl border border-accent bg-accent/10 p-3">
+          <p className="mb-1 text-xs font-semibold text-accent">Senin derecen</p>
           <div className="flex items-center gap-3">
             <span className="w-8 text-right font-bold">{me.rank}</span>
             <span className="flex-1 truncate font-semibold">{me.nickname}</span>

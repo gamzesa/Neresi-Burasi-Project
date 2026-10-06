@@ -6,7 +6,7 @@ import type { FeatureCollection } from "geojson";
 import { useEffect, useRef } from "react";
 import type { LatLng } from "@/lib/game/geo";
 import type { GameMap as GameMapType } from "@/lib/game/scoring";
-import { TURKEY_BOUNDS, WORLD_BOUNDS, buildMapStyle } from "./mapStyle";
+import { HOVER_LAYERS, hoverFilter, TURKEY_BOUNDS, WORLD_BOUNDS, buildMapStyle } from "./mapStyle";
 
 maplibregl.setWorkerUrl("/vendor/maplibre-gl-worker.mjs");
 
@@ -79,6 +79,20 @@ export default function GameMap({ map, guess, answer, disabled = false, onGuessC
       ]);
     }
     instance.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
+    // Üzerine gelinen ülke/il koyulaşır.
+    const setHover = (code: string) => {
+      for (const layer of HOVER_LAYERS) instance.setFilter(layer, hoverFilter(code));
+    };
+    instance.on("mousemove", "areas-fill", (e) => {
+      const code = e.features?.[0]?.properties?.code;
+      if (typeof code !== "string") return;
+      setHover(code);
+      instance.getCanvas().style.cursor = handlersRef.current.disabled ? "" : "pointer";
+    });
+    instance.on("mouseleave", "areas-fill", () => {
+      setHover("");
+      instance.getCanvas().style.cursor = "";
+    });
     instance.on("click", (e) => {
       const { disabled: isDisabled, onGuessChange: onChange } = handlersRef.current;
       if (isDisabled || !onChange) return;
@@ -117,14 +131,10 @@ export default function GameMap({ map, guess, answer, disabled = false, onGuessC
     if (instance.isStyleLoaded()) apply();
     else instance.once("load", apply);
 
-    // Sonuç gösterilirken tahmin ve doğru konum birlikte görünür; sonraki soruda tüm harita yeniden görünür.
+    // Sonuç gösterilirken harita yakınlaştırılmaz; sonraki soruya geçilince tüm harita yeniden görünür.
     const hadAnswer = hadAnswerRef.current;
     hadAnswerRef.current = Boolean(answer);
-    if (guess && answer) {
-      const bounds = new maplibregl.LngLatBounds([guess.lng, guess.lat], [guess.lng, guess.lat]);
-      bounds.extend([answer.lng, answer.lat]);
-      instance.fitBounds(bounds, { padding: 90, maxZoom: map === "world" ? 6 : 9, duration: 600 });
-    } else if (hadAnswer && !answer) {
+    if (hadAnswer && !answer) {
       instance.fitBounds(map === "world" ? WORLD_BOUNDS : TURKEY_BOUNDS, { padding: 8, duration: 400 });
     }
   }, [guess, answer, map]);
