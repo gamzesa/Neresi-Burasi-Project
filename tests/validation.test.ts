@@ -1,42 +1,51 @@
 import { describe, expect, it } from "vitest";
-import { containsProfanity } from "@/lib/game/profanity";
+import {
+  ADJECTIVES,
+  MAX_NAME_NUMBER,
+  NOUNS,
+  buildNickname,
+  isValidNameParts,
+  randomNameParts,
+} from "@/lib/game/nicknames";
 import {
   guessRequestSchema,
   leaderboardQuerySchema,
-  nicknameSchema,
+  nameSelectionSchema,
+  nextRequestSchema,
   startRequestSchema,
 } from "@/lib/validation";
 
 const uuid = "123e4567-e89b-42d3-a456-426614174000";
 
-describe("nicknameSchema", () => {
-  it("boşlukları kırpar", () => {
-    expect(nicknameSchema.parse("  Gamze  ")).toBe("Gamze");
+describe("rastgele ad", () => {
+  it("sözcüklerden ad kurar", () => {
+    expect(buildNickname({ adjective: 0, noun: 0, number: 42 })).toBe(`${ADJECTIVES[0]} ${NOUNS[0]} 42`);
   });
 
-  it("çok kısa ve çok uzun adı reddeder", () => {
-    expect(nicknameSchema.safeParse("a").success).toBe(false);
-    expect(nicknameSchema.safeParse(" a ").success).toBe(false);
-    expect(nicknameSchema.safeParse("a".repeat(21)).success).toBe(false);
-    expect(nicknameSchema.safeParse("a".repeat(20)).success).toBe(true);
+  it("her kombinasyon veritabanındaki 2-20 karakter sınırına sığar", () => {
+    const longestAdjective = Math.max(...ADJECTIVES.map((w) => w.length));
+    const longestNoun = Math.max(...NOUNS.map((w) => w.length));
+    const longest = longestAdjective + 1 + longestNoun + 1 + String(MAX_NAME_NUMBER).length;
+    expect(longest).toBeLessThanOrEqual(20);
   });
 
-  it("küfürlü adı reddeder", () => {
-    expect(nicknameSchema.safeParse("siktir").success).toBe(false);
-  });
-});
-
-describe("containsProfanity", () => {
-  it("harf değiştirmeyi yakalar", () => {
-    expect(containsProfanity("s1kt1r")).toBe(true);
-    expect(containsProfanity("S İ K T İ R")).toBe(true);
+  it("listelerde tekrar eden sözcük yok", () => {
+    expect(new Set(ADJECTIVES).size).toBe(ADJECTIVES.length);
+    expect(new Set(NOUNS).size).toBe(NOUNS.length);
   });
 
-  it("masum adları geçirir", () => {
-    expect(containsProfanity("Ayşe")).toBe(false);
-    expect(containsProfanity("Mehmet")).toBe(false);
-    expect(containsProfanity("Sıla")).toBe(false);
-    expect(containsProfanity("Kaşif42")).toBe(false);
+  it("aralık dışı parçaları reddeder", () => {
+    expect(isValidNameParts({ adjective: ADJECTIVES.length, noun: 0, number: 0 })).toBe(false);
+    expect(isValidNameParts({ adjective: 0, noun: -1, number: 0 })).toBe(false);
+    expect(isValidNameParts({ adjective: 0, noun: 0, number: MAX_NAME_NUMBER + 1 })).toBe(false);
+    expect(isValidNameParts({ adjective: 0.5, noun: 0, number: 0 })).toBe(false);
+    expect(() => buildNickname({ adjective: 999, noun: 0, number: 0 })).toThrow(RangeError);
+  });
+
+  it("randomNameParts her zaman geçerli parça üretir", () => {
+    for (let i = 0; i < 200; i++) expect(isValidNameParts(randomNameParts())).toBe(true);
+    expect(isValidNameParts(randomNameParts(() => 0.999999))).toBe(true);
+    expect(isValidNameParts(randomNameParts(() => 0))).toBe(true);
   });
 });
 
@@ -55,6 +64,17 @@ describe("istek şemaları", () => {
     expect(guessRequestSchema.safeParse({ sessionId: uuid, lat: 91, lng: 30 }).success).toBe(false);
     expect(guessRequestSchema.safeParse({ sessionId: uuid, lat: 40, lng: 181 }).success).toBe(false);
     expect(guessRequestSchema.safeParse({ sessionId: "x", lat: 40, lng: 30 }).success).toBe(false);
+  });
+
+  it("next yalnızca ad parçalarını kabul eder; serbest metin ad yok sayılır", () => {
+    const ok = nextRequestSchema.safeParse({ sessionId: uuid, name: { adjective: 1, noun: 2, number: 3 } });
+    expect(ok.success).toBe(true);
+
+    const free = nextRequestSchema.parse({ sessionId: uuid, nickname: "Serbest Yazi" });
+    expect(free).toEqual({ sessionId: uuid });
+
+    expect(nameSelectionSchema.safeParse({ adjective: 1000, noun: 0, number: 0 }).success).toBe(false);
+    expect(nameSelectionSchema.safeParse({ adjective: "1", noun: 0, number: 0 }).success).toBe(false);
   });
 
   it("leaderboard period varsayılanı all", () => {

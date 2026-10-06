@@ -46,14 +46,16 @@ for (let i = 1; i <= 5; i++) {
 check("oyun bitti", last.body.finished === true, last);
 check("bitmiş oyuna tahmin 409", (await call("POST", "/api/game/guess", { sessionId, lat: 39, lng: 35 })).status === 409);
 
-const badName = await call("POST", "/api/game/next", { sessionId, nickname: "siktir" });
-check("küfürlü takma ad 400", badName.status === 400, badName);
-const named = await call("POST", "/api/game/next", { sessionId, nickname: "Deneme Oyuncu" });
-check("takma ad kaydedilir", named.status === 200 && named.body.nickname === "Deneme Oyuncu", named);
+const badName = await call("POST", "/api/game/next", { sessionId, name: { adjective: 999, noun: 0, number: 0 } });
+check("geçersiz ad parçası 400", badName.status === 400, badName);
+const freeText = await call("POST", "/api/game/next", { sessionId, nickname: "Serbest Yazi" });
+check("serbest metin ad kaydedilmez", freeText.status === 200 && !freeText.body.nickname, freeText);
+const named = await call("POST", "/api/game/next", { sessionId, name: { adjective: 0, noun: 0, number: 7 } });
+check("takma ad kaydedilir", named.status === 200 && named.body.nickname === "Cesur Kartal 7", named);
 
 const board = await fetch(`${base}/api/leaderboard?map=turkey&difficulty=easy&period=all&sessionId=${sessionId}`).then((r) => r.json());
-check("sıralamada kendi derecem var", board.me?.nickname === "Deneme Oyuncu", board);
+check("sıralamada kendi derecem var", board.me?.nickname === "Cesur Kartal 7", board);
 
 console.log(failed === 0 ? "\nTüm kontroller geçti." : `\n${failed} kontrol başarısız.`);
-console.log("Not: Bu betik veritabanında 'Deneme Oyuncu' adlı gerçek bir kayıt bırakır; işin bitince silin.");
+console.log("Not: Bu betik veritabanında 'Cesur Kartal 7' adlı gerçek bir kayıt bırakır; işin bitince silin.");
 process.exit(failed === 0 ? 0 : 1);

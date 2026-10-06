@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState, type FormEvent } from "react";
-import { NICKNAME_MAX, NICKNAME_MIN } from "@/lib/validation";
+import { useState } from "react";
+import { buildNickname, randomNameParts } from "@/lib/game/nicknames";
 import { ApiError, gameApi } from "@/lib/gameApi";
 import type { GameMap } from "@/lib/game/scoring";
 
@@ -14,18 +14,18 @@ interface FinishedPanelProps {
 }
 
 export default function FinishedPanel({ sessionId, map, totalScore, onPlayAgain }: FinishedPanelProps) {
-  const [nickname, setNickname] = useState("");
+  // Ad serbest yazılmaz; hazır sözcüklerden üretilir ve sunucu doğrular.
+  const [nameParts, setNameParts] = useState(() => randomNameParts());
   const [saved, setSaved] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
-  async function save(event: FormEvent) {
-    event.preventDefault();
+  async function save() {
     setSaving(true);
     setError(null);
     try {
-      const result = await gameApi.next(sessionId, nickname);
-      setSaved(result.nickname ?? nickname.trim());
+      const result = await gameApi.next(sessionId, nameParts);
+      setSaved(result.nickname ?? buildNickname(nameParts));
     } catch (e) {
       setError(e instanceof ApiError ? e.message : "Kaydedilemedi, tekrar dene.");
     } finally {
@@ -45,29 +45,31 @@ export default function FinishedPanel({ sessionId, map, totalScore, onPlayAgain 
           Skorun <strong className="text-accent">{saved}</strong> adıyla sıralamaya eklendi.
         </p>
       ) : (
-        <form onSubmit={save} className="flex flex-col gap-2">
-          <label htmlFor="nickname" className="text-sm font-semibold">
-            Skorunu sıralamaya eklemek ister misin?
-          </label>
-          <input
-            id="nickname"
-            value={nickname}
-            onChange={(e) => setNickname(e.target.value)}
-            minLength={NICKNAME_MIN}
-            maxLength={NICKNAME_MAX}
-            placeholder={`Takma ad (${NICKNAME_MIN}–${NICKNAME_MAX} karakter)`}
-            className="min-h-11 rounded-xl border border-line bg-surface-2 px-3 text-ink placeholder:text-muted focus:border-accent focus:outline-none"
-          />
+        <div className="flex flex-col gap-2">
+          <p className="text-sm font-semibold">Skorunu sıralamaya eklemek ister misin?</p>
+          <div className="rounded-xl border border-line bg-surface-2 p-3 text-center">
+            <p className="text-xs text-muted">Sıralamada şu adla görünürsün</p>
+            <p className="text-xl font-bold text-accent">{buildNickname(nameParts)}</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setNameParts(randomNameParts())}
+            disabled={saving}
+            className="min-h-11 rounded-xl border border-line px-4 font-semibold transition hover:border-accent hover:text-accent disabled:text-muted"
+          >
+            Başka ad üret
+          </button>
           {error ? <p className="text-sm text-danger">{error}</p> : null}
           <button
-            type="submit"
-            disabled={saving || nickname.trim().length < NICKNAME_MIN}
+            type="button"
+            onClick={() => void save()}
+            disabled={saving}
             className="min-h-11 rounded-xl bg-accent px-4 font-semibold text-accent-ink transition hover:bg-accent-strong disabled:bg-surface-2 disabled:text-muted"
           >
             {saving ? "Kaydediliyor…" : "Sıralamaya ekle"}
           </button>
-          <p className="text-xs text-muted">İstemezsen atlayabilirsin; ad girmezsen skorun sıralamaya girmez.</p>
-        </form>
+          <p className="text-xs text-muted">İstemezsen atlayabilirsin; eklemezsen skorun sıralamaya girmez.</p>
+        </div>
       )}
 
       <div className="flex flex-col gap-2">

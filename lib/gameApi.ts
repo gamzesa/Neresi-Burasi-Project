@@ -1,4 +1,5 @@
 import type { getLeaderboard } from "@/lib/game/leaderboard";
+import type { NameParts } from "@/lib/game/nicknames";
 import type { Difficulty, GameMap } from "@/lib/game/scoring";
 import type { nextStep, openHint, startGame, submitGuess } from "@/lib/game/service";
 
@@ -44,7 +45,7 @@ export const gameApi = {
   start: (map: GameMap, difficulty: Difficulty) => post<StartResponse>("/api/game/start", { map, difficulty }),
   hint: (sessionId: string) => post<HintResponse>("/api/game/hint", { sessionId }),
   guess: (sessionId: string, lat: number, lng: number) => post<GuessResponse>("/api/game/guess", { sessionId, lat, lng }),
-  next: (sessionId: string, nickname?: string) => post<NextResponse>("/api/game/next", { sessionId, nickname }),
+  next: (sessionId: string, name?: NameParts) => post<NextResponse>("/api/game/next", { sessionId, name }),
 };
 
 export interface LeaderboardParams {

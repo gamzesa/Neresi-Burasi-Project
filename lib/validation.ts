@@ -1,19 +1,16 @@
 import { z } from "zod";
-import { containsProfanity } from "@/lib/game/profanity";
+import { ADJECTIVES, MAX_NAME_NUMBER, NOUNS } from "@/lib/game/nicknames";
 import { DIFFICULTIES, MAPS } from "@/lib/game/scoring";
 
 export const mapSchema = z.enum(MAPS);
 export const difficultySchema = z.enum(DIFFICULTIES);
 
-export const NICKNAME_MIN = 2;
-export const NICKNAME_MAX = 20;
-
-export const nicknameSchema = z
-  .string()
-  .trim()
-  .min(NICKNAME_MIN, `Takma ad en az ${NICKNAME_MIN} karakter olmalı`)
-  .max(NICKNAME_MAX, `Takma ad en fazla ${NICKNAME_MAX} karakter olabilir`)
-  .refine((v) => !containsProfanity(v), "Bu takma ad kullanılamaz");
+/** Sıralamadaki ad serbest metin değildir; yalnızca sözcük listesi sıra numaraları kabul edilir. */
+export const nameSelectionSchema = z.object({
+  adjective: z.number().int().min(0).max(ADJECTIVES.length - 1),
+  noun: z.number().int().min(0).max(NOUNS.length - 1),
+  number: z.number().int().min(0).max(MAX_NAME_NUMBER),
+});
 
 export const startRequestSchema = z.object({
   map: mapSchema,
@@ -32,7 +29,7 @@ export const guessRequestSchema = z.object({
 
 export const nextRequestSchema = z.object({
   sessionId: z.uuid(),
-  nickname: nicknameSchema.optional(),
+  name: nameSelectionSchema.optional(),
 });
 
 export const PERIODS = ["all", "week"] as const;

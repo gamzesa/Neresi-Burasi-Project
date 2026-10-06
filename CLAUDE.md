@@ -29,11 +29,11 @@ Arayüz dili Türkçedir. Kod (değişken, fonksiyon, dosya adları) İngilizce 
 
 ### Akış
 1. Ana sayfa: kullanıcı harita seçer (Dünya / Türkiye).
-2. Zorluk seçer (Kolay / Orta / Zor). Takma ad başta sorulmaz.
+2. Zorluk seçer (Kolay / Orta / Zor). Ad başta sorulmaz.
 3. Oyun 5 sorudan oluşur. Her soruda ilk ipucu otomatik gösterilir; kullanıcı isterse sonraki ipuçlarını açar.
 4. Kullanıcı haritaya dokunarak/tıklayarak tahminini yapar ve onaylar.
 5. Sonuç ekranı: doğru konum, tahmin ile arasındaki çizgi, mesafe ve kazanılan puan gösterilir.
-6. Oyun sonunda toplam puan gösterilir; oyuncu isterse takma adını girerek skorunu sıralama tablosuna ekler (zorunlu değil, hesap gerekmez). Ad girmeyen oyuncunun skoru sıralamaya girmez.
+6. Oyun sonunda toplam puan gösterilir; oyuncu isterse skorunu sıralama tablosuna ekler (zorunlu değil, hesap gerekmez). Ad serbest yazılmaz: oyuncuya "Cesur Kartal 42" gibi sözcük listelerinden üretilmiş bir ad önerilir, "Başka ad üret" ile değiştirebilir. Eklemeyen oyuncunun skoru sıralamaya girmez.
 
 ### İpucu sayısı
 | Zorluk | Toplam ipucu |
@@ -89,7 +89,7 @@ Tüm sabitler tek dosyada (`lib/game/scoring.ts`) tutulur; başka yerde sabit sa
 - Oturum kimliği olmadan veya bitmiş bir oturuma tahmin gönderilemez; aynı soruya ikinci tahmin kabul edilmez.
 
 ## Sıralama (rank) sistemi
-- Kullanıcı hesabı yok; takma ad ile oynanır, ad oyun sonunda isteğe bağlı sorulur (2–20 karakter, boşluk kırpılır, küfür filtresi uygulanır).
+- Kullanıcı hesabı yok. Sıralamadaki ad serbest metin değildir (küfür/taklit sorununu kökten çözmek için): `lib/game/nicknames.ts` içindeki sıfat ve isim listelerinden ve 0–99 arası bir sayıdan üretilir. İstemci yalnızca liste sıra numaralarını gönderir, adı sunucu kurar ve doğrular. Hesap sistemi (Supabase Auth) ileride eklenirse ad hesaptan gelecek.
 - Sıralama harita bazlıdır (Dünya / Türkiye), zorluğa göre filtrelenebilir.
 - İlk 100 gösterilir. Kullanıcının kendi derecesi, ilk 100'de olmasa da gösterilir.
 - Zaman filtresi: Tüm zamanlar / Bu hafta.
