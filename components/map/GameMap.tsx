@@ -6,7 +6,7 @@ import type { FeatureCollection } from "geojson";
 import { useEffect, useRef } from "react";
 import type { LatLng } from "@/lib/game/geo";
 import type { GameMap as GameMapType } from "@/lib/game/scoring";
-import { TURKEY_BOUNDS, buildMapStyle } from "./mapStyle";
+import { TURKEY_BOUNDS, WORLD_BOUNDS, buildMapStyle } from "./mapStyle";
 
 maplibregl.setWorkerUrl("/vendor/maplibre-gl-worker.mjs");
 
@@ -60,9 +60,11 @@ export default function GameMap({ map, guess, answer, disabled = false, onGuessC
     const instance = new maplibregl.Map({
       container: containerRef.current,
       style: buildMapStyle(map, window.location.origin),
-      ...(map === "world"
-        ? { center: [15, 25] as [number, number], zoom: 1.3, minZoom: 0.8, maxZoom: 8 }
-        : { bounds: TURKEY_BOUNDS, fitBoundsOptions: { padding: 12 }, minZoom: 4, maxZoom: 10 }),
+      // Varsayılan görünüm haritanın tamamıdır; oyuncu yakınlaştırıp uzaklaştırabilir.
+      bounds: map === "world" ? WORLD_BOUNDS : TURKEY_BOUNDS,
+      fitBoundsOptions: { padding: 8 },
+      minZoom: map === "world" ? 0 : 3,
+      maxZoom: map === "world" ? 8 : 10,
       renderWorldCopies: false,
       attributionControl: false,
       dragRotate: false,
@@ -81,9 +83,21 @@ export default function GameMap({ map, guess, answer, disabled = false, onGuessC
       if (isDisabled || !onChange) return;
       onChange({ lat: e.lngLat.lat, lng: e.lngLat.lng });
     });
+    // Oyuncu haritaya dokunana kadar, kutu boyutu değiştikçe (ör. pencere yeniden boyutlanınca) tüm harita yeniden sığdırılır.
+    let userMoved = false;
+    instance.on("movestart", (e) => {
+      if ("originalEvent" in e && e.originalEvent) userMoved = true;
+    });
+    const defaultBounds = map === "world" ? WORLD_BOUNDS : TURKEY_BOUNDS;
+    const observer = new ResizeObserver(() => {
+      instance.resize();
+      if (!userMoved) instance.fitBounds(defaultBounds, { padding: 8, duration: 0 });
+    });
+    observer.observe(containerRef.current);
     mapRef.current = instance;
 
     return () => {
+      observer.disconnect();
       instance.remove();
       mapRef.current = null;
     };

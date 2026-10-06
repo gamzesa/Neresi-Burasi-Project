@@ -13,6 +13,12 @@ const COLORS = {
 const REGULAR = ["Noto Sans Regular"];
 const MEDIUM = ["Noto Sans Medium"];
 
+/** Varsayılan görünüm: dünya haritasının tamamı (Antarktika'nın büyük kısmı hariç) görünür. */
+export const WORLD_BOUNDS: [[number, number], [number, number]] = [
+  [-170, -58],
+  [180, 84],
+];
+
 export const TURKEY_BOUNDS: [[number, number], [number, number]] = [
   [25.6, 35.7],
   [44.9, 42.2],
