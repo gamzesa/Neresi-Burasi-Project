@@ -6,5 +6,5 @@ export default defineConfig([
   ...nextVitals,
   ...nextTs,
   { rules: { "@typescript-eslint/no-explicit-any": "error" } },
-  globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts"]),
+  globalIgnores(["public/vendor/**", ".next/**", "out/**", "build/**", "next-env.d.ts"]),
 ]);
