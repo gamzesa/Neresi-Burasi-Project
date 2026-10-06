@@ -1,6 +1,15 @@
 import { describe, expect, it } from "vitest";
 import { periodStart } from "@/lib/game/period";
-import { GameError, nextStep, openHint, pickRandom, startGame, submitGuess, type RegionChecker } from "@/lib/game/service";
+import {
+  GameError,
+  claimSession,
+  nextStep,
+  openHint,
+  pickRandom,
+  startGame,
+  submitGuess,
+  type RegionChecker,
+} from "@/lib/game/service";
 import type { QuestionRow } from "@/lib/game/types";
 import { createMemoryStore, makeQuestions } from "./helpers/memoryStore";
 
@@ -176,28 +185,65 @@ describe("nextStep ve tam oyun", () => {
     await expectGameError(openHint(store, { sessionId }), 409);
   });
 
-  it("bitmiş oyunda takma ad bir kez kaydedilir", async () => {
+  it("girişli oyuncunun oyunu hesabına bağlanır ve bitişte sıralamada sayılır", async () => {
     const { store, sessions } = setup();
-    const { sessionId } = await startGame(store, { map: "world", difficulty: "easy" });
-    for (let i = 0; i < 5; i++) {
-      await submitGuess(store, alwaysHit, { sessionId, lat: 0, lng: 0 });
-      await nextStep(store, { sessionId });
-    }
+    const started = await startGame(store, { map: "world", difficulty: "easy", userId: "user-1" });
+    expect(sessions.get(started.sessionId)!.user_id).toBe("user-1");
 
-    const saved = await nextStep(store, { sessionId, nickname: "Gamze" });
-    expect(saved).toMatchObject({ finished: true, nickname: "Gamze" });
-    expect(sessions.get(sessionId)!.nickname).toBe("Gamze");
-    await expectGameError(nextStep(store, { sessionId, nickname: "Baska" }), 409);
+    let last;
+    for (let i = 0; i < 5; i++) {
+      await submitGuess(store, alwaysHit, { sessionId: started.sessionId, lat: 0, lng: 0 });
+      last = await nextStep(store, { sessionId: started.sessionId });
+    }
+    expect(last).toMatchObject({ finished: true, ranked: true });
   });
 
-  it("takma ad olmadan biten oyun adsız kalır", async () => {
-    const { store, sessions } = setup();
+  it("misafir oyunu sıralamada sayılmaz (ranked=false)", async () => {
+    const { store } = setup();
     const { sessionId } = await startGame(store, { map: "world", difficulty: "easy" });
+    let last;
     for (let i = 0; i < 5; i++) {
       await submitGuess(store, alwaysHit, { sessionId, lat: 0, lng: 0 });
-      await nextStep(store, { sessionId });
+      last = await nextStep(store, { sessionId });
     }
-    expect(sessions.get(sessionId)!.nickname).toBeNull();
+    expect(last).toMatchObject({ finished: true, ranked: false });
+  });
+});
+
+describe("claimSession", () => {
+  async function finishedGuestGame() {
+    const env = setup();
+    const { sessionId } = await startGame(env.store, { map: "world", difficulty: "easy" });
+    for (let i = 0; i < 5; i++) {
+      await submitGuess(env.store, alwaysHit, { sessionId, lat: 0, lng: 0 });
+      await nextStep(env.store, { sessionId });
+    }
+    return { ...env, sessionId };
+  }
+
+  it("biten misafir oyununu giriş yapan kullanıcıya bağlar", async () => {
+    const { store, sessions, sessionId } = await finishedGuestGame();
+    await claimSession(store, { sessionId, userId: "user-1" });
+    expect(sessions.get(sessionId)!.user_id).toBe("user-1");
+  });
+
+  it("aynı kullanıcı tekrar bağlayabilir (idempotent); başka kullanıcı bağlayamaz", async () => {
+    const { store, sessions, sessionId } = await finishedGuestGame();
+    await claimSession(store, { sessionId, userId: "user-1" });
+    await claimSession(store, { sessionId, userId: "user-1" });
+    await expectGameError(claimSession(store, { sessionId, userId: "user-2" }), 409);
+    expect(sessions.get(sessionId)!.user_id).toBe("user-1");
+  });
+
+  it("bitmemiş oyun bağlanamaz", async () => {
+    const { store } = setup();
+    const { sessionId } = await startGame(store, { map: "world", difficulty: "easy" });
+    await expectGameError(claimSession(store, { sessionId, userId: "user-1" }), 409);
+  });
+
+  it("bilinmeyen oturumda 404 döner", async () => {
+    const { store } = setup();
+    await expectGameError(claimSession(store, { sessionId: "00000000-0000-4000-8000-000000000000", userId: "u" }), 404);
   });
 });
 

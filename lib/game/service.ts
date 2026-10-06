@@ -59,10 +59,18 @@ function questionView(session: SessionRow, question: QuestionRow): QuestionView 
   };
 }
 
-export async function startGame(store: GameStore, input: { map: GameMap; difficulty: Difficulty }) {
+export async function startGame(
+  store: GameStore,
+  input: { map: GameMap; difficulty: Difficulty; userId?: string | null },
+) {
   const ids = await store.listQuestionIds(input.map, input.difficulty);
   if (ids.length < QUESTIONS_PER_GAME) throw new GameError(503, "Bu seçim için yeterli soru yok.");
-  const session = await store.createSession({ ...input, question_ids: pickRandom(ids, QUESTIONS_PER_GAME) });
+  const session = await store.createSession({
+    map: input.map,
+    difficulty: input.difficulty,
+    user_id: input.userId ?? null,
+    question_ids: pickRandom(ids, QUESTIONS_PER_GAME),
+  });
   const question = await loadCurrentQuestion(store, session);
   return { sessionId: session.id, map: session.map, difficulty: session.difficulty, ...questionView(session, question) };
 }
@@ -132,21 +140,12 @@ export async function submitGuess(
   };
 }
 
-/**
- * Sonraki soruya geçer veya oyunu bitirir. Oyun bittikten sonra, takma ad henüz yoksa aynı uç nokta
- * (nickname ile) takma adı kaydeder; böylece skor sıralamaya girer.
- */
-export async function nextStep(store: GameStore, input: { sessionId: string; nickname?: string }) {
+/** Sonraki soruya geçer veya oyunu bitirir. */
+export async function nextStep(store: GameStore, input: { sessionId: string }) {
   const session = await loadSession(store, input.sessionId);
 
   if (session.status === "finished") {
-    if (input.nickname !== undefined) {
-      if (session.nickname) throw new GameError(409, "Bu skor için takma ad zaten kaydedildi.");
-      const ok = await store.updateSession(session.id, { status: "finished" }, { nickname: input.nickname });
-      if (!ok) throw new GameError(409, "İstek çakıştı, tekrar dene.");
-      return { finished: true as const, totalScore: session.total_score, nickname: input.nickname };
-    }
-    return { finished: true as const, totalScore: session.total_score, nickname: session.nickname };
+    return { finished: true as const, totalScore: session.total_score, ranked: session.user_id !== null };
   }
 
   const question = await loadCurrentQuestion(store, session);
@@ -159,10 +158,9 @@ export async function nextStep(store: GameStore, input: { sessionId: string; nic
     const ok = await store.updateSession(session.id, expect, {
       status: "finished",
       finished_at: new Date().toISOString(),
-      ...(input.nickname !== undefined ? { nickname: input.nickname } : {}),
     });
     if (!ok) throw new GameError(409, "İstek çakıştı, tekrar dene.");
-    return { finished: true as const, totalScore: session.total_score, nickname: input.nickname ?? null };
+    return { finished: true as const, totalScore: session.total_score, ranked: session.user_id !== null };
   }
 
   const ok = await store.updateSession(session.id, expect, {
@@ -172,4 +170,18 @@ export async function nextStep(store: GameStore, input: { sessionId: string; nic
   if (!ok) throw new GameError(409, "İstek çakıştı, tekrar dene.");
   const advanced: SessionRow = { ...session, current_index: session.current_index + 1, current_hints_opened: 1 };
   return { finished: false as const, ...questionView(advanced, await loadCurrentQuestion(store, advanced)) };
+}
+
+/**
+ * Misafir olarak biten bir oyunu, giriş yapmış kullanıcıya bağlar; böylece skor sıralamaya girer.
+ * Yalnızca bitmiş ve henüz kimseye ait olmayan oyun sahiplenilebilir.
+ */
+export async function claimSession(store: GameStore, input: { sessionId: string; userId: string }) {
+  const session = await loadSession(store, input.sessionId);
+  if (session.status !== "finished") throw new GameError(409, "Yalnızca biten bir oyun hesabına eklenebilir.");
+  if (session.user_id === input.userId) return { totalScore: session.total_score };
+  if (session.user_id !== null) throw new GameError(409, "Bu oyun başka bir hesaba ait.");
+  const ok = await store.updateSession(session.id, { status: "finished", user_id: null }, { user_id: input.userId });
+  if (!ok) throw new GameError(409, "İstek çakıştı, tekrar dene.");
+  return { totalScore: session.total_score };
 }

@@ -1,5 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 import GameScreen from "@/components/game/GameScreen";
+import { getCurrentUser } from "@/lib/auth/server";
 import { difficultySchema, mapSchema } from "@/lib/validation";
 
 export default async function PlayPage({
@@ -14,5 +15,6 @@ export default async function PlayPage({
   const difficulty = difficultySchema.safeParse((await searchParams).difficulty);
   // Zorluk seçilmeden oyun başlamaz; ana sayfaya dön.
   if (!difficulty.success) redirect("/");
-  return <GameScreen map={map.data} difficulty={difficulty.data} />;
+  const user = await getCurrentUser();
+  return <GameScreen map={map.data} difficulty={difficulty.data} user={user ? { username: user.username } : null} />;
 }

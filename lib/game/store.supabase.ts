@@ -67,7 +67,9 @@ export function createSupabaseStore(): GameStore {
 
     async updateSession(id, expect, patch) {
       let query = db.from("game_sessions").update(patch).eq("id", id);
-      for (const [column, value] of Object.entries(expect)) query = query.eq(column, value);
+      for (const [column, value] of Object.entries(expect)) {
+        query = value === null ? query.is(column, null) : query.eq(column, value);
+      }
       const { data, error } = await query.select("id");
       if (error) fail("updateSession", error.message);
       return (data ?? []).length > 0;

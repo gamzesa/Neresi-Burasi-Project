@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import AuthBar from "@/components/auth/AuthBar";
 import { DIFFICULTIES, MAPS, type Difficulty, type GameMap } from "@/lib/game/scoring";
 import { DIFFICULTY_DESCRIPTIONS, DIFFICULTY_LABELS, MAP_DESCRIPTIONS, MAP_LABELS } from "@/lib/labels";
 
@@ -23,12 +24,13 @@ const DIFFICULTY_HOVER: Record<Difficulty, string> = {
 
 const descriptionClass = "text-sm text-muted group-hover:text-current group-hover:opacity-80 group-focus-visible:text-current";
 
-export default function HomeMenu() {
+export default function HomeMenu({ user }: { user: { username: string } | null }) {
   const [map, setMap] = useState<GameMap | null>(null);
 
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col gap-10 px-6 pt-12 pb-8">
-      <header className="text-center">
+    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col gap-10 px-6 pt-4 pb-8">
+      <AuthBar user={user} />
+      <header className="-mt-4 text-center">
         <svg aria-hidden="true" viewBox="0 0 24 24" className="mx-auto mb-3 size-10 text-accent" fill="currentColor">
           <path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z" />
         </svg>

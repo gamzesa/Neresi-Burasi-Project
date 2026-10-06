@@ -1,5 +1,4 @@
 import type { getLeaderboard } from "@/lib/game/leaderboard";
-import type { NameParts } from "@/lib/game/nicknames";
 import type { Difficulty, GameMap } from "@/lib/game/scoring";
 import type { nextStep, openHint, startGame, submitGuess } from "@/lib/game/service";
 
@@ -45,20 +44,26 @@ export const gameApi = {
   start: (map: GameMap, difficulty: Difficulty) => post<StartResponse>("/api/game/start", { map, difficulty }),
   hint: (sessionId: string) => post<HintResponse>("/api/game/hint", { sessionId }),
   guess: (sessionId: string, lat: number, lng: number) => post<GuessResponse>("/api/game/guess", { sessionId, lat, lng }),
-  next: (sessionId: string, name?: NameParts) => post<NextResponse>("/api/game/next", { sessionId, name }),
+  next: (sessionId: string) => post<NextResponse>("/api/game/next", { sessionId }),
+  claim: (sessionId: string) => post<{ totalScore: number }>("/api/game/claim", { sessionId }),
+};
+
+export const authApi = {
+  register: (input: { email: string; username: string; password: string }) =>
+    post<{ username: string }>("/api/auth/register", input),
+  login: (input: { email: string; password: string }) => post<{ username: string }>("/api/auth/login", input),
+  logout: () => post<{ ok: true }>("/api/auth/logout", {}),
 };
 
 export interface LeaderboardParams {
   map: GameMap;
   difficulty?: Difficulty;
   period: "all" | "week";
-  sessionId?: string;
 }
 
 export async function fetchLeaderboard(params: LeaderboardParams): Promise<LeaderboardResponse> {
   const query = new URLSearchParams({ map: params.map, period: params.period });
   if (params.difficulty) query.set("difficulty", params.difficulty);
-  if (params.sessionId) query.set("sessionId", params.sessionId);
   try {
     return await parse<LeaderboardResponse>(await fetch(`/api/leaderboard?${query}`));
   } catch (error) {

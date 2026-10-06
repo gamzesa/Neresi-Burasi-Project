@@ -29,11 +29,11 @@ Arayüz dili Türkçedir. Kod (değişken, fonksiyon, dosya adları) İngilizce 
 
 ### Akış
 1. Ana sayfa: kullanıcı harita seçer (Dünya / Türkiye).
-2. Zorluk seçer (Kolay / Orta / Zor). Ad başta sorulmaz.
+2. Zorluk seçer (Kolay / Orta / Zor). Hesap şart değildir; ana sayfada "Giriş yap / Kayıt ol" düğmeleri ayrı sayfalara götürür.
 3. Oyun 5 sorudan oluşur. Her soruda ilk ipucu otomatik gösterilir; kullanıcı isterse sonraki ipuçlarını açar.
 4. Kullanıcı haritaya dokunarak/tıklayarak tahminini yapar ve onaylar.
 5. Sonuç ekranı: doğru konum, tahmin ile arasındaki çizgi, mesafe ve kazanılan puan gösterilir.
-6. Oyun sonunda toplam puan gösterilir; oyuncu isterse skorunu sıralama tablosuna ekler (zorunlu değil, hesap gerekmez). Ad serbest yazılmaz: oyuncuya "Cesur Kartal 42" gibi sözcük listelerinden üretilmiş bir ad önerilir, "Başka ad üret" ile değiştirebilir. Eklemeyen oyuncunun skoru sıralamaya girmez.
+6. Oyun sonunda toplam puan gösterilir. Hesabı olan (giriş yapmış) oyuncunun skoru otomatik sıralamaya girer. Hesapsız oynayan misafir de oynayabilir ama skoru sıralamaya girmez; oyun sonunda "Kayıt ol / Giriş yap" önerilir ve o oyun, kayıt/giriş sonrası hesabına bağlanır.
 
 ### İpucu sayısı
 | Zorluk | Toplam ipucu |
@@ -89,9 +89,11 @@ Tüm sabitler tek dosyada (`lib/game/scoring.ts`) tutulur; başka yerde sabit sa
 - Oturum kimliği olmadan veya bitmiş bir oturuma tahmin gönderilemez; aynı soruya ikinci tahmin kabul edilmez.
 
 ## Sıralama (rank) sistemi
-- Kullanıcı hesabı yok. Sıralamadaki ad serbest metin değildir (küfür/taklit sorununu kökten çözmek için): `lib/game/nicknames.ts` içindeki sıfat ve isim listelerinden ve 0–99 arası bir sayıdan üretilir. İstemci yalnızca liste sıra numaralarını gönderir, adı sunucu kurar ve doğrular. Hesap sistemi (Supabase Auth) ileride eklenirse ad hesaptan gelecek.
+- **Hesap sistemi:** Supabase Auth (e-posta + şifre). Kayıt olurken kullanıcı adı seçilir: 3–20 karakter, yalnızca harf/rakam/alt çizgi, büyük-küçük harf fark etmeksizin benzersiz, küfür filtresinden geçer, ayrılmış adlar (admin vb.) alınamaz. Kullanıcı adı `profiles` tablosunda tutulur ve sıralamada görünür. E-posta doğrulaması şimdilik yok (hesap kayıtta doğrulanmış açılır); yayından önce özel e-posta servisi bağlanıp doğrulama ve şifre sıfırlama eklenecek.
+- Sıralamaya yalnızca hesabı olanlar girer. Oyun, girişli kullanıcıda başlarken hesabına bağlanır; misafir oyunu bittikten sonra `POST /api/game/claim` ile (giriş yaptıktan sonra) hesaba bağlanabilir.
+- Sıralamada her kullanıcının filtreye uyan **en iyi** oyunu sayılır (`get_leaderboard` SQL fonksiyonu).
 - Sıralama harita bazlıdır (Dünya / Türkiye), zorluğa göre filtrelenebilir.
-- İlk 100 gösterilir. Kullanıcının kendi derecesi, ilk 100'de olmasa da gösterilir.
+- İlk 100 gösterilir. Girişli kullanıcının kendi derecesi, ilk 100'de olmasa da gösterilir.
 - Zaman filtresi: Tüm zamanlar / Bu hafta.
 
 ## Veritabanı şeması (Supabase)
@@ -108,13 +110,19 @@ questions
   hints text[]        -- uzunluğu zorluğun ipucu sayısına eşit olmalı
   is_active boolean
 
+profiles
+  user_id uuid pk fk -- auth.users
+  username text       -- 3–20 karakter, lower(username) benzersiz
+  created_at timestamptz
+
 game_sessions
   id uuid pk
-  nickname text
+  user_id uuid fk     -- girişli oyuncu; misafir oyunlarda null (sonradan sahiplenilebilir)
   map text
   difficulty text
   question_ids uuid[]
   current_index int
+  current_hints_opened int
   total_score int
   status text         -- 'active' | 'finished'
   created_at, finished_at timestamptz
@@ -131,7 +139,7 @@ guesses
   unique (session_id, question_id)
 ```
 
-- Sıralama bir view veya sorgu ile `game_sessions` (status = 'finished') üzerinden üretilir.
+- Sıralama, `get_leaderboard` SQL fonksiyonuyla `game_sessions` (status = 'finished') ve `profiles` üzerinden üretilir.
 - Row Level Security açık olur; istemci tablolara doğrudan yazamaz. Tüm yazmalar Next.js API route'ları üzerinden, sunucudaki service role anahtarıyla yapılır.
 - Şema değişiklikleri `supabase/migrations/` altında migration dosyası olarak yazılır.
 
@@ -144,7 +152,10 @@ Mobil uygulama da aynı uç noktaları kullanacağı için oyun mantığı API'd
 | `POST /api/game/hint` | Sıradaki ipucunu döner, açılan ipucu sayısını artırır |
 | `POST /api/game/guess` | Koordinatı alır; mesafe, bölge, puan hesaplar; doğru konumu ve sonucu döner |
 | `POST /api/game/next` | Sonraki soruya geçer veya oyunu bitirir |
-| `GET /api/leaderboard` | `map`, `difficulty`, `period` parametreleriyle sıralama |
+| `POST /api/game/claim` | Giriş yapmış kullanıcının, misafir olarak bitirdiği oyunu hesabına bağlar |
+| `GET /api/leaderboard` | `map`, `difficulty`, `period` parametreleriyle sıralama (girişliyse kendi derecesi de) |
+| `POST /api/auth/register` | E-posta, kullanıcı adı, şifre ile hesap açar ve giriş yapar |
+| `POST /api/auth/login` · `POST /api/auth/logout` · `GET /api/auth/me` | Giriş, çıkış, mevcut kullanıcı |
 
 Tüm girdiler Zod ile doğrulanır.
 
@@ -155,8 +166,11 @@ app/
   page.tsx                  -- harita seçimi
   play/[map]/page.tsx       -- oyun ekranı
   leaderboard/page.tsx
+  giris/page.tsx            -- giriş yap
+  kayit/page.tsx            -- kayıt ol
   api/game/...              -- yukarıdaki uç noktalar
   api/leaderboard/route.ts
+  api/auth/...              -- kayıt, giriş, çıkış, mevcut kullanıcı
 components/
   map/GameMap.tsx           -- MapLibre sarmalayıcı (client component)
   game/                     -- ipucu kartı, sonuç ekranı, skor göstergesi
@@ -164,6 +178,7 @@ lib/
   game/scoring.ts           -- puanlama sabitleri ve fonksiyonları
   game/geo.ts               -- mesafe, nokta-çokgen kontrolü (Turf)
   supabase/                 -- sunucu ve istemci bağlantıları
+  auth/                     -- hesap işlemleri ve çerezden kullanıcı okuma (sunucuda)
   validation.ts             -- Zod şemaları
 public/geo/                 -- GeoJSON ve font dosyaları
 supabase/migrations/

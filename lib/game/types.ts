@@ -2,7 +2,8 @@ import type { Difficulty, GameMap } from "./scoring";
 
 export interface SessionRow {
   id: string;
-  nickname: string | null;
+  /** Oyunu başlatan girişli kullanıcı; misafir oyunlarda null (sonradan sahiplenilebilir). */
+  user_id: string | null;
   map: GameMap;
   difficulty: Difficulty;
   question_ids: string[];
@@ -39,15 +40,15 @@ export interface GuessRow {
 }
 
 /** `updateSession` yalnızca bu alanların beklenen değerleri hâlâ geçerliyse yazar (iyimser kilit). */
-export type SessionExpectation = Partial<Pick<SessionRow, "current_index" | "current_hints_opened" | "status">>;
+export type SessionExpectation = Partial<Pick<SessionRow, "current_index" | "current_hints_opened" | "status" | "user_id">>;
 export type SessionPatch = Partial<
-  Pick<SessionRow, "nickname" | "current_index" | "current_hints_opened" | "total_score" | "status" | "finished_at">
+  Pick<SessionRow, "user_id" | "current_index" | "current_hints_opened" | "total_score" | "status" | "finished_at">
 >;
 
 /** Oyun mantığının veri erişim sınırı. Üretimde Supabase, testlerde bellek içi bir uygulama kullanılır. */
 export interface GameStore {
   listQuestionIds(map: GameMap, difficulty: Difficulty): Promise<string[]>;
-  createSession(input: Pick<SessionRow, "map" | "difficulty" | "question_ids">): Promise<SessionRow>;
+  createSession(input: Pick<SessionRow, "map" | "difficulty" | "question_ids" | "user_id">): Promise<SessionRow>;
   getSession(id: string): Promise<SessionRow | null>;
   getQuestion(id: string): Promise<QuestionRow | null>;
   getGuess(sessionId: string, questionId: string): Promise<GuessRow | null>;

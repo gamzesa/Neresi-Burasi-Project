@@ -1,37 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { buildNickname, randomNameParts } from "@/lib/game/nicknames";
-import { ApiError, gameApi } from "@/lib/gameApi";
 import type { GameMap } from "@/lib/game/scoring";
 
 interface FinishedPanelProps {
   sessionId: string;
   map: GameMap;
   totalScore: number;
+  /** Oyun bir hesaba bağlıysa (girişli oynandıysa) skor sıralamadadır. */
+  ranked: boolean;
+  username: string | null;
   onPlayAgain: () => void;
 }
 
-export default function FinishedPanel({ sessionId, map, totalScore, onPlayAgain }: FinishedPanelProps) {
-  // Ad serbest yazılmaz; hazır sözcüklerden üretilir ve sunucu doğrular.
-  const [nameParts, setNameParts] = useState(() => randomNameParts());
-  const [saved, setSaved] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [saving, setSaving] = useState(false);
-
-  async function save() {
-    setSaving(true);
-    setError(null);
-    try {
-      const result = await gameApi.next(sessionId, nameParts);
-      setSaved(result.nickname ?? buildNickname(nameParts));
-    } catch (e) {
-      setError(e instanceof ApiError ? e.message : "Kaydedilemedi, tekrar dene.");
-    } finally {
-      setSaving(false);
-    }
-  }
+export default function FinishedPanel({ sessionId, map, totalScore, ranked, username, onPlayAgain }: FinishedPanelProps) {
+  const leaderboardPath = `/leaderboard?map=${map}`;
+  // Misafir giriş yaparsa/kayıt olursa bu oyun hesabına bağlanır ve sıralamaya girer.
+  const authQuery = new URLSearchParams({ next: leaderboardPath, claim: sessionId });
 
   return (
     <section aria-label="Oyun bitti" className="flex flex-col gap-4">
@@ -40,35 +25,28 @@ export default function FinishedPanel({ sessionId, map, totalScore, onPlayAgain 
         <p className="text-5xl font-extrabold text-gold">{totalScore.toLocaleString("tr-TR")}</p>
       </div>
 
-      {saved ? (
+      {ranked ? (
         <p className="rounded-xl border border-accent/30 bg-accent/10 p-3 text-sm">
-          Skorun <strong className="text-accent">{saved}</strong> adıyla sıralamaya eklendi.
+          Skorun <strong className="text-accent">{username}</strong> adıyla sıralamaya eklendi.
         </p>
       ) : (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 rounded-xl border border-line bg-surface-2 p-3">
           <p className="text-sm font-semibold">Skorunu sıralamaya eklemek ister misin?</p>
-          <div className="rounded-xl border border-line bg-surface-2 p-3 text-center">
-            <p className="text-xs text-muted">Sıralamada şu adla görünürsün</p>
-            <p className="text-xl font-bold text-accent">{buildNickname(nameParts)}</p>
+          <p className="text-xs text-muted">Sıralamaya girmek için hesabın olmalı. Bu oyunun skoru hesabına eklenir.</p>
+          <div className="grid grid-cols-2 gap-2">
+            <Link
+              href={`/kayit?${authQuery}`}
+              className="flex min-h-11 items-center justify-center rounded-xl bg-accent px-3 text-sm font-semibold text-accent-ink transition hover:bg-accent-strong"
+            >
+              Kayıt ol
+            </Link>
+            <Link
+              href={`/giris?${authQuery}`}
+              className="flex min-h-11 items-center justify-center rounded-xl border border-line px-3 text-sm font-semibold transition hover:border-accent hover:text-accent"
+            >
+              Giriş yap
+            </Link>
           </div>
-          <button
-            type="button"
-            onClick={() => setNameParts(randomNameParts())}
-            disabled={saving}
-            className="min-h-11 rounded-xl border border-line px-4 font-semibold transition hover:border-accent hover:text-accent disabled:text-muted"
-          >
-            Başka ad üret
-          </button>
-          {error ? <p className="text-sm text-danger">{error}</p> : null}
-          <button
-            type="button"
-            onClick={() => void save()}
-            disabled={saving}
-            className="min-h-11 rounded-xl bg-accent px-4 font-semibold text-accent-ink transition hover:bg-accent-strong disabled:bg-surface-2 disabled:text-muted"
-          >
-            {saving ? "Kaydediliyor…" : "Sıralamaya ekle"}
-          </button>
-          <p className="text-xs text-muted">İstemezsen atlayabilirsin; eklemezsen skorun sıralamaya girmez.</p>
         </div>
       )}
 
@@ -81,7 +59,7 @@ export default function FinishedPanel({ sessionId, map, totalScore, onPlayAgain 
           Tekrar oyna
         </button>
         <Link
-          href={`/leaderboard?map=${map}${saved ? `&sessionId=${sessionId}` : ""}`}
+          href={leaderboardPath}
           className="flex min-h-11 items-center justify-center rounded-xl border border-line px-4 font-semibold transition hover:border-accent hover:text-accent"
         >
           Sıralamayı gör

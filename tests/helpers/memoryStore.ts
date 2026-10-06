@@ -13,7 +13,6 @@ export function createMemoryStore(questions: QuestionRow[]) {
     async createSession(input) {
       const row: SessionRow = {
         id: randomUUID(),
-        nickname: null,
         ...input,
         current_index: 0,
         current_hints_opened: 1,

@@ -14,6 +14,8 @@ import ResultPanel from "./ResultPanel";
 interface GameScreenProps {
   map: GameMap;
   difficulty: Difficulty;
+  /** Girişli kullanıcı; misafirde null. */
+  user: { username: string } | null;
 }
 
 interface QuestionState {
@@ -29,7 +31,7 @@ function messageOf(error: unknown): string {
   return error instanceof ApiError ? error.message : "Beklenmeyen bir hata oluştu.";
 }
 
-export default function GameScreen({ map, difficulty }: GameScreenProps) {
+export default function GameScreen({ map, difficulty, user }: GameScreenProps) {
   const [phase, setPhase] = useState<Phase>("loading");
   const [error, setError] = useState<string | null>(null);
   const [sessionId, setSessionId] = useState<string | null>(null);
@@ -37,6 +39,7 @@ export default function GameScreen({ map, difficulty }: GameScreenProps) {
   const [guess, setGuess] = useState<LatLng | null>(null);
   const [result, setResult] = useState<GuessResponse | null>(null);
   const [totalScore, setTotalScore] = useState(0);
+  const [ranked, setRanked] = useState(false);
   const [busy, setBusy] = useState(false);
   const startedRef = useRef(false);
 
@@ -46,6 +49,7 @@ export default function GameScreen({ map, difficulty }: GameScreenProps) {
     setGuess(null);
     setResult(null);
     setTotalScore(0);
+    setRanked(false);
     try {
       const started = await gameApi.start(map, difficulty);
       setSessionId(started.sessionId);
@@ -101,6 +105,7 @@ export default function GameScreen({ map, difficulty }: GameScreenProps) {
       const next = await gameApi.next(sessionId);
       if (next.finished) {
         setTotalScore(next.totalScore);
+        setRanked(next.ranked);
         setPhase("finished");
       } else {
         setQuestion(next);
@@ -180,6 +185,8 @@ export default function GameScreen({ map, difficulty }: GameScreenProps) {
             sessionId={sessionId}
             map={map}
             totalScore={totalScore}
+            ranked={ranked}
+            username={user?.username ?? null}
             onPlayAgain={() => void start()}
           />
         ) : null}
