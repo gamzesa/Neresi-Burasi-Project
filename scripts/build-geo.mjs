@@ -11,8 +11,11 @@ if (!rawDir) {
   process.exit(1);
 }
 const outDir = path.resolve("public/geo");
+// Sunucudaki bölge kontrolü için sadeleştirilmemiş sınırlar (istemciye gönderilmez).
+const fullDir = path.resolve("data/geo");
 const tmpDir = path.join(rawDir, "tmp");
 mkdirSync(outDir, { recursive: true });
+mkdirSync(fullDir, { recursive: true });
 mkdirSync(tmpDir, { recursive: true });
 
 const readJson = (file) => JSON.parse(readFileSync(path.join(rawDir, file), "utf8"));
@@ -73,6 +76,10 @@ const simplify = (input, output, percent) =>
     `npx mapshaper "${path.join(tmpDir, input)}" -simplify ${percent}% keep-shapes -o "${path.join(outDir, output)}" format=geojson precision=0.001 force`,
     { stdio: "inherit" },
   );
+const full = (input, output) =>
+  execSync(`npx mapshaper "${path.join(tmpDir, input)}" -o "${path.join(fullDir, output)}" format=geojson precision=0.0001 force`, { stdio: "inherit" });
+full("world.json", "world-countries.full.geojson");
+full("turkey.json", "turkey-provinces.full.geojson");
 simplify("world.json", "world-countries.geojson", 30);
 simplify("turkey.json", "turkey-provinces.geojson", 25);
 

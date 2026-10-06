@@ -1,0 +1,395 @@
+{
+  "map": "turkey",
+  "questions": [
+    {
+      "difficulty": "easy",
+      "answer_lat": 41.0086,
+      "answer_lng": 28.9802,
+      "region_code": "34",
+      "answer_label": "İstanbul – Ayasofya",
+      "hints": [
+        "Marmara Denizi kıyısında, iki kıtaya yayılan dev bir metropoldür.",
+        "Boğaz köprüleri Asya ile Avrupa'yı birbirine bağlar; vapurlar martılar eşliğinde iki yaka arasında gidip gelir.",
+        "Tarih boyunca üç büyük imparatorluğa başkentlik yapmıştır.",
+        "Sultanahmet Meydanı'nda, kubbesiyle ünlü, kilise iken camiye, sonra müzeye çevrilmiş, sonra yeniden camiye dönüşmüş bir yapı vardır."
+      ],
+      "banned_words": ["İstanbul", "Konstantinopolis"]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 39.925,
+      "answer_lng": 32.8369,
+      "region_code": "06",
+      "answer_label": "Ankara – Anıtkabir",
+      "hints": [
+        "İç Anadolu'da, tiftik keçisi ve kedisiyle dünyaca ünlü bir şehirdir.",
+        "Cumhuriyet'in ilan edildiği ve bugün de ülkenin başkenti olan şehirdir.",
+        "Kalesi, Hamamönü sokakları ve Ulus semtiyle tarihî bir çekirdeğe sahiptir.",
+        "Çankaya ilçesinde, Rasattepe'de ülkenin kurucusunun anıt mezarı yükselir."
+      ],
+      "banned_words": ["Ankara", "Angora"]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 38.6431,
+      "answer_lng": 34.8289,
+      "region_code": "50",
+      "answer_label": "Nevşehir – Göreme (Kapadokya)",
+      "hints": [
+        "İç Anadolu'da, volkanik tüflerin rüzgâr ve suyla şekillendiği bir bölgedir.",
+        "Peri bacaları ve kayalara oyulmuş kiliselerle ünlü Kapadokya'nın kalbidir.",
+        "Gün doğumunda gökyüzü yüzlerce renkli sıcak hava balonuyla dolar.",
+        "Uçhisar ve Ürgüp'ün yakınındaki Göreme Açık Hava Müzesi bu topraklardadır."
+      ],
+      "banned_words": ["Nevşehir"]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 36.8841,
+      "answer_lng": 30.7056,
+      "region_code": "07",
+      "answer_label": "Antalya – Kaleiçi",
+      "hints": [
+        "Akdeniz kıyısında, yaz aylarında milyonlarca turistin geldiği bir şehirdir.",
+        "Portakal çiçekleri, Konyaaltı plajı ve Düden Şelalesi ile tanınır.",
+        "Roma İmparatoru Hadrianus'un adını taşıyan, üç kemerli mermer bir kapı eski şehir surlarındadır.",
+        "Muratpaşa ilçesindeki Kaleiçi'nde, Yivli Minare ve tarihî liman yan yana durur."
+      ],
+      "banned_words": ["Antalya", "Adalya"]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 38.4189,
+      "answer_lng": 27.1287,
+      "region_code": "35",
+      "answer_label": "İzmir – Konak Saat Kulesi",
+      "hints": [
+        "Ege kıyısında, ülkenin üçüncü büyük şehridir.",
+        "Boyoz, gevrek ve incir ile ünlüdür; körfez boyunca uzanan Kordon akşam yürüyüşlerinin vazgeçilmezidir.",
+        "Tarihî Kemeraltı Çarşısı ve antik Agora kalıntıları, şehrin eski ticaret merkezini oluşturur.",
+        "Konak Meydanı'nda, 1901'de yapılan, ülkenin en bilinen saat kulelerinden biri şehrin simgesidir."
+      ],
+      "banned_words": ["İzmir", "Smyrna"]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 40.6894,
+      "answer_lng": 39.6586,
+      "region_code": "61",
+      "answer_label": "Trabzon – Sümela Manastırı",
+      "hints": [
+        "Doğu Karadeniz'de, dağlık ve yağışlı bir kıyı şehridir.",
+        "Hamsi, kuymak ve horon ile özdeşleşmiş bir kültüre sahiptir.",
+        "Meryem Ana'ya adanmış, bir uçurumun yamacına inşa edilmiş, 4. yüzyıldan kalma bir manastır vardır.",
+        "Maçka ilçesindeki Altındere Vadisi'nde, sarp kayalığın yüzüne oyulmuş yapı turistleri çeker."
+      ],
+      "banned_words": ["Trabzon", "Trapezus"]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 37.9203,
+      "answer_lng": 29.1211,
+      "region_code": "20",
+      "answer_label": "Denizli – Pamukkale",
+      "hints": [
+        "Ege'nin iç kesiminde, kalsiyum karbonat yüklü sıcak su kaynaklarıyla bilinen bir yöredir.",
+        "Dik bir yamaçtan aşağı inen bembeyaz teraslar, uzaktan pamuk yığınına benzer.",
+        "Üstündeki antik kentte, Kleopatra Havuzu'nda tarihî sütunlar arasında yüzülür.",
+        "Pamukkale ilçesindeki Hierapolis antik kenti ve travertenler UNESCO Dünya Mirası'dır."
+      ],
+      "banned_words": ["Denizli"]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 39.9575,
+      "answer_lng": 26.2389,
+      "region_code": "17",
+      "answer_label": "Çanakkale – Truva (Troya)",
+      "hints": [
+        "İki denizi birbirine bağlayan dar bir boğazın kıyısında bir şehirdir.",
+        "1915'te, Birinci Dünya Savaşı sırasında dünya tarihine geçen büyük bir kara ve deniz savaşına sahne oldu.",
+        "Antik çağın en ünlü destanında, tahta atla ele geçirilen şehrin burada olduğu sanılır.",
+        "Tevfikiye köyü yakınında, antik kentin kalıntıları ve dev bir tahta at kopyası bulunur."
+      ],
+      "banned_words": ["Çanakkale", "Dardanel"]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 37.3129,
+      "answer_lng": 40.7339,
+      "region_code": "47",
+      "answer_label": "Mardin – Eski Şehir",
+      "hints": [
+        "Güneydoğu'da, Mezopotamya ovasına bakan bir taş şehirdir.",
+        "Yamaç boyunca basamak basamak dizilmiş sarı kesme taş evleri, medreseleri ve kiliseleriyle ünlüdür.",
+        "Zinciriye ve Kasımiye medreseleri, şehrin taş işçiliğinin örnekleridir.",
+        "Artuklu ilçesindeki eski şehirde, Ulu Cami ve Deyrulzafaran Manastırı bulunur."
+      ],
+      "banned_words": ["Mardin"]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 37.8719,
+      "answer_lng": 32.5047,
+      "region_code": "42",
+      "answer_label": "Konya – Mevlana Müzesi",
+      "hints": [
+        "İç Anadolu'da, yüzölçümü bakımından ülkenin en büyük şehridir.",
+        "Etli ekmek, tirit ve bozkır kültürüyle bilinir; bir dönem Anadolu Selçuklu Devleti'ne başkentlik yaptı.",
+        "Dönerek ibadet eden dervişlerin (semazenlerin) şehridir.",
+        "Karatay ilçesinde, yeşil çinili kubbesiyle ünlü bir türbe, her aralık düzenlenen anma törenlerine ev sahipliği yapar."
+      ],
+      "banned_words": ["Konya", "Konia", "İkonion"]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": 41.2547,
+      "answer_lng": 32.6942,
+      "region_code": "78",
+      "answer_label": "Karabük – Safranbolu",
+      "hints": [
+        "Batı Karadeniz'de, UNESCO Dünya Mirası listesinde yer alan eski bir çarşı kentidir.",
+        "Osmanlı konaklarıyla, lokumuyla ve demir-çelik sanayisiyle tanınan bir yöredir.",
+        "Adını bir baharat bitkisinden alan ilçedeki Cinci Han ve Yörük Köyü gezilebilir."
+      ],
+      "banned_words": ["Karabük"]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": 37.07,
+      "answer_lng": 37.375,
+      "region_code": "27",
+      "answer_label": "Gaziantep – Zeugma Mozaik Müzesi",
+      "hints": [
+        "Güneydoğu Anadolu'da, UNESCO Yaratıcı Şehirler Ağı'na gastronomi alanında giren bir şehirdir.",
+        "Yeşil fıstıklı baklavasıyla ve sabahları içilen beyran çorbasıyla ünlüdür.",
+        "Fırat kıyısındaki antik kentten çıkarılan mozaiklerin sergilendiği müze, dünyanın en büyük mozaik koleksiyonlarından biridir."
+      ],
+      "banned_words": ["Gaziantep", "Antep", "Ayıntap"]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": 40.97,
+      "answer_lng": 41.1,
+      "region_code": "53",
+      "answer_label": "Rize – Ayder Yaylası",
+      "hints": [
+        "Doğu Karadeniz'de, yağmuru bol, yamaçları çay bahçeleriyle kaplı bir şehirdir.",
+        "Kaçkar Dağları'nın eteklerinde, yaylalar ve taş kemerli köprülerle dolu bir yöredir.",
+        "Çamlıhemşin ilçesinde, Fırtına Deresi vadisinin yukarısında, sıcak su kaynaklarıyla ünlü bir yayla vardır."
+      ],
+      "banned_words": ["Rize"]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": 37.2231,
+      "answer_lng": 38.9225,
+      "region_code": "63",
+      "answer_label": "Şanlıurfa – Göbeklitepe",
+      "hints": [
+        "Güneydoğu'da, 'peygamberler şehri' diye anılan, İbrahim'in doğduğu söylenen bir şehirdir.",
+        "Bilinen en eski anıtsal yapılar, yaklaşık on iki bin yıl önce burada dikilmiş T biçimli taşlardır.",
+        "Haliliye ilçesindeki, 'göbek' biçimli bir tepenin üzerindeki alan, tarih öncesinin tapınaklarını barındırır."
+      ],
+      "banned_words": ["Şanlıurfa", "Urfa", "Edessa", "Ruha"]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": 41.6778,
+      "answer_lng": 26.5557,
+      "region_code": "22",
+      "answer_label": "Edirne – Selimiye Camii",
+      "hints": [
+        "Trakya'da, Bulgaristan ve Yunanistan sınırına yakın tarihî bir şehirdir.",
+        "Tava ciğeri ve badem ezmesiyle bilinir; her yaz yağlı güreşlerin en eskisine ev sahipliği yapar.",
+        "Mimar Sinan'ın 'ustalık eserim' dediği, dört ince minareli ve geniş kubbeli bir cami şehrin merkezindedir."
+      ],
+      "banned_words": ["Edirne", "Hadrianopolis"]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": 39.906,
+      "answer_lng": 41.275,
+      "region_code": "25",
+      "answer_label": "Erzurum – Çifte Minareli Medrese",
+      "hints": [
+        "Doğu Anadolu'da, kışı uzun, karı bol ve rakımı yüksek bir şehirdir.",
+        "Palandöken'deki kayak pistleri ve çağ kebabıyla tanınır.",
+        "İki ince minareli taç kapısıyla ünlü bir Selçuklu medresesi ve Üç Kümbetler şehrin tarihî merkezindedir."
+      ],
+      "banned_words": ["Erzurum", "Karin", "Theodosiopolis"]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": 36.206,
+      "answer_lng": 36.175,
+      "region_code": "31",
+      "answer_label": "Hatay – Antakya, St. Pierre Kilisesi",
+      "hints": [
+        "Akdeniz'in doğu ucunda, Suriye sınırında, farklı inançların yan yana yaşadığı kozmopolit bir geçmişe sahip bir şehirdir.",
+        "Künefesi, humusu ve tuzlu zahterli kahvaltılarıyla bilinir.",
+        "Antakya ilçesinde, Hristiyan adının ilk kez kullanıldığı söylenen yerde, bir mağaraya oyulmuş kilise vardır."
+      ],
+      "banned_words": ["Hatay", "Antiochia"]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": 36.55,
+      "answer_lng": 29.1167,
+      "region_code": "48",
+      "answer_label": "Muğla – Ölüdeniz",
+      "hints": [
+        "Ege ile Akdeniz'in birleştiği, çam ormanlarıyla kaplı bir turizm bölgesidir.",
+        "Yamaç paraşütüyle atlayanlar, Babadağ'dan süzülüp turkuaz renkli bir lagünün kıyısına iner.",
+        "Fethiye ilçesinde, Kelebekler Vadisi'nin yakınındaki bu koy dünyanın en güzel plajlarından biri sayılır."
+      ],
+      "banned_words": ["Muğla"]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": 39.3722,
+      "answer_lng": 38.1167,
+      "region_code": "58",
+      "answer_label": "Sivas – Divriği Ulu Camii ve Darüşşifası",
+      "hints": [
+        "İç Anadolu ile Doğu Anadolu arasında, Kızılırmak'ın doğduğu bir şehirdir.",
+        "1919'da ulusal mücadelenin kararlarının alındığı tarihî bir kongreye ev sahipliği yaptı.",
+        "Divriği ilçesinde, taç kapısındaki taş oymalarıyla UNESCO Dünya Mirası olan bir cami ve şifahane bulunur."
+      ],
+      "banned_words": ["Sivas", "Sebasteia"]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": 38.5,
+      "answer_lng": 43.34,
+      "region_code": "65",
+      "answer_label": "Van – Van Kalesi",
+      "hints": [
+        "Doğu Anadolu'da, ülkenin en büyük gölünün kıyısında bir şehirdir.",
+        "Otlu peyniriyle zengin kahvaltısı ve gözleri farklı renkte olan kedisiyle tanınır.",
+        "Urartu Krallığı'nın başkenti Tuşpa'nın, göl kıyısındaki uzun kayalık kalesi şehrin simgesidir."
+      ],
+      "banned_words": ["Van"]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": 41.7469,
+      "answer_lng": 32.3869,
+      "region_code": "74",
+      "answer_label": "Bartın – Amasra",
+      "hints": [
+        "Batı Karadeniz kıyısında, iki küçük limanı ve yarımadasıyla, Bizans ve Ceneviz surları olan sakin bir kasabadır.",
+        "Kuşkayası Roma Yol Anıtı ve Tavşan Adası gibi yerler, kıyıdaki tarihî dokunun parçasıdır."
+      ],
+      "banned_words": ["Bartın"]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": 38.75,
+      "answer_lng": 42.4833,
+      "region_code": "13",
+      "answer_label": "Bitlis – Ahlat",
+      "hints": [
+        "Türkiye'nin en büyük gölünün kuzeybatı kıyısında, volkanik bir dağın eteğinde bir yöredir.",
+        "Binlerce oyma mezar taşı ve kümbetleriyle Selçuklu dönemine ait geniş bir mezarlık vardır."
+      ],
+      "banned_words": ["Bitlis"]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": 40.5075,
+      "answer_lng": 43.5731,
+      "region_code": "36",
+      "answer_label": "Kars – Ani Harabeleri",
+      "hints": [
+        "Doğu'nun en kuzeydoğusunda, komşu bir ülkenin sınırında; kışı çok sert, gravyeri ve balıyla ünlü bir şehirdir.",
+        "Bir zamanlar 'bin bir kilise şehri' denilen terk edilmiş bir ortaçağ başkentinin kalıntıları, sınır nehrinin kıyısındadır."
+      ],
+      "banned_words": ["Kars"]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": 42.09,
+      "answer_lng": 34.97,
+      "region_code": "57",
+      "answer_label": "Sinop – İnceburun",
+      "hints": [
+        "Karadeniz'e bir yarımada gibi uzanan, tarih boyunca doğal limanıyla bilinen şehirdir; filozof Diogenes buralıdır.",
+        "Ülkenin en kuzeydeki noktası, bir burun üzerindeki fenerle işaretlenir."
+      ],
+      "banned_words": ["Sinop", "Sinope"]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": 39.3606,
+      "answer_lng": 39.2123,
+      "region_code": "62",
+      "answer_label": "Tunceli – Ovacık / Munzur Gözeleri",
+      "hints": [
+        "Doğu Anadolu'da, sarp dağlar ve bol kaynak suyuyla dolu, ülkenin en az nüfuslu illerinden biridir.",
+        "Munzur Vadisi Milli Parkı'ndaki gözelerden doğan, berrak bir nehrin yukarı havzasındaki ilçe."
+      ],
+      "banned_words": ["Tunceli", "Dersim"]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": 36.47,
+      "answer_lng": 34.15,
+      "region_code": "33",
+      "answer_label": "Mersin – Kızkalesi",
+      "hints": [
+        "Akdeniz kıyısında, biri denizin içinde, biri karada duran iki ortaçağ kalesiyle ünlü bir sahil kasabasıdır.",
+        "Efsaneye göre bir kral, kızını yılan sokacağı kehanetinden korumak için denizdeki kaleye kapattı; Erdemli ilçesindedir."
+      ],
+      "banned_words": ["Mersin", "İçel"]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": 39.7667,
+      "answer_lng": 30.5256,
+      "region_code": "26",
+      "answer_label": "Eskişehir – Odunpazarı",
+      "hints": [
+        "Porsuk Çayı üzerinde gondol turlarının yapıldığı, üniversite öğrencileriyle dolu bir şehirdir.",
+        "Lületaşı işlemeciliği ve ahşap Osmanlı evleriyle ünlü, 'Odun Pazarı' adlı tarihî bir mahalleye sahiptir."
+      ],
+      "banned_words": ["Eskişehir", "Dorylaion"]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": 37.5744,
+      "answer_lng": 43.7408,
+      "region_code": "30",
+      "answer_label": "Hakkâri – Şehir Merkezi",
+      "hints": [
+        "Türkiye'nin güneydoğu ucunda, Irak ve İran sınırlarına komşu, yüksek dağlarla çevrili bir şehirdir.",
+        "Cilo ve Sat dağlarının buzul gölleri, Zap Suyu vadisi ve Yüksekova ovası bu topraklardadır."
+      ],
+      "banned_words": ["Hakkari", "Hakkâri"]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": 40.02,
+      "answer_lng": 34.615,
+      "region_code": "19",
+      "answer_label": "Çorum – Hattuşa",
+      "hints": [
+        "İç Anadolu'nun kuzeyinde, leblebisiyle ünlü bir şehirdir.",
+        "Boğazkale ilçesinde, bir imparatorluğun başkenti Hattuşa'nın Aslanlı Kapı'sı ve kaya tapınağı Yazılıkaya bulunur."
+      ],
+      "banned_words": ["Çorum"]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": 37.9808,
+      "answer_lng": 38.7406,
+      "region_code": "02",
+      "answer_label": "Adıyaman – Nemrut Dağı",
+      "hints": [
+        "Güneydoğu Anadolu'da, Toros Dağları'nın doğu ucunda, gün doğumunu izlemek için tırmanılan yüksek bir zirve vardır.",
+        "Kommagene Kralı'nın, tanrı heykelleriyle birlikte dev kafaları dizdirdiği anıt mezar tümülüsü burada yükselir."
+      ],
+      "banned_words": ["Adıyaman"]
+    }
+  ]
+}

@@ -23,6 +23,7 @@ Arayüz dili Türkçedir. Kod (değişken, fonksiyon, dosya adları) İngilizce 
 - Altlık (tile) harita kullanılmaz; stil yalnızca arka plan + GeoJSON dolgu/çizgi (+ dünya için etiket) katmanlarından oluşur. Bu sayede ücretli harita servisine gerek kalmaz ve etiketler tamamen kontrol altında olur.
 - Etiket fontları (glyph) kendi sunucumuzda barındırılır ve Türkçe karakterleri (ç, ğ, ı, İ, ö, ş, ü) desteklemelidir.
 - Dosyalar `public/geo/` altında durur ve boyutları küçük tutulur (gerekirse mapshaper ile sadeleştirilir).
+- Sunucudaki bölge kontrolü (nokta-çokgen) için sadeleştirilmemiş sınırlar `data/geo/*.full.geojson` dosyalarında tutulur ve istemciye gönderilmez; sadeleştirilmiş `public/geo/` dosyaları yalnızca çizim içindir. İkisi de `scripts/build-geo.mjs` ile üretilir.
 
 ## Oyun kuralları
 

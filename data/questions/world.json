@@ -1,0 +1,395 @@
+{
+  "map": "world",
+  "questions": [
+    {
+      "difficulty": "easy",
+      "answer_lat": 29.9792,
+      "answer_lng": 31.1342,
+      "region_code": "EG",
+      "answer_label": "Mısır – Gize Piramitleri",
+      "hints": [
+        "Kıtanın kuzeydoğu köşesinde yer alır; Asya ile kara bağlantısı kuran bir geçide sahiptir.",
+        "Yaşam, çölün ortasından kuzeye doğru akan, dünyanın en uzun nehirlerinden biri boyunca yoğunlaşır.",
+        "Firavunların hüküm sürdüğü bu topraklarda mumyalar ve hiyeroglif yazıları keşfedilmiştir.",
+        "Çölün kenarında, dev taş piramitler ve yarı insan yarı aslan görünümlü Sfenks yan yana durur."
+      ],
+      "banned_words": ["Mısır", "Kahire"]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 48.8584,
+      "answer_lng": 2.2945,
+      "region_code": "FR",
+      "answer_label": "Fransa – Eyfel Kulesi",
+      "hints": [
+        "Batı Avrupa'da, hem Atlas Okyanusu'na hem Akdeniz'e kıyısı olan, altıgene benzeyen bir ülke.",
+        "Peynir çeşitliliği, şarapları ve kruvasanıyla ünlüdür; vadilerinde çok sayıda Rönesans şatosu bulunur.",
+        "Dünyanın en ünlü bisiklet yarışı her yıl burada sona erer; moda ve sanatın da merkezlerinden biridir.",
+        "Gustave Eiffel'in tasarladığı demir kafesli kule, Seine Nehri'nin kıyısında yükselir."
+      ],
+      "banned_words": ["Fransa", "Fransız", "Paris"]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 41.8902,
+      "answer_lng": 12.4922,
+      "region_code": "IT",
+      "answer_label": "İtalya – Kolezyum",
+      "hints": [
+        "Akdeniz'in ortasına uzanan, çizme biçimli bir yarımadada yer alır.",
+        "Sicilya ve Sardinya gibi büyük adalar da sınırları içindedir; Alpler kuzeyini çevreler.",
+        "Pizza, makarna ve dondurmanın (gelato) anavatanıdır; Venedik'te sokaklar kanallardan oluşur.",
+        "Gladyatör dövüşlerine ev sahipliği yapmış, elips biçimli antik amfitiyatro hâlâ ayaktadır."
+      ],
+      "banned_words": ["İtalya", "İtalyan", "Roma"]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 35.3606,
+      "answer_lng": 138.7274,
+      "region_code": "JP",
+      "answer_label": "Japonya – Fuji Dağı",
+      "hints": [
+        "Pasifik Okyanusu'nda, binlerce adadan oluşan bir ada ülkesidir.",
+        "Büyük şehirlerinde hızlı trenler saniyesine kadar tam zamanında kalkar.",
+        "Suşi, ramen, manga ve anime bu topraklarda doğdu; kiraz çiçekleri her bahar kutlanır.",
+        "Zirvesi çoğu zaman karla kaplı, simetrik görünümlü sönmüş bir volkan ülkenin simgesidir."
+      ],
+      "banned_words": ["Japonya", "Japon", "Tokyo"]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": -22.9519,
+      "answer_lng": -43.2105,
+      "region_code": "BR",
+      "answer_label": "Brezilya – Kurtarıcı İsa Heykeli",
+      "hints": [
+        "Güney Amerika kıtasının en büyük ülkesidir.",
+        "Dünyanın en büyük yağmur ormanı ve en büyük nehir havzası sınırlarının büyük kısmını kapsar.",
+        "Futbolun ve sambanın ülkesi; her yıl şubatta renkli karnaval geçitleri düzenlenir.",
+        "Sahil şehrinin üzerindeki tepede, kollarını iki yana açmış dev bir İsa heykeli durur."
+      ],
+      "banned_words": ["Brezilya", "Brasilia"]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 27.1751,
+      "answer_lng": 78.0421,
+      "region_code": "IN",
+      "answer_label": "Hindistan – Tac Mahal",
+      "hints": [
+        "Dünyanın en kalabalık ülkelerinden biridir; güneyi okyanusa doğru üçgen biçimli bir yarımada olarak uzanır.",
+        "Baharatları, renkli festivalleri, yoga geleneği ve sinema endüstrisiyle tanınır.",
+        "Milyonlarca insanın kutsal saydığı büyük bir nehir bu topraklardan geçer.",
+        "Bir imparatorun, vefat eden eşi için yaptırdığı beyaz mermer türbe burada yükselir."
+      ],
+      "banned_words": ["Hindistan", "Hint", "Delhi"]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": -33.8568,
+      "answer_lng": 151.2153,
+      "region_code": "AU",
+      "answer_label": "Avustralya – Sidney Opera Binası",
+      "hints": [
+        "Hem bir ülke hem de bir kıtadır; güney yarımkürede yer alır.",
+        "Kanguru ve koala gibi yalnızca bu topraklarda yaşayan hayvanlarla tanınır.",
+        "Kuzeydoğu kıyısındaki dünyanın en büyük mercan resifi uzaydan bile görülür.",
+        "Yelkenleri andıran çatılarıyla ünlü bir opera binası, büyük bir liman şehrinin koyunda yer alır."
+      ],
+      "banned_words": ["Avustralya", "Kanberra"]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 36.0544,
+      "answer_lng": -112.1401,
+      "region_code": "US",
+      "answer_label": "ABD – Büyük Kanyon",
+      "hints": [
+        "Elli eyalet ve bir federal bölgeden oluşan, iki okyanus arasında uzanan dev bir federal cumhuriyettir.",
+        "Hollywood filmlerinin, hamburger ve basketbolun anavatanıdır.",
+        "Batıdaki çöl platosunda, milyonlarca yıl boyunca bir nehrin kazdığı, kat kat kızıl kayalıklardan oluşan dev bir yarık uzanır.",
+        "Colorado Nehri'nin oyduğu, yaklaşık bir buçuk kilometre derinliğindeki kanyonun güney kenarı milli parktır."
+      ],
+      "banned_words": ["Amerika", "ABD", "Washington", "Vaşington"]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 40.3598,
+      "answer_lng": 116.02,
+      "region_code": "CN",
+      "answer_label": "Çin – Çin Seddi (Badaling)",
+      "hints": [
+        "Dünyanın en kalabalık ülkelerinden biridir; Asya'nın doğusunda çok geniş bir alanı kaplar.",
+        "Çay, ipek ve porselenin ilk üretildiği topraklardır; barut ve kâğıt da burada icat edildi.",
+        "Bambu ormanlarında yaşayan siyah beyaz renkli, sevimli bir hayvanın anavatanıdır.",
+        "Binlerce kilometre uzunluğundaki taş surlar, dağların sırtından kıvrılarak geçer."
+      ],
+      "banned_words": ["Çin", "Pekin"]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 55.7525,
+      "answer_lng": 37.6231,
+      "region_code": "RU",
+      "answer_label": "Rusya – Aziz Vasil Katedrali",
+      "hints": [
+        "Dünyanın yüzölçümü en büyük ülkesidir; on bir saat dilimine yayılır.",
+        "Kışları çok soğuk geçer; dünyanın en uzun demiryolu hatlarından biri bu topraklardan geçer.",
+        "Votka, matruşka bebekleri ve bale geleneğiyle bilinir; uzaya giden ilk insan buradan çıktı.",
+        "Soğan kubbeli renkli bir katedral, ünlü bir meydanın kenarında yükselir."
+      ],
+      "banned_words": ["Rusya", "Rus", "Moskova"]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": -13.1631,
+      "answer_lng": -72.545,
+      "region_code": "PE",
+      "answer_label": "Peru – Machu Picchu",
+      "hints": [
+        "And Dağları'nın batı yamacında, Pasifik'e kıyısı olan bir Güney Amerika ülkesidir.",
+        "Lama ve alpaka yetiştiriciliğiyle, yüzlerce patates çeşidiyle ve ceviche adlı yemeğiyle tanınır.",
+        "Bulutların arasında, dağ zirvesinde kurulmuş, kaybolmuş bir İnka şehri kalıntısı vardır."
+      ],
+      "banned_words": ["Peru", "Lima"]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": 62.1008,
+      "answer_lng": 7.2059,
+      "region_code": "NO",
+      "answer_label": "Norveç – Geiranger",
+      "hints": [
+        "Kuzey Avrupa'da, Kuzey Kutup Dairesi'nin ötesine uzanan, uzun ve dar bir ülkedir.",
+        "Yaz aylarında gece yarısı güneşi, kışın ise kuzey ışıkları (aurora) görülür.",
+        "Kıyısını buzulların oyduğu derin deniz kolları keser; batıdaki en ünlülerinden biri UNESCO listesindedir."
+      ],
+      "banned_words": ["Norveç", "Oslo"]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": -1.5,
+      "answer_lng": 35.1,
+      "region_code": "KE",
+      "answer_label": "Kenya – Maasai Mara",
+      "hints": [
+        "Ekvator çizgisinin üzerinden geçtiği, Doğu Afrika'da bir ülkedir.",
+        "Dünyaca ünlü uzun mesafe koşucuları, yüksek rakımlı yaylalarında yetişir.",
+        "Her yıl milyonlarca antilop ve zebranın göç ettiği geniş bir savan, aslanlara ve Maasai halkına ev sahipliği yapar."
+      ],
+      "banned_words": ["Kenya", "Nairobi"]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": -45.0312,
+      "answer_lng": 168.6626,
+      "region_code": "NZ",
+      "answer_label": "Yeni Zelanda – Queenstown",
+      "hints": [
+        "Güney Pasifik'te, iki ana adadan oluşan, dünyanın en uzak ülkelerinden biridir.",
+        "Koyun sayısının insan sayısından çok fazla olduğu söylenir; kivi kuşu ulusal simgesidir.",
+        "Göl kıyısındaki bir kasaba, bungee jumping ve diğer macera sporlarının merkezidir."
+      ],
+      "banned_words": ["Zelanda", "Wellington"]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": 64.3271,
+      "answer_lng": -20.1199,
+      "region_code": "IS",
+      "answer_label": "İzlanda – Gullfoss Şelalesi",
+      "hints": [
+        "Kuzey Atlantik'te, Avrupa ve Kuzey Amerika levhalarının birbirinden ayrıldığı volkanik bir ada ülkesidir.",
+        "Gayzer sözcüğü, bu topraklardaki bir sıcak su fışkırtan kaynaktan dünyaya yayıldı.",
+        "Güneybatıdaki bir nehir, iki basamakta dökülen güçlü bir şelaleyle 'altın' adını taşıyan kanyona akar."
+      ],
+      "banned_words": ["İzlanda", "Reykjavik"]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": -33.9628,
+      "answer_lng": 18.4098,
+      "region_code": "ZA",
+      "answer_label": "Güney Afrika – Masa Dağı",
+      "hints": [
+        "Kıtanın en güney ucunda, iki okyanusun kıyısında yer alır.",
+        "On bir resmî dili olan, 'gökkuşağı ulusu' diye anılan, altın ve elmas madenleriyle ünlü bir ülkedir.",
+        "Tepesi masa gibi düz, bulutlarla örtülen ünlü bir dağ, büyük bir liman şehrinin üzerinde yükselir."
+      ],
+      "banned_words": ["Afrika", "Pretoria", "Cape Town"]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": 15.8801,
+      "answer_lng": 108.338,
+      "region_code": "VN",
+      "answer_label": "Vietnam – Hoi An",
+      "hints": [
+        "Güneydoğu Asya'da, uzun ve S harfine benzeyen bir kıyı şeridine sahip ülkedir.",
+        "Pirinç tarlaları, motosiklet trafiği ve pho çorbasıyla tanınır.",
+        "Fenerlerle aydınlanan sokakları olan, UNESCO listesinde yer alan eski bir ticaret limanı kentidir."
+      ],
+      "banned_words": ["Vietnam", "Hanoi"]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": -54.8019,
+      "answer_lng": -68.303,
+      "region_code": "AR",
+      "answer_label": "Arjantin – Ushuaia",
+      "hints": [
+        "Güney Amerika'nın güneyinde, And Dağları ile Atlas Okyanusu arasında uzanan çok uzun bir ülkedir.",
+        "Tango ve ızgara et (asado) kültürüyle, futbol efsaneleriyle bilinir.",
+        "Dünyanın en güneydeki şehri olarak anılan, 'dünyanın sonu' lakaplı liman kenti buradadır."
+      ],
+      "banned_words": ["Arjantin", "Buenos Aires"]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": 20.6843,
+      "answer_lng": -88.5678,
+      "region_code": "MX",
+      "answer_label": "Meksika – Chichén Itzá",
+      "hints": [
+        "Kuzey Amerika'nın güneyinde, hem Pasifik hem Karayip kıyısı olan bir ülkedir.",
+        "Tacos, guacamole ve acı biberle ünlü mutfağı UNESCO mirası sayılır; 'ölüler günü' renkli bir kutlamadır.",
+        "Yarımadadaki basamaklı bir Maya piramidinde, ekinoks günlerinde merdivenlerde yılan biçimli bir gölge belirir."
+      ],
+      "banned_words": ["Meksika", "Mexico"]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": 7.8804,
+      "answer_lng": 98.3923,
+      "region_code": "TH",
+      "answer_label": "Tayland – Phuket",
+      "hints": [
+        "Güneydoğu Asya'da, haritada bir fil başına benzetilen bir ülkedir.",
+        "Tuk-tuk, baharatlı tom yum çorbası ve altın kaplamalı Budist tapınaklarıyla tanınır.",
+        "Andaman Denizi'ndeki büyük bir ada, plajları ve gece hayatıyla ünlü bir tatil merkezidir."
+      ],
+      "banned_words": ["Tayland", "Bangkok"]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": 27.4916,
+      "answer_lng": 89.3636,
+      "region_code": "BT",
+      "answer_label": "Butan – Kaplan Yuvası Manastırı",
+      "hints": [
+        "Himalayalar'da, 'gayrisafi ulusal mutluluk' kavramını benimseyen küçük bir krallıktır.",
+        "Uçurumun kenarına yapışmış 'Kaplan Yuvası' manastırı en bilinen yapısıdır."
+      ],
+      "banned_words": ["Butan", "Thimphu"]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": 47.1953,
+      "answer_lng": 102.8453,
+      "region_code": "MN",
+      "answer_label": "Moğolistan – Erdene Zuu Manastırı",
+      "hints": [
+        "Denize kıyısı olmayan, dünyanın en seyrek nüfuslu ülkelerinden biridir; bozkırlarda keçe çadırlarda yaşayan göçebeler vardır.",
+        "Cengiz Han'ın imparatorluğunun eski başkenti Karakurum'un kalıntıları yakınındaki, duvarlarla çevrili manastır kompleksi."
+      ],
+      "banned_words": ["Moğol", "Ulan Batur"]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": -20.2506,
+      "answer_lng": 44.4189,
+      "region_code": "MG",
+      "answer_label": "Madagaskar – Baobab Yolu",
+      "hints": [
+        "Hint Okyanusu'nda, kıtadan ayrılmış dev bir ada; hayvan ve bitkilerinin büyük çoğunluğu dünyada başka yerde yaşamaz.",
+        "Batı kıyısındaki kurak bölgede, dev ve şişkin gövdeli ağaçlar bir toprak yolun iki yanına dizilmiştir."
+      ],
+      "banned_words": ["Madagaskar", "Antananarivo"]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": 45.965,
+      "answer_lng": 63.305,
+      "region_code": "KZ",
+      "answer_label": "Kazakistan – Baykonur",
+      "hints": [
+        "Denize kıyısı olmayan ülkeler arasında yüzölçümü en büyük olanıdır; Orta Asya bozkırlarında yer alır.",
+        "Çölün ortasındaki ünlü bir fırlatma üssünden, tarihteki ilk insanlı uzay uçuşu gerçekleştirildi."
+      ],
+      "banned_words": ["Kazak", "Astana", "Nur-Sultan"]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": -24.7357,
+      "answer_lng": 15.2907,
+      "region_code": "NA",
+      "answer_label": "Namibya – Sossusvlei",
+      "hints": [
+        "Güneybatı kıyısında, dünyanın en eski çöllerinden birinin okyanusla buluştuğu, çok seyrek nüfuslu bir ülkedir.",
+        "Kızıl kum tepelerinin arasında, kurumuş ağaç gövdelerinin durduğu beyaz bir tuz-kil tavası bulunur."
+      ],
+      "banned_words": ["Namibya", "Windhoek"]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": 4.637,
+      "answer_lng": -75.483,
+      "region_code": "CO",
+      "answer_label": "Kolombiya – Cocora Vadisi",
+      "hints": [
+        "Hem Pasifik'e hem Karayip Denizi'ne kıyısı olan tek Güney Amerika ülkesidir; kahvesiyle ünlüdür.",
+        "Dünyanın en uzun palmiyelerinin, kahve bölgesindeki bulutlu bir vadide gökyüzüne uzandığı görülür."
+      ],
+      "banned_words": ["Kolombiya", "Bogota"]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": 28.2096,
+      "answer_lng": 83.9856,
+      "region_code": "NP",
+      "answer_label": "Nepal – Pokhara",
+      "hints": [
+        "Dünyanın en yüksek on dört zirvesinden sekizini barındıran Himalaya ülkesidir; bayrağı dikdörtgen değildir.",
+        "Göl kıyısındaki bir kentten, Annapurna sıradağlarına çıkan yürüyüş rotaları başlar."
+      ],
+      "banned_words": ["Nepal", "Katmandu"]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": 22.6167,
+      "answer_lng": -83.7167,
+      "region_code": "CU",
+      "answer_label": "Küba – Viñales Vadisi",
+      "hints": [
+        "Karayipler'in en büyük adasıdır; eski model Amerikan otomobilleri ve purolarıyla tanınır.",
+        "Batısında, kireçtaşından yuvarlak tepelerle (mogote) çevrili, tütün tarlalarıyla dolu bir vadi vardır."
+      ],
+      "banned_words": ["Küba", "Havana"]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": 13.4125,
+      "answer_lng": 103.867,
+      "region_code": "KH",
+      "answer_label": "Kamboçya – Angkor Wat",
+      "hints": [
+        "Güneydoğu Asya'da, Mekong'un geçtiği ve Tonle Sap Gölü'nün mevsime göre büyüyüp küçüldüğü bir krallıktır.",
+        "Dünyanın en büyük dini yapısı sayılan Hindu-Budist tapınak kompleksi, ülkenin bayrağında yer alır."
+      ],
+      "banned_words": ["Kamboçya", "Phnom Penh"]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": 42.6586,
+      "answer_lng": 44.6416,
+      "region_code": "GE",
+      "answer_label": "Gürcistan – Kazbegi (Stepantsminda)",
+      "hints": [
+        "Kafkasya'da, Karadeniz kıyısında; sekiz bin yıllık şarap yapım geleneğiyle tanınan bir ülkedir.",
+        "Büyük Kafkas Dağları'nda, buzullu bir zirvenin eteğindeki küçük kasabanın üstünde, ortaçağdan kalma bir kilise yükselir."
+      ],
+      "banned_words": ["Gürcistan", "Gürcü", "Tiflis"]
+    }
+  ]
+}
