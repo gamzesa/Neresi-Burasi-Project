@@ -49,6 +49,7 @@ export default function GameMap({ map, guess, answer, disabled = false, onGuessC
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const handlersRef = useRef({ disabled, onGuessChange });
+  const hadAnswerRef = useRef(false);
 
   useEffect(() => {
     handlersRef.current = { disabled, onGuessChange };
@@ -115,6 +116,17 @@ export default function GameMap({ map, guess, answer, disabled = false, onGuessC
     };
     if (instance.isStyleLoaded()) apply();
     else instance.once("load", apply);
+
+    // Sonuç gösterilirken tahmin ve doğru konum birlikte görünür; sonraki soruda tüm harita yeniden görünür.
+    const hadAnswer = hadAnswerRef.current;
+    hadAnswerRef.current = Boolean(answer);
+    if (guess && answer) {
+      const bounds = new maplibregl.LngLatBounds([guess.lng, guess.lat], [guess.lng, guess.lat]);
+      bounds.extend([answer.lng, answer.lat]);
+      instance.fitBounds(bounds, { padding: 90, maxZoom: map === "world" ? 6 : 9, duration: 600 });
+    } else if (hadAnswer && !answer) {
+      instance.fitBounds(map === "world" ? WORLD_BOUNDS : TURKEY_BOUNDS, { padding: 8, duration: 400 });
+    }
   }, [guess, answer, map]);
 
   return <div ref={containerRef} className="h-full w-full touch-none" />;

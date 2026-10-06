@@ -1,9 +1,18 @@
-import { notFound } from "next/navigation";
-import MapPreview from "@/components/game/MapPreview";
-import { mapSchema } from "@/lib/validation";
+import { notFound, redirect } from "next/navigation";
+import GameScreen from "@/components/game/GameScreen";
+import { difficultySchema, mapSchema } from "@/lib/validation";
 
-export default async function PlayPage({ params }: { params: Promise<{ map: string }> }) {
-  const parsed = mapSchema.safeParse((await params).map);
-  if (!parsed.success) notFound();
-  return <MapPreview map={parsed.data} />;
+export default async function PlayPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ map: string }>;
+  searchParams: Promise<{ difficulty?: string }>;
+}) {
+  const map = mapSchema.safeParse((await params).map);
+  if (!map.success) notFound();
+  const difficulty = difficultySchema.safeParse((await searchParams).difficulty);
+  // Zorluk seçilmeden oyun başlamaz; ana sayfaya dön.
+  if (!difficulty.success) redirect("/");
+  return <GameScreen map={map.data} difficulty={difficulty.data} />;
 }
