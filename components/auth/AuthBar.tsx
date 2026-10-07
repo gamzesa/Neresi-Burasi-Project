@@ -9,9 +9,10 @@ interface AuthBarProps {
   user: { username: string } | null;
 }
 
-const linkClass = "flex min-h-11 items-center rounded-xl px-4 text-sm font-semibold transition";
+const buttonClass =
+  "flex min-h-12 items-center justify-center rounded-2xl px-4 font-semibold transition active:scale-[0.98]";
 
-/** Sayfa üstündeki giriş durumu: misafire "Giriş yap / Kayıt ol", girişliye kullanıcı adı ve çıkış. */
+/** Ana sayfanın altındaki giriş durumu: misafire yan yana "Giriş yap / Kayıt ol", girişliye kullanıcı adı ve çıkış. */
 export default function AuthBar({ user }: AuthBarProps) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
@@ -28,15 +29,15 @@ export default function AuthBar({ user }: AuthBarProps) {
 
   if (user) {
     return (
-      <div className="flex items-center justify-end gap-2 text-sm">
-        <span className="text-muted">
-          Merhaba, <strong className="text-ink">{user.username}</strong>
-        </span>
+      <div className="flex flex-col items-center gap-3">
+        <p className="text-sm text-muted">
+          <strong className="text-ink">{user.username}</strong> olarak giriş yaptın
+        </p>
         <button
           type="button"
           onClick={() => void logout()}
           disabled={busy}
-          className={`${linkClass} border border-line text-muted hover:border-danger hover:text-danger`}
+          className={`${buttonClass} w-full border border-line text-muted hover:border-danger hover:text-danger`}
         >
           Çıkış yap
         </button>
@@ -45,11 +46,11 @@ export default function AuthBar({ user }: AuthBarProps) {
   }
 
   return (
-    <div className="flex items-center justify-end gap-2">
-      <Link href="/giris" className={`${linkClass} border border-line hover:border-accent hover:text-accent`}>
+    <div className="grid grid-cols-2 gap-3">
+      <Link href="/giris" className={`${buttonClass} border border-line bg-surface hover:border-accent hover:text-accent`}>
         Giriş yap
       </Link>
-      <Link href="/kayit" className={`${linkClass} bg-accent text-accent-ink hover:bg-accent-strong`}>
+      <Link href="/kayit" className={`${buttonClass} bg-accent text-accent-ink hover:bg-accent-strong`}>
         Kayıt ol
       </Link>
     </div>
