@@ -1,182 +1,148 @@
-# Neresi Burası?
+<div align="center">
 
-Verilen ipuçlarıyla **dünya** veya **Türkiye** haritası üzerinde bir konumu bulmaya çalıştığın web tabanlı bir coğrafya oyunu. Her oyun 5 sorudan oluşur; ipuçlarını oku, haritaya dokunarak tahminini işaretle, ne kadar yakınsan o kadar puan kazan.
+# 📍 Neresi Burası?
 
-Arayüz Türkçedir. İleride mobil uygulamaya (iOS/Android) dönüştürülecek şekilde, mobil öncelikli tasarlanmıştır.
+**İpuçlarını oku, haritada yeri bul.**
 
-## Nasıl oynanır
+Dünya ve Türkiye haritalarında oynanan, Türkçe bir coğrafya bilgi oyunu.
 
-1. Ana sayfada **Dünya** veya **Türkiye** haritasını seç, sonra **Kolay / Orta / Zor** zorluğunu seç. Hesap açmadan da oynayabilirsin.
-2. Her soruda ilk ipucu otomatik gösterilir. İstersen sonraki ipuçlarını aç; ama her ipucu puanını düşürür.
-3. Haritaya dokunarak tahminini işaretle, ardından **Tahmini onayla** düğmesine bas.
-4. Sonuç ekranında doğru konumu, aranızdaki mesafeyi ve kazandığın puanı gör.
-5. 5 soru sonunda toplam puanın gösterilir. **Hesabı olan oyuncuların skoru otomatik sıralamaya girer.** Misafir olarak oynadıysan, oyun sonunda kayıt olursan o oyunun skoru hesabına eklenir.
+<img src="docs/screenshots/01-ana-sayfa.png" alt="Ana sayfa" width="720">
 
-### İpuçları
+</div>
 
-| Zorluk | Toplam ipucu | Zorluk katsayısı |
-|---|---|---|
-| Kolay | 4 | ×1,0 |
-| Orta | 3 | ×1,5 |
-| Zor | 2 | ×2,0 |
+## Oyun nedir?
 
-İpuçları genelden özele doğru sıralanır. Dünya haritasında ipuçlarında ülkenin adı, başkenti ya da ülkeyi doğrudan ele veren sıfatlar geçmez; Türkiye haritasında il adı geçmez (ilçe adı geçebilir).
+Sana bir yerin ipuçları verilir; sen de haritada o yeri bulmaya çalışırsın. Her oyun **5 sorudan** oluşur. İpuçları genelden özele doğru gider: ilkini ücretsiz görürsün, daha fazlasını açmak istersen puanından feda edersin. Haritaya dokunup tahminini işaretlersin; tahmin doğru yere ne kadar yakınsa o kadar çok puan kazanırsın.
+
+- 🌍 **İki harita:** Dünya (ülkeler) ve Türkiye (81 il)
+- 🎚️ **Üç zorluk:** Kolay, Orta, Zor. Zorlaştıkça ipucu azalır ama puan katsayısı artar.
+- 📚 **150 soru:** Yapılar, doğa, yemek, tarih, kültür. Her oyunda rastgele 5 tanesi seçilir.
+- 🏆 **Sıralama:** Hesabı olan oyuncuların skorları sıralamaya girer. Hesap açmadan da oynayabilirsin.
+- 📱 **Mobil uyumlu:** Telefonda rahat kullanılır; ileride iOS/Android uygulamasına dönüştürülecek.
+
+## Ekran görüntüleri
+
+| Harita ve zorluk seçimi | Oyun ekranı |
+|:---:|:---:|
+| <img src="docs/screenshots/02-zorluk-secimi.png" alt="Zorluk seçimi" width="440"> | <img src="docs/screenshots/03-oyun-ekrani.png" alt="Oyun ekranı" width="440"> |
+| Önce harita, sonra zorluk seçilir. | Solda ipuçları, sağda harita. Tahmin haritaya dokunarak işaretlenir. |
+
+| Sonuç ekranı | Dünya haritası |
+|:---:|:---:|
+| <img src="docs/screenshots/04-sonuc-ekrani.png" alt="Sonuç ekranı" width="440"> | <img src="docs/screenshots/05-dunya-haritasi.png" alt="Dünya haritası" width="440"> |
+| Doğru yer (yeşil), tahminin (kırmızı), mesafe ve puan. | Dünya haritasında ülke adları Türkçe; üzerine gelinen ülke vurgulanır. |
+
+| Sıralama | Kayıt |
+|:---:|:---:|
+| <img src="docs/screenshots/06-siralama.png" alt="Sıralama" width="440"> | <img src="docs/screenshots/07-kayit.png" alt="Kayıt ol" width="440"> |
+| Harita, zorluk ve döneme göre filtrelenir. | Sıralamaya girmek için kullanıcı adıyla kayıt olunur. |
+
+<div align="center">
+<img src="docs/screenshots/08-mobil.png" alt="Mobil görünüm" width="240">
+
+*Telefonda: ipuçları üstte, harita altta.*
+</div>
+
+## Nasıl çalışır?
+
+### Oynanış
+
+1. Harita (Dünya / Türkiye) ve zorluk seçilir.
+2. Sunucu rastgele 5 soru seçer ve **yalnızca ilk ipucunu** gönderir.
+3. İstenirse sonraki ipuçları tek tek açılır (her biri puanı düşürür).
+4. Oyuncu haritaya dokunup tahminini işaretler ve **Tahmini onayla** der.
+5. Sunucu mesafeyi ve puanı hesaplar; doğru konum ancak o zaman gösterilir.
+6. 5 soru sonunda toplam puan görülür ve hesabı olan oyuncunun skoru sıralamaya girer.
 
 ### Puanlama
 
 ```
-mesafePuanı = 1000 × e^(−mesafe_km / ölçek)       ölçek: Dünya 1500 km, Türkiye 75 km
-bölgeBonusu = tahmin doğru ülke/il içindeyse 500, değilse 0
-soruPuanı   = yuvarla((mesafePuanı + bölgeBonusu) × ipucuKatsayısı × zorlukKatsayısı)
+mesafePuanı = 1000 × e^(−mesafe_km / ölçek)     ölçek: Dünya 1500 km · Türkiye 75 km
+bölgeBonusu = tahmin doğru ülke/il içindeyse +500
+soruPuanı   = (mesafePuanı + bölgeBonusu) × ipucuKatsayısı × zorlukKatsayısı
 ```
 
-İpucu katsayıları (açılan ipucu sayısına göre; ilk ipucu dahil):
+| Zorluk | İpucu sayısı | Zorluk katsayısı | İpucu katsayıları (1 → son ipucu) |
+|---|:---:|:---:|---|
+| Kolay | 4 | ×1,0 | 1,00 · 0,80 · 0,60 · 0,40 |
+| Orta | 3 | ×1,5 | 1,00 · 0,70 · 0,45 |
+| Zor | 2 | ×2,0 | 1,00 · 0,60 |
 
-| Zorluk | 1 ipucu | 2 ipucu | 3 ipucu | 4 ipucu |
-|---|---|---|---|---|
-| Kolay | 1,00 | 0,80 | 0,60 | 0,40 |
-| Orta | 1,00 | 0,70 | 0,45 | – |
-| Zor | 1,00 | 0,60 | – | – |
+### Mimari
 
-Tüm sabitler tek dosyada tutulur: [`lib/game/scoring.ts`](lib/game/scoring.ts).
+```mermaid
+flowchart LR
+    A["Tarayıcı<br/>(ileride mobil uygulama)<br/>Next.js arayüzü + MapLibre harita"] -->|JSON istekleri| B["Next.js API<br/>oyun kuralları ve puanlama"]
+    B --> C[("Supabase<br/>PostgreSQL + Auth")]
+    B --> D["Sınır dosyaları (GeoJSON)<br/>Turf.js ile bölge kontrolü"]
+```
 
-## Teknoloji
+Oyun mantığı arayüzde değil **API'de** durur; mobil uygulama da aynı uç noktaları kullanacak.
 
-| Katman | Teknoloji |
-|---|---|
-| Framework | Next.js 16 (App Router) + TypeScript (strict) |
-| Harita | MapLibre GL JS (altlık harita yok; yalnızca kendi GeoJSON katmanlarımız) |
-| Coğrafi hesaplar | Turf.js |
-| Veritabanı ve kimlik doğrulama | Supabase (PostgreSQL + Auth) |
-| Stil | Tailwind CSS 4 |
-| Doğrulama | Zod |
-| Test | Vitest |
-| Barındırma (planlanan) | Vercel |
-| Mobil (planlanan) | Capacitor |
+### Hileye karşı
 
-Harita verisi [Natural Earth](https://www.naturalearthdata.com/) (kamu malı) kaynaklıdır: dünya için ülke sınırları, Türkiye için 81 il sınırı. Etiket fontları (Noto Sans) kendi sunucumuzdan verilir ve Türkçe karakterleri destekler.
+- Doğru cevabın koordinatı ve bölge kodu, **tahmin yapılmadan önce istemciye hiç gönderilmez**.
+- Açılmamış ipuçları gönderilmez; her ipucu ayrı istekle alınır ve sayısı sunucuda tutulur.
+- Mesafe, bölge kontrolü ve puan **yalnızca sunucuda** hesaplanır; istemcinin puanına güvenilmez.
+- Aynı soruya ikinci tahmin ve bitmiş oyuna tahmin kabul edilmez.
+- Veritabanı tablolarına istemci doğrudan erişemez (Row Level Security).
 
-## Kurulum
+## Kullanılan teknolojiler
+
+| | Teknoloji | Ne için? |
+|---|---|---|
+| 🖥️ | **Next.js 16** (App Router) + **TypeScript** | Arayüz ve API tek projede |
+| 🗺️ | **MapLibre GL JS** | Harita; altlık harita yok, yalnızca kendi GeoJSON katmanlarımız |
+| 📐 | **Turf.js** | Mesafe (haversine) ve "nokta hangi ülkede/ilde" kontrolü |
+| 🗄️ | **Supabase** (PostgreSQL + Auth) | Sorular, oyunlar, hesaplar ve sıralama |
+| 🎨 | **Tailwind CSS 4** | Mobil öncelikli, koyu tema |
+| ✅ | **Zod** | Tüm API girdilerinin doğrulanması |
+| 🧪 | **Vitest** | Puanlama, coğrafi hesap, oyun kuralları ve soru kalitesi testleri |
+| ☁️ | **Vercel** *(planlanan)* | Yayın |
+| 📱 | **Capacitor** *(planlanan)* | iOS/Android uygulaması |
+
+Harita sınırları [Natural Earth](https://www.naturalearthdata.com/) (kamu malı) kaynaklıdır. Etiket fontu Noto Sans'tır ve Türkçe karakterleri destekler.
+
+## Çalıştırma
 
 Gereksinimler: Node.js 24 ve bir [Supabase](https://supabase.com) projesi.
 
 ```bash
 npm install
-cp .env.example .env     # ardından .env dosyasını doldur
-npm run dev              # http://localhost:3000
+cp .env.example .env      # .env dosyasındaki 3 Supabase anahtarını doldur
+npm run seed:questions    # soruları veritabanına yükle (önce supabase/migrations uygulanmalı)
+npm run dev               # http://localhost:3000
 ```
-
-`.env` dosyası şu değişkenleri ister (Supabase paneli → Project Settings → API Keys):
-
-```
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=
-```
-
-> `SUPABASE_SERVICE_ROLE_KEY` veritabanının tüm korumasını aşar. Yalnızca sunucuda kullanılır; asla istemciye sızdırma, kimseyle paylaşma ve git'e ekleme (`.env` dosyası zaten `.gitignore` içindedir).
-
-### Veritabanını hazırlama
-
-1. [`supabase/migrations/`](supabase/migrations) altındaki migration dosyalarını sırayla Supabase projene uygula (Supabase CLI ile ya da panelden SQL Editor ile).
-2. Soruları yükle:
-
-```bash
-npm run seed:questions
-```
-
-Betik tekrar çalıştırılabilir; aynı soruyu iki kez eklemez.
-
-## Komutlar
 
 | Komut | İş |
 |---|---|
 | `npm run dev` | Geliştirme sunucusu |
-| `npm run build` | Üretim derlemesi |
-| `npm run start` | Üretim sunucusu (önce `build`) |
-| `npm run lint` | ESLint |
-| `npm run typecheck` | TypeScript denetimi |
-| `npm run test` | Vitest birim testleri |
+| `npm run build` · `npm run start` | Üretim derlemesi ve sunucusu |
+| `npm run lint` · `npm run typecheck` · `npm run test` | Kod denetimleri |
 | `npm run seed:questions` | Soruları Supabase'e yükler |
 
-Bir değişiklik bitmiş sayılmadan önce `lint`, `typecheck` ve `test` geçmelidir.
-
-Ek betikler ([`scripts/`](scripts)):
-
-- `node scripts/smoke-api.mjs [adres]`: çalışan sunucuya karşı uçtan uca API denemesi (kayıt, giriş, oyun, hile senaryoları, sıralama). Deneme hesapları bırakır; sonra silinmelidir.
-- `node scripts/build-geo.mjs <hamVeriKlasörü>`: Natural Earth ham verisinden harita dosyalarını üretir.
-- `node scripts/build-hero-map.mjs`: ana sayfadaki şeffaf dünya haritası silüetini üretir.
+> `SUPABASE_SERVICE_ROLE_KEY` veritabanı korumasını aşar: yalnızca sunucuda kullanılır, kimseyle paylaşılmaz ve git'e eklenmez (`.env` zaten `.gitignore` içindedir).
 
 ## Proje yapısı
 
 ```
-app/                    Sayfalar ve API uç noktaları (App Router)
-  page.tsx              Harita ve zorluk seçimi
-  play/[map]/           Oyun ekranı
-  leaderboard/          Sıralama
-  giris/, kayit/        Giriş ve kayıt
-  api/game/             start, hint, guess, next, claim
-  api/auth/             register, login, logout, me
-  api/leaderboard/      Sıralama
-components/             Arayüz bileşenleri (harita, oyun, hesap, sıralama)
-lib/
-  game/                 Puanlama, mesafe/bölge hesabı, oyun kuralları, soru doğrulama
-  auth/                 Hesap işlemleri ve oturum okuma (yalnızca sunucuda)
-  supabase/             Sunucu ve istemci bağlantıları
-  validation.ts         Zod şemaları
-data/
-  questions/            Soru dosyaları (world.json, turkey.json)
-  geo/                  Sunucudaki bölge kontrolü için tam çözünürlüklü sınırlar
-public/geo/             Haritada çizilen sadeleştirilmiş GeoJSON ve fontlar
-supabase/migrations/    Veritabanı şeması
-tests/                  Birim testleri
+app/            Sayfalar ve API uç noktaları (oyun, hesap, sıralama)
+components/     Arayüz bileşenleri (harita, oyun ekranları, hesap, sıralama)
+lib/            Oyun kuralları, puanlama, coğrafi hesaplar, hesap işlemleri
+data/           Soru dosyaları ve sunucudaki bölge kontrolü için sınır verisi
+public/geo/     Haritada çizilen GeoJSON dosyaları ve fontlar
+supabase/       Veritabanı şeması (migration dosyaları)
+tests/          Birim testleri
+docs/           README ekran görüntüleri
 ```
 
-Proje kuralları, oyun kuralları ve kararların ayrıntıları için [`CLAUDE.md`](CLAUDE.md) dosyasına bak.
-
-## API
-
-Mobil uygulama da aynı uç noktaları kullanacağı için oyun mantığı API'de, arayüz istemcide durur.
-
-| Uç nokta | İş |
-|---|---|
-| `POST /api/game/start` | Oturum açar, rastgele 5 soru seçer; ilk soruyu ve ilk ipucunu döner |
-| `POST /api/game/hint` | Sıradaki ipucunu döner |
-| `POST /api/game/guess` | Tahmini alır; mesafe, bölge ve puanı hesaplar; doğru konumu döner |
-| `POST /api/game/next` | Sonraki soruya geçer veya oyunu bitirir |
-| `POST /api/game/claim` | Misafir olarak biten oyunu girişli kullanıcının hesabına bağlar |
-| `GET /api/leaderboard` | `map`, `difficulty`, `period` ile sıralama |
-| `POST /api/auth/register`, `login`, `logout` · `GET /api/auth/me` | Hesap işlemleri |
-
-Tüm girdiler Zod ile doğrulanır.
-
-## Hile önleme
-
-- Doğru cevabın koordinatları ve bölge kodu, **tahmin yapılmadan önce istemciye hiç gönderilmez**.
-- Açılmamış ipuçları istemciye gönderilmez; her ipucu ayrı istekle alınır ve açılan sayı sunucuda tutulur.
-- Mesafe, bölge kontrolü ve puan **yalnızca sunucuda** hesaplanır; istemcinin gönderdiği puana güvenilmez.
-- Bitmiş bir oturuma ya da aynı soruya ikinci kez tahmin gönderilemez.
-- Veritabanında Row Level Security açıktır; istemci tablolara doğrudan erişemez, tüm okuma ve yazmalar sunucudaki API'den yapılır.
-
-## Hesaplar ve sıralama
-
-- Supabase Auth ile e-posta + şifre. Kayıt olurken bir **kullanıcı adı** seçilir (3–20 karakter; harf, rakam, alt çizgi; benzersiz; küfür filtresinden geçer). Sıralamada bu ad görünür.
-- Sıralamaya yalnızca hesabı olanların skorları girer; her kullanıcının filtreye uyan **en iyi** oyunu sayılır. Harita (Dünya / Türkiye), zorluk ve dönem (tüm zamanlar / son 7 gün) filtrelenebilir. İlk 100 gösterilir; girişli kullanıcının kendi derecesi ilk 100'de olmasa da gösterilir.
-- Hesapsız (misafir) oynamak serbesttir.
+Oyun kuralları, kararlar ve proje kurallarının tamamı için [`CLAUDE.md`](CLAUDE.md) dosyasına bak.
 
 ## Yol haritası
 
-- [x] Dünya ve Türkiye haritaları, üç zorluk, puanlama
-- [x] Soru havuzu: harita ve zorluk başına 25 soru (toplam 150)
+- [x] Dünya ve Türkiye haritaları, üç zorluk seviyesi, puanlama
+- [x] 150 soruluk havuz (harita ve zorluk başına 25)
 - [x] Hesaplar ve sıralama
-- [ ] Vercel'e yayın, hız sınırı, e-posta doğrulaması ve şifre sıfırlama, gizlilik (KVKK) metni
+- [ ] Yayın (Vercel), hız sınırı, e-posta doğrulaması ve şifre sıfırlama, gizlilik metni
 - [ ] Soru havuzunu harita ve zorluk başına 50'ye çıkarma
-- [ ] Capacitor ile iOS/Android paketleri
-
-## Katkı
-
-Soru eklerken: ipucu sayısı zorlukla eşleşmeli; dünya sorularında ülke adı (ve başkent/sıfat) geçmemeli; `region_code` GeoJSON'daki kodla birebir aynı olmalı; cevap koordinatı o ülkenin ya da ilin içinde olmalı; her ülke/il bir haritada yalnızca bir kez sorulabilir. Bu kuralların hepsi `npm run test` içinde otomatik denetlenir.
-
-## Lisans ve veri kaynakları
-
-Harita sınırları: Natural Earth (kamu malı). Harita etiket fontu: Noto Sans (SIL Open Font License).
+- [ ] iOS ve Android uygulamaları (Capacitor)
