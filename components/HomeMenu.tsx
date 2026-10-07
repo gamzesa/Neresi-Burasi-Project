@@ -10,10 +10,11 @@ const cardBase =
   "group flex min-h-11 w-full flex-col items-start gap-0.5 rounded-xl border border-line bg-surface px-4 py-3 text-left transition duration-150 hover:-translate-y-0.5 active:scale-[0.99]";
 
 // Her seçeneğin fare/dokunma üstünde kendi rengi vardır (sınıflar Tailwind'in görebilmesi için tam yazılır).
+const MAP_HOVER_CLASS =
+  "hover:border-sky hover:bg-sky hover:text-bg focus-visible:border-sky focus-visible:bg-sky focus-visible:text-bg";
 const MAP_HOVER: Record<GameMap, string> = {
-  world: "hover:border-sky hover:bg-sky hover:text-bg focus-visible:border-sky focus-visible:bg-sky focus-visible:text-bg",
-  turkey:
-    "hover:border-danger-strong hover:bg-danger-strong hover:text-white focus-visible:border-danger-strong focus-visible:bg-danger-strong focus-visible:text-white",
+  world: MAP_HOVER_CLASS,
+  turkey: MAP_HOVER_CLASS,
 };
 
 const DIFFICULTY_HOVER: Record<Difficulty, string> = {
