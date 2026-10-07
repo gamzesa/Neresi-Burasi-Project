@@ -10,7 +10,7 @@ interface AuthBarProps {
 }
 
 const buttonClass =
-  "flex min-h-12 items-center justify-center rounded-2xl px-4 font-semibold transition active:scale-[0.98]";
+  "flex min-h-11 items-center justify-center rounded-xl px-4 text-sm font-semibold transition active:scale-[0.98]";
 
 /** Ana sayfanın altındaki giriş durumu: misafire yan yana "Giriş yap / Kayıt ol", girişliye kullanıcı adı ve çıkış. */
 export default function AuthBar({ user }: AuthBarProps) {
@@ -29,7 +29,7 @@ export default function AuthBar({ user }: AuthBarProps) {
 
   if (user) {
     return (
-      <div className="flex flex-col items-center gap-3">
+      <div className="flex flex-col items-center gap-2">
         <p className="text-sm text-muted">
           <strong className="text-ink">{user.username}</strong> olarak giriş yaptın
         </p>
