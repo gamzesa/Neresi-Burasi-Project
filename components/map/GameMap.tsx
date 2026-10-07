@@ -73,9 +73,11 @@ export default function GameMap({ map, guess, answer, disabled = false, onGuessC
     });
     instance.touchZoomRotate.disableRotation();
     if (map === "turkey") {
+      // Kaydırma sınırı; dikeyde cömert tutulur, çünkü uzun (telefon) ekranlarda dar bir sınır haritayı
+      // zorla yakınlaştırıp Türkiye'nin kenarlarını keser.
       instance.setMaxBounds([
-        [TURKEY_BOUNDS[0][0] - 6, TURKEY_BOUNDS[0][1] - 4],
-        [TURKEY_BOUNDS[1][0] + 6, TURKEY_BOUNDS[1][1] + 4],
+        [TURKEY_BOUNDS[0][0] - 10, TURKEY_BOUNDS[0][1] - 14],
+        [TURKEY_BOUNDS[1][0] + 10, TURKEY_BOUNDS[1][1] + 14],
       ]);
     }
     instance.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
@@ -128,7 +130,9 @@ export default function GameMap({ map, guess, answer, disabled = false, onGuessC
       setData("answer", pointCollection(answer));
       setData("link", lineCollection(guess, answer));
     };
-    if (instance.isStyleLoaded()) apply();
+    // `isStyleLoaded()` harita bir kaynağı yenilerken geçici olarak false döner ve "load" olayı bir daha
+    // tetiklenmez; bu yüzden işaretçi çizilmeyebilirdi. Kaynak varsa doğrudan yaz, yoksa ilk yüklemeyi bekle.
+    if (instance.getSource("guess")) apply();
     else instance.once("load", apply);
 
     // Sonuç gösterilirken harita yakınlaştırılmaz; sonraki soruya geçilince tüm harita yeniden görünür.
