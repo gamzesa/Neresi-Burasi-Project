@@ -15,5 +15,12 @@ export default async function RegisterPage({
   const next = safeNextPath(params.next);
   if (await getCurrentUser()) redirect(next);
   const claim = z.uuid().safeParse(params.claim);
-  return <AuthForm mode="register" next={next} claimSessionId={claim.success ? claim.data : undefined} />;
+  return (
+    <AuthForm
+      mode="register"
+      next={next}
+      claimSessionId={claim.success ? claim.data : undefined}
+      googleEnabled={process.env.NEXT_PUBLIC_GOOGLE_LOGIN === "true"}
+    />
+  );
 }

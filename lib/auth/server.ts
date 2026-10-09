@@ -1,6 +1,6 @@
 import "server-only";
 import { createServerClient as createSsrClient } from "@supabase/ssr";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { createServerClient } from "@/lib/supabase/server";
 import { supabaseEnv } from "@/lib/supabase/env";
 
@@ -26,8 +26,11 @@ export async function createAuthClient() {
   });
 }
 
-/** Giriş yapmış kullanıcıyı (kimliği sunucuda doğrulanarak) ve kullanıcı adını döner; misafirde null. */
-export async function getCurrentUser(): Promise<CurrentUser | null> {
+/**
+ * Giriş yapmış kullanıcıyı (kimliği sunucuda doğrulanarak) döner; kullanıcı adı yoksa `username` null olur
+ * (ör. Google ile yeni girmiş, henüz ad seçmemiş kullanıcı). Misafirde null.
+ */
+export async function getAuthUser(): Promise<{ id: string; username: string | null } | null> {
   const auth = await createAuthClient();
   const { data, error } = await auth.auth.getUser();
   if (error || !data.user) return null;
@@ -37,6 +40,20 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
     .select("username")
     .eq("user_id", data.user.id)
     .maybeSingle();
-  if (!profile) return null;
-  return { id: data.user.id, username: profile.username as string };
+  return { id: data.user.id, username: (profile?.username as string | undefined) ?? null };
+}
+
+/** Giriş yapmış ve kullanıcı adı olan kullanıcıyı döner; aksi halde (misafir ya da adsız) null. */
+export async function getCurrentUser(): Promise<CurrentUser | null> {
+  const user = await getAuthUser();
+  if (!user || !user.username) return null;
+  return { id: user.id, username: user.username };
+}
+
+/** İsteğin geldiği sitenin adresi (ör. https://site.com); e-posta ve giriş yönlendirmeleri için. */
+export async function getRequestOrigin(): Promise<string> {
+  const requestHeaders = await headers();
+  const host = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host") ?? "localhost:3000";
+  const protocol = requestHeaders.get("x-forwarded-proto") ?? "http";
+  return `${protocol}://${host}`;
 }

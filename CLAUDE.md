@@ -89,7 +89,9 @@ Tüm sabitler tek dosyada (`lib/game/scoring.ts`) tutulur; başka yerde sabit sa
 - Oturum kimliği olmadan veya bitmiş bir oturuma tahmin gönderilemez; aynı soruya ikinci tahmin kabul edilmez.
 
 ## Sıralama (rank) sistemi
-- **Hesap sistemi:** Supabase Auth (e-posta + şifre). Kayıt olurken kullanıcı adı seçilir: 3–20 karakter, yalnızca harf/rakam/alt çizgi, büyük-küçük harf fark etmeksizin benzersiz, küfür filtresinden geçer, ayrılmış adlar (admin vb.) alınamaz. Kullanıcı adı `profiles` tablosunda tutulur ve sıralamada görünür. E-posta doğrulaması şimdilik yok (hesap kayıtta doğrulanmış açılır); yayından önce özel e-posta servisi bağlanıp doğrulama ve şifre sıfırlama eklenecek.
+- **Hesap sistemi:** Supabase Auth (e-posta + şifre). Kayıt olurken kullanıcı adı seçilir: 3–20 karakter, yalnızca harf/rakam/alt çizgi, büyük-küçük harf fark etmeksizin benzersiz, küfür filtresinden geçer, ayrılmış adlar (admin vb.) alınamaz. Kullanıcı adı `profiles` tablosunda tutulur ve sıralamada görünür. E-posta doğrulaması şimdilik yok (hesap kayıtta doğrulanmış açılır); yayından önce özel e-posta servisi (SMTP) bağlanıp doğrulama eklenecek.
+- **Google ile giriş:** Supabase Auth'un Google sağlayıcısı (OAuth/PKCE). Yalnızca `NEXT_PUBLIC_GOOGLE_LOGIN=true` iken düğme görünür (Supabase panelinde Google yapılandırılmadan açılmaz). Google ile ilk girişte kullanıcı adı yoktur; `/kullanici-adi` sayfasında seçilir (kayıttaki kurallarla aynı). Dönüş `/auth/callback` rotasındadır; misafir oyunu `claim` parametresiyle hesaba bağlanır.
+- **Şifremi unuttum:** `/sifremi-unuttum` e-posta ister, Supabase sıfırlama e-postası gönderir (kayıtlı olup olmadığı asla belli edilmez); bağlantı `/auth/callback` → `/sifre-yenile` sayfasına gider. PKCE nedeniyle bağlantı isteğin yapıldığı tarayıcıda açılmalıdır. Varsayılan Supabase e-postası yalnızca takım üyelerine gider ve saatlik sınırı vardır; herkese e-posta için özel SMTP gerekir.
 - Sıralamaya yalnızca hesabı olanlar girer. Oyun, girişli kullanıcıda başlarken hesabına bağlanır; misafir oyunu bittikten sonra `POST /api/game/claim` ile (giriş yaptıktan sonra) hesaba bağlanabilir.
 - Sıralamada her kullanıcının filtreye uyan **en iyi** oyunu sayılır (`get_leaderboard` SQL fonksiyonu).
 - Sıralama harita bazlıdır (Dünya / Türkiye), zorluğa göre filtrelenebilir.
@@ -156,6 +158,9 @@ Mobil uygulama da aynı uç noktaları kullanacağı için oyun mantığı API'd
 | `GET /api/leaderboard` | `map`, `difficulty`, `period` parametreleriyle sıralama (girişliyse kendi derecesi de) |
 | `POST /api/auth/register` | E-posta, kullanıcı adı, şifre ile hesap açar ve giriş yapar |
 | `POST /api/auth/login` · `POST /api/auth/logout` · `GET /api/auth/me` | Giriş, çıkış, mevcut kullanıcı |
+| `POST /api/auth/forgot` · `POST /api/auth/reset` | Şifre sıfırlama e-postası iste · oturumdaki kullanıcının yeni şifresini kaydet |
+| `POST /api/auth/username` | Profili olmayan (Google ile yeni girmiş) kullanıcının kullanıcı adını kaydeder |
+| `GET /auth/callback` | Google girişi ve şifre sıfırlama bağlantısının döndüğü yer; kodu oturuma çevirir |
 
 Tüm girdiler Zod ile doğrulanır.
 
@@ -168,6 +173,8 @@ app/
   leaderboard/page.tsx
   giris/page.tsx            -- giriş yap
   kayit/page.tsx            -- kayıt ol
+  sifremi-unuttum/, sifre-yenile/, kullanici-adi/  -- hesap kurtarma ve Google sonrası ad seçimi
+  auth/callback/route.ts    -- OAuth ve e-posta bağlantısı dönüşü
   api/game/...              -- yukarıdaki uç noktalar
   api/leaderboard/route.ts
   api/auth/...              -- kayıt, giriş, çıkış, mevcut kullanıcı
@@ -204,6 +211,7 @@ Bir değişiklik bitmiş sayılmadan önce `lint`, `typecheck` ve `test` geçmel
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=    # yalnızca sunucuda, asla istemciye sızmamalı
+NEXT_PUBLIC_GOOGLE_LOGIN=     # Google Supabase'te yapılandırılınca true (değişince yeniden derleme gerekir)
 ```
 
 `.env.local` git'e eklenmez; `.env.example` güncel tutulur.
@@ -222,4 +230,15 @@ SUPABASE_SERVICE_ROLE_KEY=    # yalnızca sunucuda, asla istemciye sızmamalı
 4. Capacitor ile iOS/Android paketleri
 
 ## Açık kararlar
-- İleride kullanıcı hesabı (Supabase Auth) eklenecek mi? (İlk sürümde yok, sonra netleşecek.)
+- Yayın için özel e-posta servisi (SMTP) seçimi ve Supabase ücretsiz plan sınırları (2 aktif proje, otomatik duraklatma) nasıl aşılacak?
+- iOS uygulamasında Google ile giriş sunulursa Apple ile giriş de zorunlu olur (App Store kuralı).
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

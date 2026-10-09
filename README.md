@@ -143,6 +143,7 @@ Oyun kuralları, kararlar ve proje kurallarının tamamı için [`CLAUDE.md`](CL
 - [x] Dünya ve Türkiye haritaları, üç zorluk seviyesi, puanlama
 - [x] 150 soruluk havuz (harita ve zorluk başına 25)
 - [x] Hesaplar ve sıralama
-- [ ] Yayın (Vercel), hız sınırı, e-posta doğrulaması ve şifre sıfırlama, gizlilik metni
+- [x] Google ile giriş ve şifre sıfırlama (kod hazır; Google ve e-posta ayarları Supabase panelinden yapılır)
+- [ ] Yayın (Vercel), hız sınırı, özel e-posta servisi ve e-posta doğrulaması, gizlilik metni
 - [ ] Soru havuzunu harita ve zorluk başına 50'ye çıkarma
 - [ ] iOS ve Android uygulamaları (Capacitor)

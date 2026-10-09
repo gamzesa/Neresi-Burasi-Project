@@ -41,6 +41,18 @@ export const loginRequestSchema = z.object({
   password: z.string().min(1, "Şifreni gir").max(PASSWORD_MAX),
 });
 
+export const forgotPasswordRequestSchema = z.object({
+  email: emailSchema,
+});
+
+export const resetPasswordRequestSchema = z.object({
+  password: passwordSchema,
+});
+
+export const chooseUsernameRequestSchema = z.object({
+  username: usernameSchema,
+});
+
 export const startRequestSchema = z.object({
   map: mapSchema,
   difficulty: difficultySchema,

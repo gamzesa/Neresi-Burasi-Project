@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { ApiError, authApi, gameApi } from "@/lib/gameApi";
 import { PASSWORD_MIN, USERNAME_MAX, USERNAME_MIN } from "@/lib/validation";
+import AuthShell, { inputClass, primaryButtonClass } from "./AuthShell";
+import GoogleButton from "./GoogleButton";
 
 interface AuthFormProps {
   mode: "login" | "register";
@@ -12,18 +14,19 @@ interface AuthFormProps {
   next: string;
   /** Misafir olarak bitirilen oyunun kimliği; varsa hesaba bağlanır ve skor sıralamaya girer. */
   claimSessionId?: string;
+  /** Google ile giriş yapılandırıldıysa "Google ile devam et" düğmesi gösterilir. */
+  googleEnabled?: boolean;
+  /** Başka bir sayfadan gelen hata (ör. Google dönüşü başarısız). */
+  initialError?: string;
 }
 
-const inputClass =
-  "min-h-11 rounded-xl border border-line bg-surface-2 px-3 text-ink placeholder:text-muted focus:border-accent focus:outline-none";
-
-export default function AuthForm({ mode, next, claimSessionId }: AuthFormProps) {
+export default function AuthForm({ mode, next, claimSessionId, googleEnabled = false, initialError }: AuthFormProps) {
   const router = useRouter();
   const isRegister = mode === "register";
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(initialError ?? null);
   const [busy, setBusy] = useState(false);
 
   // Kayıt/giriş sayfaları arasında geçerken oyun bağlantısı ve yönlendirme korunur.
@@ -50,21 +53,22 @@ export default function AuthForm({ mode, next, claimSessionId }: AuthFormProps) 
     }
   }
 
+  const description = claimSessionId
+    ? `${isRegister ? "Kayıt olunca" : "Giriş yapınca"} az önce bitirdiğin oyunun skoru hesabına eklenir ve sıralamaya girer.`
+    : "Sıralamaya girmek için bir hesabın olmalı. Hesapsız da oynayabilirsin.";
+
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col gap-6 px-6 pt-12 pb-8">
-      <header className="text-center">
-        <Link href="/" className="text-3xl font-extrabold tracking-tight">
-          Neresi <span className="text-accent">Burası?</span>
-        </Link>
-        <h1 className="mt-6 text-xl font-bold">{isRegister ? "Kayıt ol" : "Giriş yap"}</h1>
-        {claimSessionId ? (
-          <p className="mt-2 text-sm text-muted">
-            {isRegister ? "Kayıt olunca" : "Giriş yapınca"} az önce bitirdiğin oyunun skoru hesabına eklenir ve sıralamaya girer.
-          </p>
-        ) : (
-          <p className="mt-2 text-sm text-muted">Sıralamaya girmek için bir hesabın olmalı. Hesapsız da oynayabilirsin.</p>
-        )}
-      </header>
+    <AuthShell title={isRegister ? "Kayıt ol" : "Giriş yap"} description={description}>
+      {googleEnabled ? (
+        <>
+          <GoogleButton next={next} claimSessionId={claimSessionId} />
+          <div className="flex items-center gap-3 text-xs text-muted" aria-hidden="true">
+            <span className="h-px flex-1 bg-line" />
+            veya e-posta ile
+            <span className="h-px flex-1 bg-line" />
+          </div>
+        </>
+      ) : null}
 
       <form onSubmit={submit} className="flex flex-col gap-3">
         <label className="flex flex-col gap-1 text-sm font-semibold">
@@ -108,7 +112,13 @@ export default function AuthForm({ mode, next, claimSessionId }: AuthFormProps) 
             onChange={(e) => setPassword(e.target.value)}
             className={inputClass}
           />
-          {isRegister ? <span className="text-xs font-normal text-muted">En az {PASSWORD_MIN} karakter.</span> : null}
+          {isRegister ? (
+            <span className="text-xs font-normal text-muted">En az {PASSWORD_MIN} karakter.</span>
+          ) : (
+            <Link href="/sifremi-unuttum" className="self-end text-xs font-normal text-accent underline">
+              Şifremi unuttum
+            </Link>
+          )}
         </label>
 
         {error ? (
@@ -117,11 +127,7 @@ export default function AuthForm({ mode, next, claimSessionId }: AuthFormProps) 
           </p>
         ) : null}
 
-        <button
-          type="submit"
-          disabled={busy}
-          className="min-h-11 rounded-xl bg-accent px-4 font-semibold text-accent-ink transition hover:bg-accent-strong disabled:bg-surface-2 disabled:text-muted"
-        >
+        <button type="submit" disabled={busy} className={primaryButtonClass}>
           {busy ? "Lütfen bekle…" : isRegister ? "Kayıt ol" : "Giriş yap"}
         </button>
       </form>
@@ -135,6 +141,6 @@ export default function AuthForm({ mode, next, claimSessionId }: AuthFormProps) 
       <Link href={next} className="text-center text-sm text-muted underline hover:text-ink">
         Hesapsız devam et
       </Link>
-    </main>
+    </AuthShell>
   );
 }

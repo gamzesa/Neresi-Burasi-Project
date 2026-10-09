@@ -2,11 +2,14 @@ import { describe, expect, it } from "vitest";
 import { safeNextPath } from "@/lib/auth/redirect";
 import { containsProfanity } from "@/lib/game/profanity";
 import {
+  chooseUsernameRequestSchema,
   claimRequestSchema,
+  forgotPasswordRequestSchema,
   guessRequestSchema,
   leaderboardQuerySchema,
   loginRequestSchema,
   registerRequestSchema,
+  resetPasswordRequestSchema,
   startRequestSchema,
   usernameSchema,
 } from "@/lib/validation";
@@ -109,5 +112,24 @@ describe("safeNextPath", () => {
     expect(safeNextPath("/\\kotu.example")).toBe("/");
     expect(safeNextPath(undefined)).toBe("/");
     expect(safeNextPath("")).toBe("/");
+  });
+});
+
+describe("hesap kurtarma şemaları", () => {
+  it("şifre sıfırlama e-postayı kırpıp küçük harfe çevirir; geçersiz e-postayı reddeder", () => {
+    expect(forgotPasswordRequestSchema.parse({ email: " Ali@Example.com " }).email).toBe("ali@example.com");
+    expect(forgotPasswordRequestSchema.safeParse({ email: "ali" }).success).toBe(false);
+  });
+
+  it("yeni şifre en az 8 karakter olmalı", () => {
+    expect(resetPasswordRequestSchema.safeParse({ password: "kisa" }).success).toBe(false);
+    expect(resetPasswordRequestSchema.safeParse({ password: "yeterince-uzun" }).success).toBe(true);
+  });
+
+  it("kullanıcı adı seçimi kayıttaki kurallarla aynıdır", () => {
+    expect(chooseUsernameRequestSchema.safeParse({ username: "Gezgin_42" }).success).toBe(true);
+    expect(chooseUsernameRequestSchema.safeParse({ username: "siktir" }).success).toBe(false);
+    expect(chooseUsernameRequestSchema.safeParse({ username: "ab" }).success).toBe(false);
+    expect(chooseUsernameRequestSchema.safeParse({ username: "şükrü" }).success).toBe(false);
   });
 });
