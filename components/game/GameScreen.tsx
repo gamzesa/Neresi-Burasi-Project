@@ -10,6 +10,7 @@ import { DIFFICULTY_LABELS, MAP_LABELS } from "@/lib/labels";
 import FinishedPanel from "./FinishedPanel";
 import HintList from "./HintList";
 import ResultPanel from "./ResultPanel";
+import { useDisablePageZoom } from "./useDisablePageZoom";
 
 interface GameScreenProps {
   map: GameMap;
@@ -42,6 +43,7 @@ export default function GameScreen({ map, difficulty, user }: GameScreenProps) {
   const [ranked, setRanked] = useState(false);
   const [busy, setBusy] = useState(false);
   const startedRef = useRef(false);
+  useDisablePageZoom();
 
   const start = useCallback(async () => {
     setPhase("loading");

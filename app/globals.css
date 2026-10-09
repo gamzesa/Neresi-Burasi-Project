@@ -21,6 +21,15 @@
   color-scheme: dark;
 }
 
+html,
+body {
+  /* Çift dokunuşla sayfanın büyümesini ve yana kaymayı önler (mobil Safari). */
+  touch-action: manipulation;
+  overflow-x: hidden;
+  overscroll-behavior: none;
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   background: var(--color-bg);
   color: var(--color-ink);
