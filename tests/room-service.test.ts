@@ -63,13 +63,28 @@ describe("çok oyunculu puanlama", () => {
     expect(speedMultiplier(-5)).toBe(1);
   });
 
-  it("aynı tahmin daha hızlıysa daha çok puan alır; mesafe baskın kalır", () => {
+  it("aynı tahmin daha hızlıysa daha çok puan alır; aynı anda daha yakın olan daha çok puan alır", () => {
     const base = { map: "world", difficulty: "easy", regionHit: true } as const;
     const fast = calculateDuelScore({ ...base, distanceKm: 500, elapsedSeconds: 2 });
     const slow = calculateDuelScore({ ...base, distanceKm: 500, elapsedSeconds: 28 });
-    const farFast = calculateDuelScore({ ...base, distanceKm: 3000, elapsedSeconds: 0 });
     expect(fast).toBeGreaterThan(slow);
-    expect(slow).toBeGreaterThan(farFast);
+
+    const near = calculateDuelScore({ ...base, distanceKm: 100, elapsedSeconds: 10 });
+    const far = calculateDuelScore({ ...base, distanceKm: 3000, elapsedSeconds: 10 });
+    expect(near).toBeGreaterThan(far);
+  });
+
+  it("daha az ipucuyla verilen tahmin daha çok puan alır (aynı mesafe ve bölge)", () => {
+    const base = { map: "world", difficulty: "easy", distanceKm: 100, regionHit: true } as const;
+    // Kolay: ipuçları 0, 7.5, 15, 22.5. sn'de açılır.
+    const one = calculateDuelScore({ ...base, elapsedSeconds: 7 });
+    const two = calculateDuelScore({ ...base, elapsedSeconds: 8 });
+    const four = calculateDuelScore({ ...base, elapsedSeconds: 23 });
+    expect(one).toBeGreaterThan(two);
+    expect(two).toBeGreaterThan(four);
+    // 4 ipucu: ×0.4 ipucu katsayısı ve 23 sn hız katsayısı birlikte uygulanır.
+    const raw = 1000 * Math.exp(-100 / 1500) + 500;
+    expect(four).toBe(Math.round(raw * 0.4 * speedMultiplier(23)));
   });
 
   it("tam isabet ve anında cevap 1000 + bölge bonusu verir (kolay)", () => {
@@ -168,6 +183,30 @@ describe("oyun akışı", () => {
     expect(mine.players.find((p) => p.seat === 1)?.hasGuessed).toBe(false);
     expect(mine.players.find((p) => p.seat === 0)?.totalScore).toBe(0);
     expect(JSON.stringify(await state(guest, q1(6)))).not.toContain('"lat"');
+  });
+
+  it("tahminini onaylayan oyuncuya sonradan açılan ipuçları gösterilmez; rakibe gösterilmeye devam eder", async () => {
+    const { state, guess, host, guest } = await setup();
+    await guess(host, q1(3));
+    // 20. sn'de (kolay) 3 ipucu açıktır; host 1 ipucuyla tahmin etmişti.
+    const hostView = await state(host, q1(20));
+    const guestView = await state(guest, q1(20));
+    expect(hostView.question?.hints).toHaveLength(1);
+    expect(guestView.question?.hints).toHaveLength(3);
+  });
+
+  it("sonuçta her tahminin ipucu sayısı gösterilir ve puana yansır", async () => {
+    const { state, guess, host, guest, answerAt } = await setup();
+    const a = answerAt(0);
+    await guess(host, q1(2), a.answer_lat, a.answer_lng);
+    await guess(guest, q1(16), a.answer_lat, a.answer_lng);
+    const view = await state(host, q1(17));
+    const mine = view.result!.guesses.find((g) => g.seat === 0)!;
+    const theirs = view.result!.guesses.find((g) => g.seat === 1)!;
+    expect(mine.hintsOpened).toBe(1);
+    expect(theirs.hintsOpened).toBe(3);
+    expect(mine.score).toBeGreaterThan(theirs.score);
+    expect(view.result!.winnerSeat).toBe(0);
   });
 
   it("ikisi de tahmin edince soru hemen biter; sonuçta iki tahmin ve kazanan görünür", async () => {

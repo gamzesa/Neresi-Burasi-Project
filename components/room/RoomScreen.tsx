@@ -7,7 +7,7 @@ import { inputClass, primaryButtonClass } from "@/components/auth/AuthShell";
 import { useDisablePageZoom } from "@/components/game/useDisablePageZoom";
 import GameMapLoader from "@/components/map/GameMapLoader";
 import type { LatLng } from "@/lib/game/geo";
-import { DUEL_QUESTION_SECONDS } from "@/lib/game/scoring";
+import { DUEL_QUESTION_SECONDS, HINT_MULTIPLIERS } from "@/lib/game/scoring";
 import { ApiError, roomApi, type RoomState } from "@/lib/gameApi";
 import { DIFFICULTY_LABELS, MAP_LABELS } from "@/lib/labels";
 import { clearRoomToken, loadRoomToken, saveRoomToken } from "@/lib/roomSession";
@@ -555,8 +555,14 @@ export default function RoomScreen({ code, user }: RoomScreenProps) {
                 </li>
               ))}
             </ol>
-            {answering && view.question.hintsOpened < view.question.totalHints ? (
-              <p className="mt-2 text-xs text-muted">Sonraki ipucu süre içinde kendiliğinden açılır.</p>
+            {answering ? (
+              <p className="mt-2 text-xs text-muted">
+                {hasGuessed
+                  ? `Tahminin ${view.question.hintsOpened} ipucuyla verildi; sonraki ipuçları sana gösterilmez.`
+                  : `İpucu katsayısı şu an ×${HINT_MULTIPLIERS[view.difficulty][view.question.hintsOpened - 1]
+                      .toFixed(2)
+                      .replace(".", ",")}; ipuçları süre içinde kendiliğinden açılır, ne kadar az ipucuyla ve ne kadar hızlı bilirsen o kadar çok puan alırsın.`}
+              </p>
             ) : null}
           </section>
         ) : null}
@@ -581,7 +587,7 @@ export default function RoomScreen({ code, user }: RoomScreenProps) {
                   </p>
                   {g ? (
                     <p className="text-muted">
-                      {formatKm(g.distanceKm)} · {g.elapsedSeconds.toLocaleString("tr-TR")} sn ·{" "}
+                      {formatKm(g.distanceKm)} · {g.elapsedSeconds.toLocaleString("tr-TR")} sn · {g.hintsOpened} ipucu ·{" "}
                       <strong className="text-ink">+{g.score.toLocaleString("tr-TR")}</strong>
                     </p>
                   ) : (

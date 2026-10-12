@@ -357,6 +357,8 @@ export interface RoomResultView {
     regionHit: boolean;
     score: number;
     elapsedSeconds: number;
+    /** Tahmin anında açık olan ipucu sayısı. */
+    hintsOpened: number;
   }[];
   /** Soruyu kazanan oyuncunun koltuğu; berabere veya kimse tahmin etmediyse null. */
   winnerSeat: number | null;
@@ -429,7 +431,14 @@ export async function getRoomState(
   if (phase === "answering" || resultsVisible) {
     const row = await store.getQuestion(questionId);
     if (!row) throw new GameError(500, "Soru bulunamadı.");
-    const elapsed = phase === "answering" && tl ? (now - tl.startedAt) / SECOND : DUEL_QUESTION_SECONDS;
+    // Tahminini onaylayan oyuncuya sonradan açılan ipuçları gösterilmez; tahmin anındaki ipuçlarında kalır.
+    const mine = currentGuesses.find((g) => g.player_id === auth.me.id);
+    const elapsed =
+      phase !== "answering" || !tl
+        ? DUEL_QUESTION_SECONDS
+        : mine
+          ? mine.elapsed_ms / SECOND
+          : (now - tl.startedAt) / SECOND;
     const opened = duelHintsOpened(room.difficulty, elapsed);
     question = { hints: row.hints.slice(0, opened), hintsOpened: opened, totalHints: totalHints(room.difficulty) };
 
@@ -442,6 +451,7 @@ export async function getRoomState(
         regionHit: g.region_hit,
         score: g.score,
         elapsedSeconds: Math.round(g.elapsed_ms / 100) / 10,
+        hintsOpened: duelHintsOpened(room.difficulty, g.elapsed_ms / SECOND),
       }));
       result = {
         answer: { lat: row.answer_lat, lng: row.answer_lng, label: row.answer_label },

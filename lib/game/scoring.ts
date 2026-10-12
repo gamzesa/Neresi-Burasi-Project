@@ -94,8 +94,15 @@ export interface DuelScoreInput {
   elapsedSeconds: number;
 }
 
-/** İpucu katsayısı yerine hız katsayısı uygulanır; mesafe ve bölge bonusu tek oyunculuyla aynıdır. */
+/**
+ * Çok oyunculu puan: mesafe + bölge bonusu, zorluk, **ipucu** ve **hız** katsayılarıyla çarpılır.
+ * İpuçları süreyle kendiliğinden açıldığı için tahmin anında açık olan ipucu sayısı geçen süreden bulunur;
+ * daha az ipucuyla (ve daha hızlı, daha yakın) tahmin eden daha çok puan alır.
+ */
 export function calculateDuelScore(input: DuelScoreInput): number {
   const base = distanceScore(input.distanceKm, input.map) + (input.regionHit ? REGION_BONUS : 0);
-  return Math.round(base * DIFFICULTY_MULTIPLIER[input.difficulty] * speedMultiplier(input.elapsedSeconds));
+  const hints = hintMultiplier(input.difficulty, duelHintsOpened(input.difficulty, input.elapsedSeconds));
+  return Math.round(
+    base * DIFFICULTY_MULTIPLIER[input.difficulty] * hints * speedMultiplier(input.elapsedSeconds),
+  );
 }
