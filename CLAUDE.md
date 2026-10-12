@@ -177,6 +177,10 @@ Mobil uygulama da aynı uç noktaları kullanacağı için oyun mantığı API'd
 
 Tüm girdiler Zod ile doğrulanır.
 
+**Hız sınırı:** her istemci (IP) için uç nokta başına dakikada sınır uygulanır (`lib/rateLimit.ts`, tablo `RATE_LIMITS`; `postRoute`/`getRoute` içinde, aşılırsa `429` + `Retry-After`). Giriş/kayıt/şifre sıfırlama sıkıdır (dakikada 3–10); çok oyunculu durum sorgusu (saniyede bir) dakikada 300'dür. **Sınır:** sayaçlar işlem belleğindedir, Vercel'de sunucusuz örnek başına geçerlidir; kazara/basit kötüye kullanıma karşıdır, ciddi saldırıya karşı Vercel Firewall'da hız sınırı kuralı ya da paylaşılan depo (ör. Upstash) gerekir.
+
+**Oda temizliği:** arka plan işlemi olmadığından, 24 saatten eski odalar (oyuncu ve tahminleriyle) yeni oda kurulurken silinir.
+
 ## Klasör yapısı
 
 ```

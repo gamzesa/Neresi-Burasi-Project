@@ -36,6 +36,18 @@ export function createMemoryRoomStore(questions: QuestionRow[], createdAt = new 
       const row = [...rooms.values()].find((r) => r.code === code);
       return row ? { ...row } : null;
     },
+    async deleteStaleRooms(olderThanIso) {
+      let deleted = 0;
+      for (const [id, row] of rooms) {
+        if (row.created_at < olderThanIso) {
+          rooms.delete(id);
+          for (let i = players.length - 1; i >= 0; i--) if (players[i].room_id === id) players.splice(i, 1);
+          for (let i = guesses.length - 1; i >= 0; i--) if (guesses[i].room_id === id) guesses.splice(i, 1);
+          deleted += 1;
+        }
+      }
+      return deleted;
+    },
     async updateRoom(id, expect, patch) {
       const row = rooms.get(id);
       if (!row) return false;

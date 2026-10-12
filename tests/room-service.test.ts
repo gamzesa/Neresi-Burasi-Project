@@ -395,3 +395,20 @@ describe("tekrar oyna", () => {
     await expectGameError(rematch({ playerToken: "z".repeat(40) }, "request"), 403);
   });
 });
+
+describe("eski oda temizliği", () => {
+  it("yeni oda kurulurken 24 saatten eski odalar silinir, yenisi kalır", async () => {
+    const mem = createMemoryRoomStore(makeQuestions("world", "easy", 8), T0);
+    const old = await createRoom(mem.store, { map: "world", difficulty: "easy", nickname: "Eski Oda", now: T0 });
+    expect(mem.rooms.size).toBe(1);
+
+    const later = new Date(T0.getTime() + 25 * 3600 * 1000);
+    // Bellek deposu odaları kendi `createdAt` değeriyle açar; yeni oda için ayrı bir depo zamanı kullanılır.
+    mem.rooms.forEach((room) => (room.created_at = T0.toISOString()));
+    const fresh = await createRoom(mem.store, { map: "world", difficulty: "easy", nickname: "Yeni Oda", now: later });
+    const codes = [...mem.rooms.values()].map((r) => r.code);
+    expect(codes).not.toContain(old.code);
+    expect(codes).toContain(fresh.code);
+    expect(mem.players.every((p) => p.nickname === "Yeni Oda")).toBe(true);
+  });
+});

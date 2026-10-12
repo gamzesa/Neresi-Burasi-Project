@@ -22,6 +22,8 @@ const CODE_LENGTH = 5;
 const CODE_ATTEMPTS = 8;
 /** Bu süreden eski oda artık kullanılmaz. */
 const ROOM_TTL_MS = 3 * 60 * 60 * 1000;
+/** Bu süreden eski odalar veritabanından silinir (kullanılabilirlik süresinden çok daha uzun). */
+const ROOM_RETENTION_MS = 24 * 60 * 60 * 1000;
 
 const SECOND = 1000;
 
@@ -126,8 +128,13 @@ async function openRoomRow(store: RoomStore, map: GameMap, difficulty: Difficult
 
 export async function createRoom(
   store: RoomStore,
-  input: { map: GameMap; difficulty: Difficulty; nickname: string; userId?: string | null },
+  input: { map: GameMap; difficulty: Difficulty; nickname: string; userId?: string | null } & Clock,
 ) {
+  // Arka plan işlemi olmadığı için eski odalar, yeni oda kurulurken fırsattan yararlanılarak temizlenir.
+  // Temizlik başarısız olsa da oda kurulur.
+  const cutoff = new Date(nowOf(input) - ROOM_RETENTION_MS).toISOString();
+  await store.deleteStaleRooms(cutoff).catch(() => 0);
+
   const room = await openRoomRow(store, input.map, input.difficulty);
 
   const token = randomBytes(24).toString("hex");

@@ -30,6 +30,12 @@ export function createSupabaseRoomStore(): RoomStore {
       return (data as RoomRow | null) ?? null;
     },
 
+    async deleteStaleRooms(olderThanIso) {
+      const { data, error } = await db.from("rooms").delete().lt("created_at", olderThanIso).select("id");
+      if (error) fail("deleteStaleRooms", error.message);
+      return (data ?? []).length;
+    },
+
     async updateRoom(id, expect, patch) {
       let query = db.from("rooms").update(patch).eq("id", id);
       for (const [column, value] of Object.entries(expect)) {

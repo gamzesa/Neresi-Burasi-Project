@@ -60,6 +60,8 @@ export interface RoomStore extends Pick<GameStore, "listQuestionIds" | "getQuest
   /** Oda kodu başka bir odada kullanılıyorsa "code_taken" döner. */
   createRoom(input: Pick<RoomRow, "code" | "map" | "difficulty" | "question_ids">): Promise<RoomRow | "code_taken">;
   getRoomByCode(code: string): Promise<RoomRow | null>;
+  /** `olderThanIso`'dan eski odaları (oyuncu ve tahminleriyle birlikte) siler; silinen oda sayısını döner. */
+  deleteStaleRooms(olderThanIso: string): Promise<number>;
   /** Beklenen değerler (null dahil) tutuyorsa günceller ve true döner; başka istek araya girdiyse false. */
   updateRoom(id: string, expect: RoomExpectation, patch: RoomPatch): Promise<boolean>;
   listPlayers(roomId: string): Promise<RoomPlayerRow[]>;
