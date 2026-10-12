@@ -14,7 +14,7 @@ import {
   type GameMap,
 } from "@/lib/game/scoring";
 import { GameError, pickRandom, type RegionChecker } from "@/lib/game/service";
-import type { RoomGuessRow, RoomPlayerRow, RoomRow, RoomStore } from "./types";
+import type { RematchStatus, RoomGuessRow, RoomPlayerRow, RoomRow, RoomStore } from "./types";
 
 /** Karıştırılan harfler (0/O, 1/I) yoktur; kod elle yazılıp telefonda okunabilsin diye. */
 const CODE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -106,25 +106,29 @@ async function advanceRoom(store: RoomStore, initial: RoomRow, players: RoomPlay
 // Oda kurma, katılma, başlatma
 // ---------------------------------------------------------------------------
 
+/** Rastgele 5 soru seçip benzersiz kodlu bir oda satırı açar (oyuncular ayrıca eklenir). */
+async function openRoomRow(store: RoomStore, map: GameMap, difficulty: Difficulty): Promise<RoomRow> {
+  const ids = await store.listQuestionIds(map, difficulty);
+  if (ids.length < QUESTIONS_PER_GAME) throw new GameError(503, "Bu seçim için yeterli soru yok.");
+  const questionIds = pickRandom(ids, QUESTIONS_PER_GAME);
+
+  for (let attempt = 0; attempt < CODE_ATTEMPTS; attempt++) {
+    const created = await store.createRoom({
+      code: generateCode(),
+      map,
+      difficulty,
+      question_ids: questionIds,
+    });
+    if (created !== "code_taken") return created;
+  }
+  throw new GameError(503, "Oda kodu üretilemedi, tekrar dene.");
+}
+
 export async function createRoom(
   store: RoomStore,
   input: { map: GameMap; difficulty: Difficulty; nickname: string; userId?: string | null },
 ) {
-  const ids = await store.listQuestionIds(input.map, input.difficulty);
-  if (ids.length < QUESTIONS_PER_GAME) throw new GameError(503, "Bu seçim için yeterli soru yok.");
-  const questionIds = pickRandom(ids, QUESTIONS_PER_GAME);
-
-  let room: RoomRow | null = null;
-  for (let attempt = 0; attempt < CODE_ATTEMPTS && !room; attempt++) {
-    const created = await store.createRoom({
-      code: generateCode(),
-      map: input.map,
-      difficulty: input.difficulty,
-      question_ids: questionIds,
-    });
-    if (created !== "code_taken") room = created;
-  }
-  if (!room) throw new GameError(503, "Oda kodu üretilemedi, tekrar dene.");
+  const room = await openRoomRow(store, input.map, input.difficulty);
 
   const token = randomBytes(24).toString("hex");
   const player = await store.addPlayer({
@@ -196,6 +200,79 @@ export async function startRoom(store: RoomStore, input: { code: string; playerT
     { status: "active", current_index: 0, question_started_at: startsAt },
   );
   return { started: true as const };
+}
+
+// ---------------------------------------------------------------------------
+// Tekrar oyna
+// ---------------------------------------------------------------------------
+
+export type RematchAction = "request" | "accept" | "decline";
+
+/**
+ * Biten oyunda "tekrar oyna" isteği: bir oyuncu ister, diğeri kabul eder ya da reddeder. Kabul edilince aynı
+ * harita/zorlukla, aynı iki oyuncuyla yeni bir oda açılır ve oyun kendiliğinden (geri sayımla) başlar.
+ * Oyuncu anahtarı yeni odada da geçerlidir (özet aynen kopyalanır); istemci aynı anahtarı yeni koda kaydeder.
+ */
+export async function respondRematch(
+  store: RoomStore,
+  input: { code: string; playerToken: string; action: RematchAction } & Clock,
+) {
+  const now = nowOf(input);
+  const auth = await authenticate(store, input.code, input.playerToken, input);
+  const room = await advanceRoom(store, auth.room, auth.players, now);
+  if (room.status !== "finished") throw new GameError(409, "Oyun henüz bitmedi.");
+  if (auth.players.length < DUEL_MAX_PLAYERS) throw new GameError(409, "Rakip odada değil.");
+
+  if (room.rematch_status === "accepted") return { ok: true as const };
+  if (room.rematch_status === "declined") throw new GameError(409, "Tekrar oyun isteği reddedildi.");
+
+  let action = input.action;
+  if (action === "request") {
+    if (room.rematch_status === null) {
+      const ok = await store.updateRoom(
+        room.id,
+        { rematch_status: null },
+        { rematch_status: "pending", rematch_by: auth.me.seat },
+      );
+      if (!ok) throw new GameError(409, "İstek çakıştı, tekrar dene.");
+      return { ok: true as const };
+    }
+    // Rakip zaten istek göndermişse karşılıklı istek, kabul sayılır.
+    if (room.rematch_by === auth.me.seat) return { ok: true as const };
+    action = "accept";
+  }
+
+  if (room.rematch_status !== "pending") throw new GameError(409, "Yanıtlanacak bir istek yok.");
+  if (room.rematch_by === auth.me.seat) throw new GameError(403, "Kendi isteğini yanıtlayamazsın.");
+
+  if (action === "decline") {
+    await store.updateRoom(room.id, { rematch_status: "pending" }, { rematch_status: "declined" });
+    return { ok: true as const };
+  }
+
+  const next = await openRoomRow(store, room.map, room.difficulty);
+  for (const player of [...auth.players].sort((a, b) => a.seat - b.seat)) {
+    const added = await store.addPlayer({
+      room_id: next.id,
+      seat: player.seat,
+      user_id: player.user_id,
+      token_hash: player.token_hash,
+      nickname: player.nickname,
+    });
+    if (added === "seat_taken") throw new GameError(500, "Yeni oda kurulamadı.");
+  }
+  const startsAt = new Date(now + DUEL_LEAD_IN_SECONDS * SECOND).toISOString();
+  await store.updateRoom(
+    next.id,
+    { status: "waiting" },
+    { status: "active", current_index: 0, question_started_at: startsAt },
+  );
+  await store.updateRoom(
+    room.id,
+    { rematch_status: "pending" },
+    { rematch_status: "accepted", rematch_code: next.code },
+  );
+  return { ok: true as const };
 }
 
 // ---------------------------------------------------------------------------
@@ -306,6 +383,13 @@ export interface RoomState {
   result: RoomResultView | null;
   /** Oyun bitince: kazanan koltuk (berabere ise null). */
   winnerSeat: number | null;
+  /** "Tekrar oyna" isteği; yalnızca biten odada anlamlıdır. */
+  rematch: {
+    status: "none" | RematchStatus;
+    requestedBySeat: number | null;
+    /** Kabul edilince açılan yeni odanın kodu. */
+    code: string | null;
+  };
 }
 
 function leaderSeat(entries: { seat: number; score: number }[]): number | null {
@@ -383,5 +467,10 @@ export async function getRoomState(
     nextAt: phase === "results" && tl ? tl.nextAt : null,
     result,
     winnerSeat: phase === "finished" ? leaderSeat(players.map((p) => ({ seat: p.seat, score: p.totalScore }))) : null,
+    rematch: {
+      status: room.rematch_status ?? "none",
+      requestedBySeat: room.rematch_by,
+      code: room.rematch_status === "accepted" ? room.rematch_code : null,
+    },
   };
 }

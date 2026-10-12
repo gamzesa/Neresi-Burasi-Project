@@ -9,7 +9,14 @@ import {
   speedMultiplier,
 } from "@/lib/game/scoring";
 import { GameError, type RegionChecker } from "@/lib/game/service";
-import { createRoom, getRoomState, joinRoom, startRoom, submitRoomGuess } from "@/lib/room/service";
+import {
+  createRoom,
+  getRoomState,
+  joinRoom,
+  respondRematch,
+  startRoom,
+  submitRoomGuess,
+} from "@/lib/room/service";
 import { createMemoryRoomStore } from "./helpers/memoryRoomStore";
 import { makeQuestions } from "./helpers/memoryStore";
 
@@ -258,5 +265,94 @@ describe("oyun akışı", () => {
   it("odada olmayan anahtar durum okuyamaz", async () => {
     const { state } = await setup();
     await expectGameError(state({ playerToken: "y".repeat(40) }, at(5)), 403);
+  });
+});
+
+describe("tekrar oyna", () => {
+  /** Kimse tahmin etmeden, zamanla biten bir oyun; bitiş anını döner. */
+  async function finishedRoom() {
+    const ctx = await setup();
+    const slot = DUEL_QUESTION_SECONDS + DUEL_GRACE_SECONDS + DUEL_RESULT_SECONDS;
+    const end = at(DUEL_LEAD_IN_SECONDS + slot * 5 + 1);
+    expect((await ctx.state(ctx.host, end)).phase).toBe("finished");
+    const rematch = (who: { playerToken: string }, action: "request" | "accept" | "decline", now = end) =>
+      respondRematch(ctx.store, { code: ctx.host.code, playerToken: who.playerToken, action, now });
+    return { ...ctx, end, rematch };
+  }
+
+  it("oyun bitmeden istek yapılamaz", async () => {
+    const { store, host } = await setup();
+    await expectGameError(
+      respondRematch(store, { code: host.code, playerToken: host.playerToken, action: "request", now: q1(1) }),
+      409,
+    );
+  });
+
+  it("istek bekleyen duruma geçer; rakip isteği görür, isteyen kendi isteğini yanıtlayamaz", async () => {
+    const { state, host, guest, end, rematch } = await finishedRoom();
+    expect((await state(host, end)).rematch).toEqual({ status: "none", requestedBySeat: null, code: null });
+
+    await rematch(host, "request");
+    const forGuest = await state(guest, end);
+    expect(forGuest.rematch).toEqual({ status: "pending", requestedBySeat: 0, code: null });
+    // Aynı isteği tekrar göndermek zararsızdır.
+    await rematch(host, "request");
+    await expectGameError(rematch(host, "accept"), 403);
+    await expectGameError(rematch(host, "decline"), 403);
+  });
+
+  it("rakip reddederse istek reddedildi olur ve tekrar istenemez", async () => {
+    const { state, host, guest, end, rematch } = await finishedRoom();
+    await rematch(host, "request");
+    await rematch(guest, "decline");
+    expect((await state(host, end)).rematch.status).toBe("declined");
+    await expectGameError(rematch(host, "request"), 409);
+    await expectGameError(rematch(guest, "accept"), 409);
+  });
+
+  it("rakip kabul edince aynı ayarla yeni oda açılır; iki oyuncunun anahtarı yeni odada da geçerlidir", async () => {
+    const { store, state, host, guest, end, rematch } = await finishedRoom();
+    await rematch(guest, "request");
+    await rematch(host, "accept");
+
+    const old = await state(host, end);
+    expect(old.rematch.status).toBe("accepted");
+    const newCode = old.rematch.code!;
+    expect(newCode).not.toBe(host.code);
+    expect((await state(guest, end)).rematch.code).toBe(newCode);
+
+    const hostView = await getRoomState(store, { code: newCode, playerToken: host.playerToken, now: end });
+    const guestView = await getRoomState(store, { code: newCode, playerToken: guest.playerToken, now: end });
+    expect(hostView.phase).toBe("countdown");
+    expect(hostView.map).toBe(old.map);
+    expect(hostView.difficulty).toBe(old.difficulty);
+    expect(hostView.players.map((p) => p.nickname)).toEqual(["Ayşe", "Mehmet"]);
+    expect(hostView.players.map((p) => p.totalScore)).toEqual([0, 0]);
+    expect(guestView.you.seat).toBe(1);
+
+    // Yeni oda oynanabilir: soru açılınca tahmin kabul edilir.
+    const open = new Date(end.getTime() + (DUEL_LEAD_IN_SECONDS + 1) * 1000);
+    const accepted = await submitRoomGuess(store, alwaysHit, {
+      code: newCode,
+      playerToken: guest.playerToken,
+      lat: 1,
+      lng: 1,
+      now: open,
+    });
+    expect(accepted.accepted).toBe(true);
+  });
+
+  it("iki taraf da aynı anda isterse karşılıklı kabul sayılır", async () => {
+    const { state, host, guest, end, rematch } = await finishedRoom();
+    await rematch(host, "request");
+    await rematch(guest, "request");
+    const view = await state(host, end);
+    expect(view.rematch.status).toBe("accepted");
+    expect(view.rematch.code).toMatch(/^[A-HJ-NP-Z2-9]{5}$/);
+  });
+
+  it("odada olmayan anahtar istek yapamaz", async () => {
+    const { rematch } = await finishedRoom();
+    await expectGameError(rematch({ playerToken: "z".repeat(40) }, "request"), 403);
   });
 });

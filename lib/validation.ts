@@ -117,6 +117,10 @@ export const roomGuessRequestSchema = roomStateRequestSchema.extend({
   lng: z.number().min(-180).max(180),
 });
 
+export const rematchRequestSchema = roomStateRequestSchema.extend({
+  action: z.enum(["request", "accept", "decline"]),
+});
+
 export const PERIODS = ["all", "week"] as const;
 
 export const leaderboardQuerySchema = z.object({

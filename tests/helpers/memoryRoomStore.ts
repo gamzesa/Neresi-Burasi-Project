@@ -25,6 +25,9 @@ export function createMemoryRoomStore(questions: QuestionRow[], createdAt = new 
         question_started_at: null,
         created_at: createdAt.toISOString(),
         finished_at: null,
+        rematch_by: null,
+        rematch_status: null,
+        rematch_code: null,
       };
       rooms.set(row.id, row);
       return { ...row };

@@ -15,7 +15,14 @@ export interface RoomRow {
   question_started_at: string | null;
   created_at: string;
   finished_at: string | null;
+  /** "Tekrar oyna" isteğini yapan oyuncunun koltuğu. */
+  rematch_by: number | null;
+  rematch_status: RematchStatus | null;
+  /** Kabul edilince açılan yeni odanın kodu. */
+  rematch_code: string | null;
 }
+
+export type RematchStatus = "pending" | "declined" | "accepted";
 
 export interface RoomPlayerRow {
   id: string;
@@ -40,15 +47,20 @@ export interface RoomGuessRow {
   guessed_at: string;
 }
 
-export type RoomExpectation = Partial<Pick<RoomRow, "status" | "current_index">>;
-export type RoomPatch = Partial<Pick<RoomRow, "status" | "current_index" | "question_started_at" | "finished_at">>;
+export type RoomExpectation = Partial<Pick<RoomRow, "status" | "current_index" | "rematch_status">>;
+export type RoomPatch = Partial<
+  Pick<
+    RoomRow,
+    "status" | "current_index" | "question_started_at" | "finished_at" | "rematch_by" | "rematch_status" | "rematch_code"
+  >
+>;
 
 /** Çok oyunculu mantığın veri erişim sınırı. Soru okuma, tek oyunculu GameStore ile ortaktır. */
 export interface RoomStore extends Pick<GameStore, "listQuestionIds" | "getQuestion"> {
   /** Oda kodu başka bir odada kullanılıyorsa "code_taken" döner. */
   createRoom(input: Pick<RoomRow, "code" | "map" | "difficulty" | "question_ids">): Promise<RoomRow | "code_taken">;
   getRoomByCode(code: string): Promise<RoomRow | null>;
-  /** Beklenen değerler tutuyorsa günceller ve true döner; başka istek araya girdiyse false. */
+  /** Beklenen değerler (null dahil) tutuyorsa günceller ve true döner; başka istek araya girdiyse false. */
   updateRoom(id: string, expect: RoomExpectation, patch: RoomPatch): Promise<boolean>;
   listPlayers(roomId: string): Promise<RoomPlayerRow[]>;
   /** Koltuk doluysa "seat_taken" döner. */

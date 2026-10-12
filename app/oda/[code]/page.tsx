@@ -9,5 +9,6 @@ export default async function RoomPage({ params }: { params: Promise<{ code: str
   const code = normalizeRoomCode((await params).code);
   if (!CODE_PATTERN.test(code)) notFound();
   const user = await getCurrentUser();
-  return <RoomScreen code={code} user={user ? { username: user.username } : null} />;
+  // `key`: tekrar oyna ile yeni koda geçilince ekran durumu sıfırdan başlasın.
+  return <RoomScreen key={code} code={code} user={user ? { username: user.username } : null} />;
 }

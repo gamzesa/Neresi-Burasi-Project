@@ -32,7 +32,9 @@ export function createSupabaseRoomStore(): RoomStore {
 
     async updateRoom(id, expect, patch) {
       let query = db.from("rooms").update(patch).eq("id", id);
-      for (const [column, value] of Object.entries(expect)) query = query.eq(column, value);
+      for (const [column, value] of Object.entries(expect)) {
+        query = value === null ? query.is(column, null) : query.eq(column, value);
+      }
       const { data, error } = await query.select("id");
       if (error) fail("updateRoom", error.message);
       return (data ?? []).length > 0;

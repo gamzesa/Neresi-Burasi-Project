@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { inputClass, primaryButtonClass } from "@/components/auth/AuthShell";
 import { useDisablePageZoom } from "@/components/game/useDisablePageZoom";
@@ -13,6 +14,8 @@ import { clearRoomToken, loadRoomToken, saveRoomToken } from "@/lib/roomSession"
 import { NICKNAME_MAX } from "@/lib/validation";
 
 const POLL_MS = 1000;
+/** Oyun bittikten sonra yalnızca "tekrar oyna" isteğini beklerken daha seyrek sorgulanır. */
+const FINISHED_POLL_MS = 2000;
 const TICK_MS = 200;
 
 interface RoomScreenProps {
@@ -113,6 +116,68 @@ function JoinPanel({
   );
 }
 
+/** Oyun sonunda "tekrar oyna" isteğinin durumuna göre düğmeler ve bilgi mesajı. */
+function RematchPanel({
+  rematch,
+  mySeat,
+  opponentName,
+  onAnswer,
+}: {
+  rematch: RoomState["rematch"];
+  mySeat: number;
+  opponentName: string;
+  onAnswer: (action: "request" | "accept" | "decline") => void;
+}) {
+  const box = "flex flex-col gap-2 rounded-xl border border-line bg-surface-2 p-3 text-sm";
+  const iRequested = rematch.requestedBySeat === mySeat;
+
+  if (rematch.status === "none") {
+    return (
+      <button type="button" onClick={() => onAnswer("request")} className={primaryButtonClass}>
+        Tekrar oyna
+      </button>
+    );
+  }
+  if (rematch.status === "accepted") {
+    return (
+      <p className={`${box} text-center font-semibold text-accent`} role="status">
+        Yeni oyun başlıyor…
+      </p>
+    );
+  }
+  if (rematch.status === "declined") {
+    return (
+      <p className={`${box} text-center text-danger`} role="status">
+        {iRequested ? `${opponentName} tekrar oyun isteğini reddetti.` : "Tekrar oyun isteğini reddettin."}
+      </p>
+    );
+  }
+  if (iRequested) {
+    return (
+      <p className={`${box} text-center text-muted`} role="status">
+        Tekrar oyun isteği gönderildi, {opponentName} bekleniyor…
+      </p>
+    );
+  }
+  return (
+    <div className={box} role="status">
+      <p className="text-center font-semibold">{opponentName} tekrar oynamak istiyor.</p>
+      <div className="grid grid-cols-2 gap-2">
+        <button type="button" onClick={() => onAnswer("accept")} className={primaryButtonClass}>
+          Kabul et
+        </button>
+        <button
+          type="button"
+          onClick={() => onAnswer("decline")}
+          className="min-h-11 rounded-xl border border-danger/60 px-4 font-semibold text-danger transition hover:bg-danger/10"
+        >
+          Reddet
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function Scoreboard({ players }: { players: RoomState["players"] }) {
   return (
     <ul className="grid grid-cols-2 gap-2">
@@ -135,6 +200,7 @@ function Scoreboard({ players }: { players: RoomState["players"] }) {
 
 export default function RoomScreen({ code, user }: RoomScreenProps) {
   useDisablePageZoom();
+  const router = useRouter();
   // Depolamadaki anahtar; sunucuda ve ilk çizimde undefined (henüz okunmadı), anahtar yoksa null.
   const storedToken = useSyncExternalStore(
     subscribeNever,
@@ -167,7 +233,11 @@ export default function RoomScreen({ code, user }: RoomScreenProps) {
         setClockOffset(state.serverNow - Date.now());
         setView(state);
         setConnectionLost(false);
-        if (state.phase === "finished") return;
+        // Biten oyunda yalnızca tekrar oyna isteği sonuçlanana kadar sorgulanır.
+        const rematch = state.rematch.status;
+        if (state.phase === "finished" && (rematch === "declined" || rematch === "accepted")) return;
+        timer = setTimeout(() => void tick(), state.phase === "finished" ? FINISHED_POLL_MS : POLL_MS);
+        return;
       } catch (e) {
         if (cancelled) return;
         if (e instanceof ApiError && [403, 404, 410].includes(e.status)) {
@@ -234,6 +304,27 @@ export default function RoomScreen({ code, user }: RoomScreenProps) {
     const id = setInterval(() => autoSubmitRef.current(), TICK_MS);
     return () => clearInterval(id);
   }, [answering]);
+
+  // Tekrar oyna kabul edilince aynı oyuncu anahtarıyla yeni odaya geçilir.
+  const rematchCode = view?.rematch.status === "accepted" ? view.rematch.code : null;
+  useEffect(() => {
+    if (!rematchCode || !token) return;
+    saveRoomToken(rematchCode, token);
+    router.push(`/oda/${rematchCode}`);
+  }, [rematchCode, token, router]);
+
+  async function answerRematch(action: "request" | "accept" | "decline") {
+    if (!token) return;
+    setActionError(null);
+    try {
+      await roomApi.rematch(code, token, action);
+      const state = await roomApi.state(code, token);
+      setClockOffset(state.serverNow - Date.now());
+      setView(state);
+    } catch (e) {
+      setActionError(messageOf(e));
+    }
+  }
 
   const resultGuesses = view?.result?.guesses ?? [];
   const myResult = resultGuesses.find((g) => g.seat === view?.you.seat) ?? null;
@@ -369,8 +460,22 @@ export default function RoomScreen({ code, user }: RoomScreenProps) {
             </p>
           </div>
           <Scoreboard players={view.players} />
+          <RematchPanel
+            rematch={view.rematch}
+            mySeat={view.you.seat}
+            opponentName={opponent?.nickname ?? "Rakip"}
+            onAnswer={(action) => void answerRematch(action)}
+          />
+          {actionError ? (
+            <p role="alert" className="rounded-xl border border-danger/40 bg-danger/10 p-3 text-sm text-danger">
+              {actionError}
+            </p>
+          ) : null}
           <div className="flex flex-col gap-2">
-            <Link href="/oda" className={`${primaryButtonClass} flex items-center justify-center`}>
+            <Link
+              href="/oda"
+              className="flex min-h-11 items-center justify-center rounded-xl border border-line px-4 font-semibold hover:bg-surface-2"
+            >
               Yeni oda kur
             </Link>
             <Link

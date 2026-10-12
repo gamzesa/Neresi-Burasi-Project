@@ -97,7 +97,8 @@ Tüm sabitler tek dosyada (`lib/game/scoring.ts`) tutulur; başka yerde sabit sa
 - İkisi de tahmin edince soru hemen biter; süre dolunca tahmin etmeyen 0 alır. Sonuç 8 sn gösterilir, sonraki soru kendiliğinden açılır. Toplam puanı yüksek olan kazanır.
 - **Hile önleme:** doğru cevap ve rakibin tahmini **soru bitene kadar kimseye gönderilmez** (tahmin eden oyuncuya bile yalnızca "kabul edildi" döner). Süre sunucu saatiyle ölçülür; ilerleme arka plan işlemi olmadan her istekte tembelce hesaplanır (`lib/room/service.ts`). Oyuncu kimliği gizli bir anahtardır (gövdede taşınır, veritabanında yalnızca SHA-256 özeti tutulur).
 - Anlık güncelleme için istemci 1 sn'de bir `POST /api/room/state` sorgular (Vercel kalıcı bağlantı tutmaz). Gerekirse Supabase Realtime'a geçilebilir.
-- Tablolar: `rooms`, `room_players`, `room_guesses` (migration `20261012120000_duel_rooms.sql`). 3 saatten eski odalar kullanılmaz.
+- **Tekrar oyna:** oyun bitince iki tarafa da "Tekrar oyna" düğmesi çıkar. Biri ister, diğeri kabul ya da reddeder (`POST /api/room/rematch`, `action`: request/accept/decline). Kabul edilirse aynı harita/zorluk ve aynı iki oyuncuyla yeni oda açılır, oyun 3 sn geri sayımla kendiliğinden başlar; reddedilirse isteyene "rakip reddetti" gösterilir ve o odada tekrar istenemez. İkisi aynı anda isterse karşılıklı kabul sayılır. Oyuncu anahtarı yeni odada da geçerlidir.
+- Tablolar: `rooms`, `room_players`, `room_guesses` (migration `20261012120000_duel_rooms.sql`, tekrar oyna sütunları `20261012180000_room_rematch.sql`). 3 saatten eski odalar kullanılmaz.
 
 ## Sıralama (rank) sistemi
 - **Hesap sistemi:** Supabase Auth (e-posta + şifre). Kayıt olurken kullanıcı adı seçilir: 3–20 karakter, yalnızca harf/rakam/alt çizgi, büyük-küçük harf fark etmeksizin benzersiz, küfür filtresinden geçer, ayrılmış adlar (admin vb.) alınamaz. Kullanıcı adı `profiles` tablosunda tutulur ve sıralamada görünür. E-posta doğrulaması şimdilik yok (hesap kayıtta doğrulanmış açılır); yayından önce özel e-posta servisi (SMTP) bağlanıp doğrulama eklenecek.
@@ -166,7 +167,7 @@ Mobil uygulama da aynı uç noktaları kullanacağı için oyun mantığı API'd
 | `POST /api/game/guess` | Koordinatı alır; mesafe, bölge, puan hesaplar; doğru konumu ve sonucu döner |
 | `POST /api/game/next` | Sonraki soruya geçer veya oyunu bitirir |
 | `POST /api/game/claim` | Giriş yapmış kullanıcının, misafir olarak bitirdiği oyunu hesabına bağlar |
-| `POST /api/room/create` · `join` · `start` · `state` · `guess` | Çok oyunculu oda: kur, katıl, başlat (yalnızca kuran), durum sorgusu, tahmin |
+| `POST /api/room/create` · `join` · `start` · `state` · `guess` · `rematch` | Çok oyunculu oda: kur, katıl, başlat (yalnızca kuran), durum sorgusu, tahmin |
 | `GET /api/leaderboard` | `map`, `difficulty`, `period` parametreleriyle sıralama (girişliyse kendi derecesi de) |
 | `POST /api/auth/register` | E-posta, kullanıcı adı, şifre ile hesap açar ve giriş yapar |
 | `POST /api/auth/login` · `POST /api/auth/logout` · `GET /api/auth/me` | Giriş, çıkış, mevcut kullanıcı |

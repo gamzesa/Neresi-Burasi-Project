@@ -58,6 +58,8 @@ export const roomApi = {
   join: (input: { code: string; nickname?: string }) => post<RoomJoinResponse>("/api/room/join", input),
   start: (code: string, playerToken: string) => post<{ started: true }>("/api/room/start", { code, playerToken }),
   state: (code: string, playerToken: string) => post<RoomState>("/api/room/state", { code, playerToken }),
+  rematch: (code: string, playerToken: string, action: "request" | "accept" | "decline") =>
+    post<{ ok: true }>("/api/room/rematch", { code, playerToken, action }),
   guess: (code: string, playerToken: string, lat: number, lng: number) =>
     post<{ accepted: true }>("/api/room/guess", { code, playerToken, lat, lng }),
 };
