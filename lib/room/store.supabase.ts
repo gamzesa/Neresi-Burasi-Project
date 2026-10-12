@@ -1,9 +1,18 @@
 import "server-only";
 import { createServerClient } from "@/lib/supabase/server";
 import { createSupabaseStore } from "@/lib/game/store.supabase";
+import type { QuestionRow } from "@/lib/game/types";
 import type { RoomGuessRow, RoomPlayerRow, RoomRow, RoomStore } from "./types";
 
 const UNIQUE_VIOLATION = "23505";
+
+/**
+ * Sorular sık değişmez ve her durum sorgusunda gerekir; her seferinde okunmasın (egress) diye kısa süreli
+ * bellekte tutulur. Soru dosyası güncellenirse en geç `QUESTION_TTL_MS` sonra yeni hâli görülür.
+ */
+const QUESTION_TTL_MS = 10 * 60 * 1000;
+const QUESTION_CACHE_MAX = 300;
+const questionCache = new Map<string, { row: QuestionRow; expiresAt: number }>();
 
 function fail(action: string, message: string): never {
   throw new Error(`Veritabanı hatası (${action}): ${message}`);
@@ -15,7 +24,16 @@ export function createSupabaseRoomStore(): RoomStore {
 
   return {
     listQuestionIds: questions.listQuestionIds,
-    getQuestion: questions.getQuestion,
+    async getQuestion(id) {
+      const hit = questionCache.get(id);
+      if (hit && hit.expiresAt > Date.now()) return hit.row;
+      const row = await questions.getQuestion(id);
+      if (row) {
+        if (questionCache.size >= QUESTION_CACHE_MAX) questionCache.clear();
+        questionCache.set(id, { row, expiresAt: Date.now() + QUESTION_TTL_MS });
+      }
+      return row;
+    },
 
     async createRoom(input) {
       const { data, error } = await db.from("rooms").insert(input).select().single();

@@ -86,12 +86,19 @@ function phaseOf(room: RoomRow, tl: QuestionTimeline | null, now: number): RoomP
  * her istekte tembelce hesaplanır; yeni sorunun açılış zamanı "şimdi" değil sonuç süresinin bitiş anıdır,
  * böylece eşzamanlı istekler aynı değeri yazar.
  */
-async function advanceRoom(store: RoomStore, initial: RoomRow, players: RoomPlayerRow[], now: number) {
+async function advanceRoom(
+  store: RoomStore,
+  initial: RoomRow,
+  players: RoomPlayerRow[],
+  now: number,
+): Promise<{ room: RoomRow; guesses: RoomGuessRow[] }> {
   let room = initial;
+  // İlerleme tahminleri değiştirmez; liste bir kez okunur ve çağırana da verilir (ikinci okuma gerekmez).
+  const guesses = initial.status === "waiting" ? [] : await store.listGuesses(initial.id);
   for (let step = 0; step <= QUESTIONS_PER_GAME; step++) {
-    if (room.status !== "active" || !room.question_started_at) return room;
-    const tl = timeline(room, await store.listGuesses(room.id), players.length);
-    if (now < tl.nextAt) return room;
+    if (room.status !== "active" || !room.question_started_at) break;
+    const tl = timeline(room, guesses, players.length);
+    if (now < tl.nextAt) break;
 
     const expect = { status: "active" as const, current_index: room.current_index };
     const patch =
@@ -101,7 +108,7 @@ async function advanceRoom(store: RoomStore, initial: RoomRow, players: RoomPlay
     await store.updateRoom(room.id, expect, patch);
     room = { ...room, ...patch };
   }
-  return room;
+  return { room, guesses };
 }
 
 // ---------------------------------------------------------------------------
@@ -182,11 +189,30 @@ export async function joinRoom(
   return { code: room.code, playerToken: token, seat: player.seat };
 }
 
+/**
+ * Oyuncu satırları oyun başladıktan sonra değişmez; saniyede bir gelen durum sorgusunda her seferinde veritabanından
+ * okunmasın (egress) diye bellekte tutulur. Bekleme odasında oyuncu eklenebildiği için önbellek kullanılmaz.
+ */
+const PLAYERS_CACHE_MAX = 500;
+const playersCache = new Map<string, RoomPlayerRow[]>();
+
+async function loadPlayers(store: RoomStore, room: RoomRow): Promise<RoomPlayerRow[]> {
+  if (room.status === "waiting") return store.listPlayers(room.id);
+  const cached = playersCache.get(room.id);
+  if (cached) return cached;
+  const players = await store.listPlayers(room.id);
+  if (players.length >= DUEL_MAX_PLAYERS) {
+    if (playersCache.size >= PLAYERS_CACHE_MAX) playersCache.clear();
+    playersCache.set(room.id, players);
+  }
+  return players;
+}
+
 async function authenticate(store: RoomStore, code: string, playerToken: string, clock: Clock) {
   const room = await store.getRoomByCode(normalizeRoomCode(code));
   if (!room) throw new GameError(404, "Oda bulunamadı.");
   requireFresh(room, nowOf(clock));
-  const players = await store.listPlayers(room.id);
+  const players = await loadPlayers(store, room);
   const hash = hashToken(playerToken);
   const me = players.find((p) => p.token_hash === hash);
   if (!me) throw new GameError(403, "Bu odada oyuncu değilsin.");
@@ -226,7 +252,7 @@ export async function respondRematch(
 ) {
   const now = nowOf(input);
   const auth = await authenticate(store, input.code, input.playerToken, input);
-  const room = await advanceRoom(store, auth.room, auth.players, now);
+  const { room } = await advanceRoom(store, auth.room, auth.players, now);
   if (room.status !== "finished") throw new GameError(409, "Oyun henüz bitmedi.");
   if (auth.players.length < DUEL_MAX_PLAYERS) throw new GameError(409, "Rakip odada değil.");
 
@@ -293,10 +319,9 @@ export async function submitRoomGuess(
 ) {
   const now = nowOf(input);
   const auth = await authenticate(store, input.code, input.playerToken, input);
-  const room = await advanceRoom(store, auth.room, auth.players, now);
+  const { room, guesses } = await advanceRoom(store, auth.room, auth.players, now);
   if (room.status !== "active" || !room.question_started_at) throw new GameError(409, "Bu oyun aktif değil.");
 
-  const guesses = await store.listGuesses(room.id);
   const tl = timeline(room, guesses, auth.players.length);
   const phase = phaseOf(room, tl, now);
   if (phase === "countdown") throw new GameError(409, "Soru henüz açılmadı.");
@@ -414,8 +439,7 @@ export async function getRoomState(
 ): Promise<RoomState> {
   const now = nowOf(input);
   const auth = await authenticate(store, input.code, input.playerToken, input);
-  const room = await advanceRoom(store, auth.room, auth.players, now);
-  const guesses = room.status === "waiting" ? [] : await store.listGuesses(room.id);
+  const { room, guesses } = await advanceRoom(store, auth.room, auth.players, now);
 
   const tl = room.question_started_at !== null ? timeline(room, guesses, auth.players.length) : null;
   const phase = phaseOf(room, room.status === "active" ? tl : null, now);

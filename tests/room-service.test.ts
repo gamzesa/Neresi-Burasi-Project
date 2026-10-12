@@ -412,3 +412,30 @@ describe("eski oda temizliği", () => {
     expect(mem.players.every((p) => p.nickname === "Yeni Oda")).toBe(true);
   });
 });
+
+describe("veritabanı okuma sayısı (egress)", () => {
+  it("oyun sürerken bir durum sorgusu en fazla oda + tahmin listesi okur; oyuncular önbellekten gelir", async () => {
+    const { store, host } = await setup();
+    const calls: Record<string, number> = {};
+    const counted = new Proxy(store, {
+      get(target, prop: string) {
+        const value = (target as unknown as Record<string, unknown>)[prop];
+        if (typeof value !== "function") return value;
+        return (...args: unknown[]) => {
+          calls[prop] = (calls[prop] ?? 0) + 1;
+          return (value as (...a: unknown[]) => unknown).apply(target, args);
+        };
+      },
+    });
+    const poll = (now: Date) => getRoomState(counted, { code: host.code, playerToken: host.playerToken, now });
+
+    await poll(q1(1)); // ilk sorgu oyuncuları okur ve önbelleğe alır
+    for (const key of Object.keys(calls)) calls[key] = 0;
+    await poll(q1(2));
+    await poll(q1(3));
+
+    expect(calls.listPlayers ?? 0).toBe(0);
+    expect(calls.listGuesses).toBe(2); // sorgu başına bir
+    expect(calls.getRoomByCode).toBe(2);
+  });
+});
