@@ -76,6 +76,47 @@ export const claimRequestSchema = z.object({
   sessionId: z.uuid(),
 });
 
+export const NICKNAME_MIN = 2;
+export const NICKNAME_MAX = 20;
+
+/** Misafirin oda içinde göreceği takma ad; Türkçe karakter ve boşluk serbesttir, küfür filtresinden geçer. */
+export const nicknameSchema = z
+  .string()
+  .trim()
+  .min(NICKNAME_MIN, `Takma ad en az ${NICKNAME_MIN} karakter olmalı`)
+  .max(NICKNAME_MAX, `Takma ad en fazla ${NICKNAME_MAX} karakter olabilir`)
+  .refine((v) => !containsProfanity(v), "Bu takma ad kullanılamaz");
+
+const roomCodeSchema = z
+  .string()
+  .trim()
+  .toUpperCase()
+  .regex(/^[A-HJ-NP-Z2-9]{5}$/, "Oda kodu 5 karakterli olmalı");
+
+const playerTokenSchema = z.string().min(16).max(128);
+
+export const createRoomRequestSchema = z.object({
+  map: mapSchema,
+  difficulty: difficultySchema,
+  /** Girişli kullanıcı için kullanıcı adı kullanılır; misafirde zorunludur. */
+  nickname: nicknameSchema.optional(),
+});
+
+export const joinRoomRequestSchema = z.object({
+  code: roomCodeSchema,
+  nickname: nicknameSchema.optional(),
+});
+
+export const roomStateRequestSchema = z.object({
+  code: roomCodeSchema,
+  playerToken: playerTokenSchema,
+});
+
+export const roomGuessRequestSchema = roomStateRequestSchema.extend({
+  lat: z.number().min(-90).max(90),
+  lng: z.number().min(-180).max(180),
+});
+
 export const PERIODS = ["all", "week"] as const;
 
 export const leaderboardQuerySchema = z.object({
