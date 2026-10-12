@@ -5,13 +5,15 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import type { FeatureCollection } from "geojson";
 import { useEffect, useRef } from "react";
 import type { LatLng } from "@/lib/game/geo";
-import type { GameMap as GameMapType } from "@/lib/game/scoring";
+import type { Difficulty, GameMap as GameMapType } from "@/lib/game/scoring";
 import { HOVER_LAYERS, hoverFilter, TURKEY_BOUNDS, WORLD_BOUNDS, buildMapStyle } from "./mapStyle";
 
 maplibregl.setWorkerUrl("/vendor/maplibre-gl-worker.mjs");
 
 interface GameMapProps {
   map: GameMapType;
+  /** Dünya haritasında şehir etiketlerinin açılıp açılmayacağını belirler. */
+  difficulty?: Difficulty;
   /** Oyuncunun işaretlediği tahmin. */
   guess: LatLng | null;
   /** Doğru konum; yalnızca sonuç ekranında verilir. */
@@ -45,7 +47,7 @@ function lineCollection(a: LatLng | null, b: LatLng | null | undefined): Feature
   };
 }
 
-export default function GameMap({ map, guess, answer, disabled = false, onGuessChange }: GameMapProps) {
+export default function GameMap({ map, difficulty, guess, answer, disabled = false, onGuessChange }: GameMapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const handlersRef = useRef({ disabled, onGuessChange });
@@ -60,7 +62,7 @@ export default function GameMap({ map, guess, answer, disabled = false, onGuessC
 
     const instance = new maplibregl.Map({
       container: containerRef.current,
-      style: buildMapStyle(map, window.location.origin),
+      style: buildMapStyle(map, window.location.origin, difficulty),
       // Varsayılan görünüm haritanın tamamıdır; oyuncu yakınlaştırıp uzaklaştırabilir.
       bounds: map === "world" ? WORLD_BOUNDS : TURKEY_BOUNDS,
       fitBoundsOptions: { padding: 8 },
@@ -118,7 +120,7 @@ export default function GameMap({ map, guess, answer, disabled = false, onGuessC
       instance.remove();
       mapRef.current = null;
     };
-  }, [map]);
+  }, [map, difficulty]);
 
   useEffect(() => {
     const instance = mapRef.current;

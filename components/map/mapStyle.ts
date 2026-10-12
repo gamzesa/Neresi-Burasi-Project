@@ -1,5 +1,5 @@
 import type { FilterSpecification, StyleSpecification } from "maplibre-gl";
-import type { GameMap } from "@/lib/game/scoring";
+import type { Difficulty, GameMap } from "@/lib/game/scoring";
 
 /** Harita renkleri (koyu tema). Arayüz renkleriyle uyumludur: bkz. app/globals.css. */
 const COLORS = {
@@ -11,6 +11,7 @@ const COLORS = {
   label: "#dbe7f5",
   labelHalo: "#07121f",
   continent: "#8fa9c7",
+  city: "#b9c9dd",
   link: "#fbbf24",
   guess: "#fb7185",
   answer: "#34d399",
@@ -31,6 +32,25 @@ export const TURKEY_BOUNDS: [[number, number], [number, number]] = [
   [44.9, 42.2],
 ];
 
+/**
+ * Dünya haritasında şehir etiketleri zorluğa göre açılır (şehir adları cevabı kolaylaştırır):
+ * Kolay'da tüm şehirler (büyükten küçüğe, zoom'a göre), Orta'da yalnızca büyük şehirler ve daha geç,
+ * Zor'da hiç şehir yok. `minRank`, build-cities.mjs'teki RANK_MAX değeridir (14 = en büyük).
+ */
+export const CITY_LABELS: Record<Difficulty, { minZoom: number; minRank: number } | null> = {
+  easy: { minZoom: 3, minRank: 0 },
+  medium: { minZoom: 5, minRank: 12 },
+  hard: null,
+};
+
+/** Şehirler büyüklüğüne (RANK_MAX) göre kademelenir; büyük şehirler daha uzaktan görünür. */
+const CITY_TIERS = [
+  { minRank: 13, maxRank: 14, minZoom: 3 },
+  { minRank: 12, maxRank: 12, minZoom: 4 },
+  { minRank: 11, maxRank: 11, minZoom: 5 },
+  { minRank: 0, maxRank: 10, minZoom: 6 },
+];
+
 export const HOVER_LAYERS = ["areas-hover-fill", "areas-hover-line"] as const;
 
 /** Yalnızca verilen koda sahip bölgeyi seçen süzgeç; boş kod hiçbir bölgeyle eşleşmez (vurgu kapalı). */
@@ -39,7 +59,7 @@ export function hoverFilter(code: string): FilterSpecification {
 }
 
 /** Altlık harita yoktur: yalnızca arka plan + GeoJSON dolgu/çizgi (+ dünya için etiket) katmanları. */
-export function buildMapStyle(map: GameMap, assetBase: string): StyleSpecification {
+export function buildMapStyle(map: GameMap, assetBase: string, difficulty?: Difficulty): StyleSpecification {
   const geo = `${assetBase}/geo`;
   const common: StyleSpecification = {
     version: 8,
@@ -112,6 +132,48 @@ export function buildMapStyle(map: GameMap, assetBase: string): StyleSpecificati
         paint: { "text-color": COLORS.label, "text-halo-color": COLORS.labelHalo, "text-halo-width": 1.4 },
       },
     );
+  }
+
+  const cities = map === "world" && difficulty ? CITY_LABELS[difficulty] : null;
+  if (cities) {
+    common.sources["cities"] = { type: "geojson", data: `${geo}/world-cities.geojson` };
+    // Filtre içinde zoom kullanılamadığı için her kademe kendi `minzoom`'una sahip ayrı katmandır.
+    for (const tier of CITY_TIERS) {
+      if (tier.maxRank < cities.minRank) continue;
+      const minzoom = Math.max(tier.minZoom, cities.minZoom);
+      const filter: FilterSpecification = [
+        "all",
+        [">=", ["get", "rank"], Math.max(tier.minRank, cities.minRank)],
+        ["<=", ["get", "rank"], tier.maxRank],
+      ];
+      common.layers.push(
+        {
+          id: `city-dots-${tier.minRank}`,
+          type: "circle",
+          source: "cities",
+          minzoom,
+          filter,
+          paint: { "circle-radius": 2, "circle-color": COLORS.city, "circle-opacity": 0.8 },
+        },
+        {
+          id: `city-labels-${tier.minRank}`,
+          type: "symbol",
+          source: "cities",
+          minzoom,
+          filter,
+          layout: {
+            "text-field": ["get", "name"],
+            "text-font": REGULAR,
+            "text-size": 11,
+            "text-anchor": "top",
+            "text-offset": [0, 0.5],
+            "text-max-width": 7,
+            "symbol-sort-key": ["-", 0, ["get", "rank"]],
+          },
+          paint: { "text-color": COLORS.city, "text-halo-color": COLORS.labelHalo, "text-halo-width": 1.2 },
+        },
+      );
+    }
   }
 
   common.layers.push(

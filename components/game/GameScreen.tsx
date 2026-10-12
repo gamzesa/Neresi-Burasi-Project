@@ -219,6 +219,7 @@ export default function GameScreen({ map, difficulty, user }: GameScreenProps) {
       <main className="relative min-h-0 flex-1 md:col-span-2">
         <GameMapLoader
           map={map}
+          difficulty={difficulty}
           guess={guess}
           answer={result ? { lat: result.answer.lat, lng: result.answer.lng } : null}
           disabled={mapLocked}
