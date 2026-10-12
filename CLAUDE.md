@@ -20,6 +20,7 @@ Arayüz dili Türkçedir. Kod (değişken, fonksiyon, dosya adları) İngilizce 
 ### Harita verisi
 - **Dünya:** Natural Earth ülke sınırları (kamu malı), GeoJSON. Ülke adları Türkçe etiketlenir. Kıta adları ayrı bir nokta GeoJSON katmanında tutulur.
 - **Türkiye:** 81 il sınırları GeoJSON; kaynak Natural Earth Admin-1 (1:10m, kamu malı). **Etiket katmanı yoktur**, yalnızca il sınırları çizilir.
+- **Dünya şehir etiketleri:** `public/geo/world-cities.geojson` (Natural Earth 50m Populated Places, Türkçe adlar; `scripts/build-cities.mjs` üretir). Zorluğa göre açılır: Kolay'da tüm şehirler zoom 3'ten, Orta'da yalnızca büyük şehirler zoom 5'ten, Zor'da yok (ayar: `CITY_LABELS`, `components/map/mapStyle.ts`). Türkiye haritasında şehir/il etiketi yoktur.
 - Altlık (tile) harita kullanılmaz; stil yalnızca arka plan + GeoJSON dolgu/çizgi (+ dünya için etiket) katmanlarından oluşur. Bu sayede ücretli harita servisine gerek kalmaz ve etiketler tamamen kontrol altında olur.
 - Etiket fontları (glyph) kendi sunucumuzda barındırılır ve Türkçe karakterleri (ç, ğ, ı, İ, ö, ş, ü) desteklemelidir.
 - Dosyalar `public/geo/` altında durur ve boyutları küçük tutulur (gerekirse mapshaper ile sadeleştirilir).
@@ -88,6 +89,16 @@ Tüm sabitler tek dosyada (`lib/game/scoring.ts`) tutulur; başka yerde sabit sa
 - Mesafe, bölge kontrolü ve puan **yalnızca sunucuda** hesaplanır. İstemcinin gönderdiği puana asla güvenilmez.
 - Oturum kimliği olmadan veya bitmiş bir oturuma tahmin gönderilemez; aynı soruya ikinci tahmin kabul edilmez.
 
+## Çok oyunculu mod (arkadaşla karşılıklı)
+- Oda kurulur, 5 karakterli oda kodu/bağlantı arkadaşa verilir (`/oda`, `/oda/[kod]`). Oda **2 oyunculudur**; misafir takma adla katılabilir (sıralamaya girmez). Girişli kullanıcı kullanıcı adıyla oynar.
+- İki oyuncu **aynı 5 soruyu aynı anda** görür. Soru başına **30 sn**; ekranda geri sayım çubuğu vardır. Kuran oyunu başlatır, ilk soru 3 sn geri sayımdan sonra açılır.
+- **İpuçları kendiliğinden açılır** (süre içinde eşit aralıklarla; ilk ipucu 0. sn). Oyuncu ipucu açmaz, ipucu katsayısı uygulanmaz.
+- **Puan:** `round((mesafePuanı + bölgeBonusu) * zorlukKatsayısı * hızKatsayısı)`; `hızKatsayısı = 0.75 + 0.25 * (kalanSüre / 30)` (anında 1.00, son saniye 0.75). Sabitler `lib/game/scoring.ts` içindedir (`DUEL_*`).
+- İkisi de tahmin edince soru hemen biter; süre dolunca tahmin etmeyen 0 alır. Sonuç 8 sn gösterilir, sonraki soru kendiliğinden açılır. Toplam puanı yüksek olan kazanır.
+- **Hile önleme:** doğru cevap ve rakibin tahmini **soru bitene kadar kimseye gönderilmez** (tahmin eden oyuncuya bile yalnızca "kabul edildi" döner). Süre sunucu saatiyle ölçülür; ilerleme arka plan işlemi olmadan her istekte tembelce hesaplanır (`lib/room/service.ts`). Oyuncu kimliği gizli bir anahtardır (gövdede taşınır, veritabanında yalnızca SHA-256 özeti tutulur).
+- Anlık güncelleme için istemci 1 sn'de bir `POST /api/room/state` sorgular (Vercel kalıcı bağlantı tutmaz). Gerekirse Supabase Realtime'a geçilebilir.
+- Tablolar: `rooms`, `room_players`, `room_guesses` (migration `20261012120000_duel_rooms.sql`). 3 saatten eski odalar kullanılmaz.
+
 ## Sıralama (rank) sistemi
 - **Hesap sistemi:** Supabase Auth (e-posta + şifre). Kayıt olurken kullanıcı adı seçilir: 3–20 karakter, yalnızca harf/rakam/alt çizgi, büyük-küçük harf fark etmeksizin benzersiz, küfür filtresinden geçer, ayrılmış adlar (admin vb.) alınamaz. Kullanıcı adı `profiles` tablosunda tutulur ve sıralamada görünür. E-posta doğrulaması şimdilik yok (hesap kayıtta doğrulanmış açılır); yayından önce özel e-posta servisi (SMTP) bağlanıp doğrulama eklenecek.
 - **Google ile giriş:** Supabase Auth'un Google sağlayıcısı (OAuth/PKCE). Yalnızca `NEXT_PUBLIC_GOOGLE_LOGIN=true` iken düğme görünür (Supabase panelinde Google yapılandırılmadan açılmaz). Google ile ilk girişte kullanıcı adı yoktur; `/kullanici-adi` sayfasında seçilir (kayıttaki kurallarla aynı). Dönüş `/auth/callback` rotasındadır; misafir oyunu `claim` parametresiyle hesaba bağlanır.
@@ -155,6 +166,7 @@ Mobil uygulama da aynı uç noktaları kullanacağı için oyun mantığı API'd
 | `POST /api/game/guess` | Koordinatı alır; mesafe, bölge, puan hesaplar; doğru konumu ve sonucu döner |
 | `POST /api/game/next` | Sonraki soruya geçer veya oyunu bitirir |
 | `POST /api/game/claim` | Giriş yapmış kullanıcının, misafir olarak bitirdiği oyunu hesabına bağlar |
+| `POST /api/room/create` · `join` · `start` · `state` · `guess` | Çok oyunculu oda: kur, katıl, başlat (yalnızca kuran), durum sorgusu, tahmin |
 | `GET /api/leaderboard` | `map`, `difficulty`, `period` parametreleriyle sıralama (girişliyse kendi derecesi de) |
 | `POST /api/auth/register` | E-posta, kullanıcı adı, şifre ile hesap açar ve giriş yapar |
 | `POST /api/auth/login` · `POST /api/auth/logout` · `GET /api/auth/me` | Giriş, çıkış, mevcut kullanıcı |

@@ -78,6 +78,12 @@ export default function HomeMenu({ user }: { user: { username: string } | null }
 
       <footer className="flex flex-col gap-3 pt-6">
         <Link
+          href="/oda"
+          className="flex min-h-11 items-center justify-center rounded-xl border border-sky/60 px-4 text-sm font-semibold text-sky transition hover:bg-sky hover:text-bg"
+        >
+          Arkadaşınla yarış
+        </Link>
+        <Link
           href="/leaderboard"
           className="flex min-h-11 items-center justify-center text-sm font-semibold text-accent underline hover:text-ink"
         >

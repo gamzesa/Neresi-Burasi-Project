@@ -18,6 +18,8 @@ interface GameMapProps {
   guess: LatLng | null;
   /** Doğru konum; yalnızca sonuç ekranında verilir. */
   answer?: LatLng | null;
+  /** Çok oyunculuda rakibin tahmini; yalnızca soru bittikten sonra verilir. */
+  opponentGuess?: LatLng | null;
   /** Harita dokunmaya kapalıysa (ör. sonuç ekranı) true. */
   disabled?: boolean;
   onGuessChange?: (point: LatLng) => void;
@@ -47,7 +49,15 @@ function lineCollection(a: LatLng | null, b: LatLng | null | undefined): Feature
   };
 }
 
-export default function GameMap({ map, difficulty, guess, answer, disabled = false, onGuessChange }: GameMapProps) {
+export default function GameMap({
+  map,
+  difficulty,
+  guess,
+  answer,
+  opponentGuess,
+  disabled = false,
+  onGuessChange,
+}: GameMapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const handlersRef = useRef({ disabled, onGuessChange });
@@ -131,6 +141,8 @@ export default function GameMap({ map, difficulty, guess, answer, disabled = fal
       setData("guess", pointCollection(guess));
       setData("answer", pointCollection(answer));
       setData("link", lineCollection(guess, answer));
+      setData("opponent", pointCollection(opponentGuess));
+      setData("opponent-link", lineCollection(opponentGuess ?? null, answer));
     };
     // `isStyleLoaded()` harita bir kaynağı yenilerken geçici olarak false döner ve "load" olayı bir daha
     // tetiklenmez; bu yüzden işaretçi çizilmeyebilirdi. Kaynak varsa doğrudan yaz, yoksa ilk yüklemeyi bekle.
@@ -143,7 +155,7 @@ export default function GameMap({ map, difficulty, guess, answer, disabled = fal
     if (hadAnswer && !answer) {
       instance.fitBounds(map === "world" ? WORLD_BOUNDS : TURKEY_BOUNDS, { padding: 8, duration: 400 });
     }
-  }, [guess, answer, map]);
+  }, [guess, answer, opponentGuess, map]);
 
   return <div ref={containerRef} className="h-full w-full touch-none" />;
 }

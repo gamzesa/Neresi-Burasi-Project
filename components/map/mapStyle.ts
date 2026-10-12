@@ -14,6 +14,7 @@ const COLORS = {
   city: "#b9c9dd",
   link: "#fbbf24",
   guess: "#fb7185",
+  opponent: "#38bdf8",
   answer: "#34d399",
   markerStroke: "#ffffff",
 };
@@ -72,6 +73,9 @@ export function buildMapStyle(map: GameMap, assetBase: string, difficulty?: Diff
       guess: { type: "geojson", data: { type: "FeatureCollection", features: [] } },
       answer: { type: "geojson", data: { type: "FeatureCollection", features: [] } },
       link: { type: "geojson", data: { type: "FeatureCollection", features: [] } },
+      // Çok oyunculuda rakibin tahmini (yalnızca soru bittikten sonra doldurulur).
+      opponent: { type: "geojson", data: { type: "FeatureCollection", features: [] } },
+      "opponent-link": { type: "geojson", data: { type: "FeatureCollection", features: [] } },
     },
     layers: [
       { id: "background", type: "background", paint: { "background-color": COLORS.water } },
@@ -182,6 +186,23 @@ export function buildMapStyle(map: GameMap, assetBase: string, difficulty?: Diff
       type: "line",
       source: "link",
       paint: { "line-color": COLORS.link, "line-width": 2.5, "line-dasharray": [2, 2] },
+    },
+    {
+      id: "opponent-link-line",
+      type: "line",
+      source: "opponent-link",
+      paint: { "line-color": COLORS.opponent, "line-width": 2.5, "line-dasharray": [2, 2] },
+    },
+    {
+      id: "opponent-point",
+      type: "circle",
+      source: "opponent",
+      paint: {
+        "circle-radius": 9,
+        "circle-color": COLORS.opponent,
+        "circle-stroke-color": COLORS.markerStroke,
+        "circle-stroke-width": 3,
+      },
     },
     {
       id: "answer-point",

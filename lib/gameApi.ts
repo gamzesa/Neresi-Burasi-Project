@@ -1,12 +1,16 @@
 import type { getLeaderboard } from "@/lib/game/leaderboard";
 import type { Difficulty, GameMap } from "@/lib/game/scoring";
 import type { nextStep, openHint, startGame, submitGuess } from "@/lib/game/service";
+import type { RoomState, createRoom, joinRoom } from "@/lib/room/service";
 
 export type StartResponse = Awaited<ReturnType<typeof startGame>>;
 export type HintResponse = Awaited<ReturnType<typeof openHint>>;
 export type GuessResponse = Awaited<ReturnType<typeof submitGuess>>;
 export type NextResponse = Awaited<ReturnType<typeof nextStep>>;
 export type LeaderboardResponse = Awaited<ReturnType<typeof getLeaderboard>>;
+
+export type RoomJoinResponse = Awaited<ReturnType<typeof createRoom>> | Awaited<ReturnType<typeof joinRoom>>;
+export type { RoomState };
 
 export class ApiError extends Error {
   constructor(
@@ -46,6 +50,16 @@ export const gameApi = {
   guess: (sessionId: string, lat: number, lng: number) => post<GuessResponse>("/api/game/guess", { sessionId, lat, lng }),
   next: (sessionId: string) => post<NextResponse>("/api/game/next", { sessionId }),
   claim: (sessionId: string) => post<{ totalScore: number }>("/api/game/claim", { sessionId }),
+};
+
+export const roomApi = {
+  create: (input: { map: GameMap; difficulty: Difficulty; nickname?: string }) =>
+    post<RoomJoinResponse>("/api/room/create", input),
+  join: (input: { code: string; nickname?: string }) => post<RoomJoinResponse>("/api/room/join", input),
+  start: (code: string, playerToken: string) => post<{ started: true }>("/api/room/start", { code, playerToken }),
+  state: (code: string, playerToken: string) => post<RoomState>("/api/room/state", { code, playerToken }),
+  guess: (code: string, playerToken: string, lat: number, lng: number) =>
+    post<{ accepted: true }>("/api/room/guess", { code, playerToken, lat, lng }),
 };
 
 export const authApi = {
