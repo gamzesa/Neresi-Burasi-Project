@@ -90,6 +90,9 @@ export default function HomeMenu({ user }: { user: { username: string } | null }
           Sıralamayı gör
         </Link>
         <AuthBar user={user} />
+        <Link href="/gizlilik" className="text-center text-xs text-muted underline hover:text-ink">
+          Gizlilik ve KVKK
+        </Link>
       </footer>
     </main>
   );

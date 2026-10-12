@@ -190,6 +190,7 @@ app/
   leaderboard/page.tsx
   giris/page.tsx            -- giriş yap
   kayit/page.tsx            -- kayıt ol
+  gizlilik/page.tsx         -- gizlilik ve KVKK aydınlatma metni (iletişim: neresiburasiapp@gmail.com)
   sifremi-unuttum/, sifre-yenile/, kullanici-adi/  -- hesap kurtarma ve Google sonrası ad seçimi
   auth/callback/route.ts    -- OAuth ve e-posta bağlantısı dönüşü
   api/game/...              -- yukarıdaki uç noktalar

@@ -20,6 +20,11 @@ export default function AuthShell({
         {description ? <p className="mt-2 text-sm text-muted">{description}</p> : null}
       </header>
       {children}
+      <p className="mt-auto text-center text-xs text-muted">
+        <Link href="/gizlilik" className="underline hover:text-ink">
+          Gizlilik ve KVKK
+        </Link>
+      </p>
     </main>
   );
 }
