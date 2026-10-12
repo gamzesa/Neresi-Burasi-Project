@@ -6,6 +6,8 @@
 
 Dünya ve Türkiye haritalarında oynanan, Türkçe bir coğrafya bilgi oyunu.
 
+**[▶ Oyna: neresi-burasi-project.vercel.app](https://neresi-burasi-project.vercel.app)**
+
 <img src="docs/screenshots/01-ana-sayfa.png" alt="Ana sayfa" width="720">
 
 </div>
@@ -18,6 +20,8 @@ Sana bir yerin ipuçları verilir; sen de haritada o yeri bulmaya çalışırsı
 - 🎚️ **Üç zorluk:** Kolay, Orta, Zor. Zorlaştıkça ipucu azalır ama puan katsayısı artar.
 - 📚 **150 soru:** Yapılar, doğa, yemek, tarih, kültür. Her oyunda rastgele 5 tanesi seçilir.
 - 🏆 **Sıralama:** Hesabı olan oyuncuların skorları sıralamaya girer. Hesap açmadan da oynayabilirsin.
+- 🤝 **Arkadaşınla yarış:** Oda kodu paylaş, aynı soruları aynı anda oyna; daha yakın, daha az ipucuyla ve daha hızlı bilen kazanır. Oyun bitince "tekrar oyna" diyebilirsin.
+- 🏙️ **Şehir etiketleri:** Dünya haritasında yakınlaştıkça şehir adları görünür (Kolay'da hepsi, Orta'da büyükler, Zor'da yok).
 - 📱 **Mobil uyumlu:** Telefonda rahat kullanılır; ileride iOS/Android uygulamasına dönüştürülecek.
 
 ## Ekran görüntüleri
@@ -54,7 +58,22 @@ Sana bir yerin ipuçları verilir; sen de haritada o yeri bulmaya çalışırsı
 5. Sunucu mesafeyi ve puanı hesaplar; doğru konum ancak o zaman gösterilir.
 6. 5 soru sonunda toplam puan görülür ve hesabı olan oyuncunun skoru sıralamaya girer.
 
-### Puanlama
+### Arkadaşla yarış (çok oyunculu)
+
+1. Oda kurulur; 5 harfli oda kodu ya da bağlantı arkadaşa gönderilir (misafir de katılabilir).
+2. İki oyuncu **aynı 5 soruyu aynı anda** görür; her soru için **30 saniye** vardır ve ekranda geri sayım çubuğu görünür.
+3. İpuçları süre içinde **kendiliğinden** açılır. Tahminini onaylayan oyuncuya sonradan açılan ipuçları gösterilmez.
+4. İkisi de tahmin edince (ya da süre dolunca) sonuç görülür: doğru yer, iki tahmin, mesafe, süre ve puan.
+5. 5 soru sonunda toplam puanı yüksek olan kazanır. İstenirse "tekrar oyna" ile aynı ayarlarla yeni bir oyun başlar (rakip kabul eder ya da reddeder).
+
+```
+soruPuanı = (mesafePuanı + bölgeBonusu) × zorlukKatsayısı × ipucuKatsayısı × hızKatsayısı
+hızKatsayısı = 0,75 + 0,25 × (kalanSüre / 30)     anında 1,00 · son saniye 0,75
+```
+
+Doğru cevap ve rakibin tahmini **soru bitene kadar kimseye gönderilmez**; süre sunucu saatiyle ölçülür.
+
+### Puanlama (tek oyunculu)
 
 ```
 mesafePuanı = 1000 × e^(−mesafe_km / ölçek)     ölçek: Dünya 1500 km · Türkiye 75 km
@@ -86,6 +105,8 @@ Oyun mantığı arayüzde değil **API'de** durur; mobil uygulama da aynı uç n
 - Mesafe, bölge kontrolü ve puan **yalnızca sunucuda** hesaplanır; istemcinin puanına güvenilmez.
 - Aynı soruya ikinci tahmin ve bitmiş oyuna tahmin kabul edilmez.
 - Veritabanı tablolarına istemci doğrudan erişemez (Row Level Security).
+- Çok oyunculuda cevap ve rakibin tahmini soru bitene kadar gizlidir; süre sunucuda ölçülür.
+- Her istemci için uç nokta başına hız sınırı uygulanır (giriş, kayıt, şifre sıfırlama dahil).
 
 ## Kullanılan teknolojiler
 
@@ -98,7 +119,7 @@ Oyun mantığı arayüzde değil **API'de** durur; mobil uygulama da aynı uç n
 | 🎨 | **Tailwind CSS 4** | Mobil öncelikli, koyu tema |
 | ✅ | **Zod** | Tüm API girdilerinin doğrulanması |
 | 🧪 | **Vitest** | Puanlama, coğrafi hesap, oyun kuralları ve soru kalitesi testleri |
-| ☁️ | **Vercel** *(planlanan)* | Yayın |
+| ☁️ | **Vercel** | Yayın |
 | 📱 | **Capacitor** *(planlanan)* | iOS/Android uygulaması |
 
 Harita sınırları [Natural Earth](https://www.naturalearthdata.com/) (kamu malı) kaynaklıdır. Etiket fontu Noto Sans'tır ve Türkçe karakterleri destekler.
@@ -126,9 +147,9 @@ npm run dev               # http://localhost:3000
 ## Proje yapısı
 
 ```
-app/            Sayfalar ve API uç noktaları (oyun, hesap, sıralama)
-components/     Arayüz bileşenleri (harita, oyun ekranları, hesap, sıralama)
-lib/            Oyun kuralları, puanlama, coğrafi hesaplar, hesap işlemleri
+app/            Sayfalar ve API uç noktaları (oyun, oda, hesap, sıralama, gizlilik)
+components/     Arayüz bileşenleri (harita, oyun ve oda ekranları, hesap, sıralama)
+lib/            Oyun kuralları, puanlama, coğrafi hesaplar, çok oyunculu oda mantığı, hesap işlemleri
 data/           Soru dosyaları ve sunucudaki bölge kontrolü için sınır verisi
 public/geo/     Haritada çizilen GeoJSON dosyaları ve fontlar
 supabase/       Veritabanı şeması (migration dosyaları)
@@ -143,7 +164,10 @@ Oyun kuralları, kararlar ve proje kurallarının tamamı için [`CLAUDE.md`](CL
 - [x] Dünya ve Türkiye haritaları, üç zorluk seviyesi, puanlama
 - [x] 150 soruluk havuz (harita ve zorluk başına 25)
 - [x] Hesaplar ve sıralama
-- [x] Google ile giriş ve şifre sıfırlama (kod hazır; Google ve e-posta ayarları Supabase panelinden yapılır)
-- [ ] Yayın (Vercel), hız sınırı, özel e-posta servisi ve e-posta doğrulaması, gizlilik metni
+- [x] Google ile giriş ve şifre sıfırlama
+- [x] Yayın (Vercel), hız sınırı, gizlilik/KVKK sayfası, hesap silme
+- [x] Dünya haritasında şehir etiketleri
+- [x] Arkadaşla çok oyunculu mod (oda kodu, 30 sn/soru, tekrar oyna)
+- [ ] E-posta doğrulaması ve özel alan adı
 - [ ] Soru havuzunu harita ve zorluk başına 50'ye çıkarma
 - [ ] iOS ve Android uygulamaları (Capacitor)
