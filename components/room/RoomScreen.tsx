@@ -178,7 +178,8 @@ function RematchPanel({
   );
 }
 
-function Scoreboard({ players }: { players: RoomState["players"] }) {
+/** `showGuessed`: yalnızca soru sürerken "tahmin etti" bilgisi gösterilir; diğer zamanlarda alt yazı "skor"dur. */
+function Scoreboard({ players, showGuessed = false }: { players: RoomState["players"]; showGuessed?: boolean }) {
   return (
     <ul className="grid grid-cols-2 gap-2">
       {players.map((p) => (
@@ -191,7 +192,7 @@ function Scoreboard({ players }: { players: RoomState["players"] }) {
             {p.isYou ? " (sen)" : ""}
           </p>
           <p className="text-lg font-extrabold">{p.totalScore.toLocaleString("tr-TR")}</p>
-          {p.hasGuessed ? <p className="text-xs text-muted">tahmin etti</p> : null}
+          <p className="text-xs text-muted">{showGuessed && p.hasGuessed ? "tahmin etti" : "skor"}</p>
         </li>
       ))}
     </ul>
@@ -517,7 +518,7 @@ export default function RoomScreen({ code, user }: RoomScreenProps) {
           </p>
         </header>
 
-        <Scoreboard players={view.players} />
+        <Scoreboard players={view.players} showGuessed={answering} />
 
         {connectionLost ? <p className="text-xs text-danger">Bağlantı sorunu, yeniden deneniyor…</p> : null}
 
