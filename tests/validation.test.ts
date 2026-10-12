@@ -133,3 +133,18 @@ describe("hesap kurtarma şemaları", () => {
     expect(chooseUsernameRequestSchema.safeParse({ username: "şükrü" }).success).toBe(false);
   });
 });
+
+describe("hesap silme onayı", () => {
+  it("kullanıcı adı, büyük/küçük harf ve boşluk fark etmeksizin onay sayılır", async () => {
+    const { isDeletionConfirmed } = await import("@/lib/auth/deletion");
+    expect(isDeletionConfirmed("  Gamze_01 ", "gamze_01")).toBe(true);
+    expect(isDeletionConfirmed("baska", "gamze_01")).toBe(false);
+    expect(isDeletionConfirmed("", "gamze_01")).toBe(false);
+  });
+
+  it("kullanıcı adı olmayan hesap için SIL yazılır", async () => {
+    const { isDeletionConfirmed } = await import("@/lib/auth/deletion");
+    expect(isDeletionConfirmed("sil", null)).toBe(true);
+    expect(isDeletionConfirmed("gamze", null)).toBe(false);
+  });
+});

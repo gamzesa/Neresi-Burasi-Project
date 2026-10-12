@@ -53,6 +53,11 @@ export const chooseUsernameRequestSchema = z.object({
   username: usernameSchema,
 });
 
+export const deleteAccountRequestSchema = z.object({
+  /** Silmeyi onaylamak için yazılan kullanıcı adı (kullanıcı adı yoksa "SIL"). */
+  confirmation: z.string().trim().min(1, "Onay metnini yaz").max(40),
+});
+
 export const startRequestSchema = z.object({
   map: mapSchema,
   difficulty: difficultySchema,

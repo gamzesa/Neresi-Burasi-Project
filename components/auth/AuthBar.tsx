@@ -41,6 +41,9 @@ export default function AuthBar({ user }: AuthBarProps) {
         >
           Çıkış yap
         </button>
+        <Link href="/hesabi-sil" className="text-xs text-muted underline hover:text-danger">
+          Hesabımı sil
+        </Link>
       </div>
     );
   }

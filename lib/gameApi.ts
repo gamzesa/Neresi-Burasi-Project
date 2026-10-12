@@ -71,6 +71,7 @@ export const authApi = {
   logout: () => post<{ ok: true }>("/api/auth/logout", {}),
   forgotPassword: (email: string) => post<{ ok: true }>("/api/auth/forgot", { email }),
   resetPassword: (password: string) => post<{ ok: true }>("/api/auth/reset", { password }),
+  deleteAccount: (confirmation: string) => post<{ ok: true }>("/api/auth/delete", { confirmation }),
   chooseUsername: (username: string) => post<{ username: string }>("/api/auth/username", { username }),
 };
 

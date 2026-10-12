@@ -110,7 +110,14 @@ export default function PrivacyPage() {
         <ul className={list}>
           <li>Hesap ve oyun verileri, hesabını silmeni isteyene kadar,</li>
           <li>Arkadaşla oyun odaları 24 saat,</li>
-          <li>Hesap silinirse e-posta ve kullanıcı adın silinir; geçmiş oyun kayıtları kimliksiz kalır.</li>
+          <li>
+            Hesabını istediğin an{" "}
+            <Link href="/hesabi-sil" className="font-semibold text-accent underline">
+              Hesabımı sil
+            </Link>{" "}
+            sayfasından silebilirsin. Silinince e-posta ve kullanıcı adın kaldırılır; geçmiş oyun kayıtları kimliksiz
+            kalır ve sıralamadan düşer.
+          </li>
         </ul>
       </Section>
 

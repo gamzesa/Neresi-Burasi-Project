@@ -22,6 +22,7 @@ export const RATE_LIMITS: Record<string, RateLimitRule> = {
   "/api/auth/forgot": { max: 3, windowSeconds: MINUTE },
   "/api/auth/reset": { max: 5, windowSeconds: MINUTE },
   "/api/auth/username": { max: 10, windowSeconds: MINUTE },
+  "/api/auth/delete": { max: 5, windowSeconds: MINUTE },
   "/api/auth/me": { max: 120, windowSeconds: MINUTE },
   "/api/auth/logout": { max: 30, windowSeconds: MINUTE },
   // Tek oyunculu oyun.

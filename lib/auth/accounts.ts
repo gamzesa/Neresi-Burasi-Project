@@ -1,6 +1,7 @@
 import "server-only";
 import { GameError } from "@/lib/game/service";
 import { createServerClient } from "@/lib/supabase/server";
+import { isDeletionConfirmed } from "./deletion";
 import { createAuthClient, getAuthUser, getRequestOrigin } from "./server";
 
 const UNIQUE_VIOLATION = "23505";
@@ -114,4 +115,27 @@ export async function chooseUsername(username: string) {
     throw new GameError(500, "Kullanıcı adı kaydedilemedi.");
   }
   return { username };
+}
+
+/**
+ * Hesabı kalıcı olarak siler. Onay olarak kullanıcı adı yazılmalıdır. Hesap silinince profil de silinir;
+ * oyun oturumları ve oda kayıtları kimliksiz kalır (veritabanında `user_id` boşalır) ve sıralamadan düşer.
+ */
+export async function deleteAccount(confirmation: string) {
+  const authUser = await getAuthUser();
+  if (!authUser) throw new GameError(401, "Önce giriş yapmalısın.");
+  if (!isDeletionConfirmed(confirmation, authUser.username)) {
+    throw new GameError(400, "Onay metni eşleşmedi. Kullanıcı adını aynen yaz.");
+  }
+
+  const { error } = await createServerClient().auth.admin.deleteUser(authUser.id);
+  if (error) {
+    console.error("deleteUser", error.code ?? error.message);
+    throw new GameError(500, "Hesap silinemedi. Biraz sonra tekrar dene.");
+  }
+
+  // Oturum çerezi artık geçersiz; temizlenemese de silme tamamlanmıştır.
+  const auth = await createAuthClient();
+  await auth.auth.signOut().catch(() => undefined);
+  return { ok: true as const };
 }
