@@ -8,3 +8,12 @@ next-env.d.ts
 !.env.example
 .vercel
 data/questions/ONIZLEME.md
+
+# Android imza anahtarları ve paketleri: asla depoya eklenmez
+*.keystore
+*.jks
+*.p12
+signing-key-info.txt
+signing.keystore
+*.aab
+*.apk
