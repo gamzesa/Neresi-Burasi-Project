@@ -241,6 +241,12 @@ NEXT_PUBLIC_GOOGLE_LOGIN=     # Google Supabase'te yapılandırılınca true (de
 - Tarayıcıya özgü API'lere (ör. `window`) bağımlılık bileşenlerde izole tutulur ki Capacitor'a geçiş kolay olsun.
 - Soru eklerken: ipucu sayısı zorlukla eşleşmeli, dünya sorularında ülke adı geçmemeli, `region_code` GeoJSON'daki kodla birebir aynı olmalı.
 
+## Android uygulaması (Google Play)
+- Uygulama, siteyi sarmalayan bir TWA paketidir (PWABuilder; paket adı `com.neresiburasi.app`). Site güncellenince uygulama da güncellenir.
+- Adres çubuğunun kalkması için `public/.well-known/assetlinks.json` bu paket adını ve imza parmak izlerini (Play uygulama imzalama anahtarı + PWABuilder yükleme anahtarı) içerir. Paketi yeni bir anahtarla üretirsen dosyayı güncelle.
+- İmza anahtarı (`signing.keystore`) ve parolası **depoya asla eklenmez** (`.gitignore` korur); depo dışında yedeklenir.
+- Mağaza metinleri ve form cevapları: `docs/play-store/`.
+
 ## Yol haritası
 1. **MVP:** Harita seçimi, Dünya haritası, tek zorluk, puanlama, sıralama
 2. Türkiye haritası, üç zorluk seviyesi

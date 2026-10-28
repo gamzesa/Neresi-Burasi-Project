@@ -1,0 +1,15 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.neresiburasi.app",
+      "sha256_cert_fingerprints": [
+        "6D:7C:12:93:13:FE:36:56:79:F1:EE:FE:7E:A7:57:EF:CC:70:48:27:B3:89:F8:6F:93:BA:E5:CC:B8:FA:CC:34",
+        "E1:5D:AC:8D:B5:67:D8:23:7A:20:01:AE:36:A1:EF:AB:E7:7F:7A:C6:E3:2A:04:A1:4F:61:AF:96:68:3A:2B:2C"
+      ]
+    }
+  }
+]
