@@ -49,11 +49,13 @@ const STEP_TITLES: Record<LobbyStep, { title: string; hint?: string }> = {
 interface OptionProps {
   selected: boolean;
   label: string;
+  /** Etiketin yanında, aynı satırda hafif yazılan kısa not (ör. "İl adları haritada görünür"). */
+  note?: string | null;
   description?: string;
   onSelect: () => void;
 }
 
-function Option({ selected, label, description, onSelect }: OptionProps) {
+function Option({ selected, label, note, description, onSelect }: OptionProps) {
   return (
     <button
       type="button"
@@ -61,7 +63,10 @@ function Option({ selected, label, description, onSelect }: OptionProps) {
       onClick={onSelect}
       className={`${optionBase} ${selected ? optionOn : optionOff}`}
     >
-      <span className={`text-base font-bold ${selected ? "text-accent" : "text-ink"}`}>{label}</span>
+      <span className="flex flex-wrap items-baseline gap-x-1.5">
+        <span className={`text-base font-bold ${selected ? "text-accent" : "text-ink"}`}>{label}</span>
+        {note ? <span className="text-sm text-muted">– {note}</span> : null}
+      </span>
       {description ? <span className="text-xs text-muted">{description}</span> : null}
     </button>
   );
@@ -259,7 +264,8 @@ export default function RoomLobby({ user }: { user: { username: string } | null 
                 key={d}
                 selected={difficulty === d}
                 label={DIFFICULTY_LABELS[d]}
-                description={`${DIFFICULTY_DESCRIPTIONS[d]} · ${labelNote(map, d)}`}
+                note={labelNote(map, d)}
+                description={DIFFICULTY_DESCRIPTIONS[d]}
                 onSelect={() => {
                   setDifficulty(d);
                   next();

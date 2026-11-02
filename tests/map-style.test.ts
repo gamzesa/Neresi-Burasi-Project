@@ -57,16 +57,14 @@ describe("zorluk seçimindeki etiket notu", () => {
     expect(labelNote("turkey", "hard")).toBe("İl adları haritada görünmez");
   });
 
-  it("Dünya: Kolay'da tüm şehirler, Orta'da büyük şehirler, Zor'da hiçbiri", () => {
-    expect(labelNote("world", "easy")).toBe("Şehir adları haritada görünür");
-    expect(labelNote("world", "medium")).toBe("Yalnızca büyük şehirlerin adları görünür");
-    expect(labelNote("world", "hard")).toBe("Şehir adları haritada görünmez");
+  it("Dünya için not yoktur", () => {
+    for (const difficulty of DIFFICULTIES) expect(labelNote("world", difficulty)).toBeNull();
   });
 
   it("not, harita stilindeki gerçek ayarla çelişmez", () => {
     for (const difficulty of DIFFICULTIES) {
       const shown = layerIds("turkey", difficulty).includes("province-labels");
-      expect(labelNote("turkey", difficulty).endsWith("görünür")).toBe(shown);
+      expect(labelNote("turkey", difficulty)?.endsWith("görünür") ?? false).toBe(shown);
     }
   });
 });

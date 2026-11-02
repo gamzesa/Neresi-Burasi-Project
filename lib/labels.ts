@@ -1,4 +1,4 @@
-import { CITY_LABELS, TURKEY_PROVINCE_LABELS } from "@/components/map/mapStyle";
+import { TURKEY_PROVINCE_LABELS } from "@/components/map/mapStyle";
 import type { Difficulty, GameMap } from "@/lib/game/scoring";
 
 export const MAP_LABELS: Record<GameMap, string> = {
@@ -24,14 +24,10 @@ export const DIFFICULTY_DESCRIPTIONS: Record<Difficulty, string> = {
 };
 
 /**
- * Zorluk seçerken gösterilen not: haritada şehir/il adlarının görünüp görünmediği.
- * Türkiye'de il adları yalnızca Kolay'da; Dünya'da Kolay'da tüm şehirler, Orta'da büyük şehirler, Zor'da hiçbiri.
+ * Türkiye'de zorluk seçerken seviye adının yanında gösterilen not: il adlarının haritada görünüp görünmediği
+ * (yalnızca Kolay'da görünür). Dünya haritası için not yoktur (null).
  */
-export function labelNote(map: GameMap, difficulty: Difficulty): string {
-  if (map === "turkey") {
-    return TURKEY_PROVINCE_LABELS[difficulty] ? "İl adları haritada görünür" : "İl adları haritada görünmez";
-  }
-  const cities = CITY_LABELS[difficulty];
-  if (!cities) return "Şehir adları haritada görünmez";
-  return cities.minRank === 0 ? "Şehir adları haritada görünür" : "Yalnızca büyük şehirlerin adları görünür";
+export function labelNote(map: GameMap, difficulty: Difficulty): string | null {
+  if (map !== "turkey") return null;
+  return TURKEY_PROVINCE_LABELS[difficulty] ? "İl adları haritada görünür" : "İl adları haritada görünmez";
 }

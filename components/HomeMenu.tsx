@@ -68,9 +68,15 @@ export default function HomeMenu({ user }: { user: { username: string } | null }
             </div>
             {DIFFICULTIES.map((d) => (
               <Link key={d} href={`/play/${map}?difficulty=${d}`} className={`${cardBase} ${DIFFICULTY_HOVER[d]}`}>
-                <span className="text-base font-bold">{DIFFICULTY_LABELS[d]}</span>
+                <span className="flex flex-wrap items-baseline gap-x-1.5">
+                  <span className="text-base font-bold">{DIFFICULTY_LABELS[d]}</span>
+                  {labelNote(map, d) ? (
+                    <span className="text-sm text-muted group-hover:text-current group-hover:opacity-80 group-focus-visible:text-current">
+                      – {labelNote(map, d)}
+                    </span>
+                  ) : null}
+                </span>
                 <span className={descriptionClass}>{DIFFICULTY_DESCRIPTIONS[d]}</span>
-                <span className={descriptionClass}>{labelNote(map, d)}</span>
               </Link>
             ))}
           </section>
