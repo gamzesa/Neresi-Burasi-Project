@@ -90,6 +90,7 @@ Tüm sabitler tek dosyada (`lib/game/scoring.ts`) tutulur; başka yerde sabit sa
 - Oturum kimliği olmadan veya bitmiş bir oturuma tahmin gönderilemez; aynı soruya ikinci tahmin kabul edilmez.
 
 ## Çok oyunculu mod (arkadaşla karşılıklı)
+- Oda kurma ve koda katılma ekranı (`/oda`) **adım adım** ilerler, her adımda tek soru sorulur: giriş yapmamışsa önce takma ad (diğer sorular görünmez), sonra harita, zorluk, süre, soru sayısı ve bir özet ekranı ("Değiştir" ile adıma dönülür). Giriş yapmış kullanıcıda takma ad adımı atlanır. Adım mantığı `lib/roomLobbySteps.ts`'tedir.
 - Oda kurulur, 5 karakterli oda kodu/bağlantı arkadaşa verilir (`/oda`, `/oda/[kod]`). Oda **2 oyunculudur**; misafir takma adla katılabilir (sıralamaya girmez). Girişli kullanıcı kullanıcı adıyla oynar.
 - İki oyuncu **aynı soruları aynı anda** görür. Odayı kuran **soru başına süreyi (30/60/90 sn, varsayılan 30)** ve **soru sayısını (5/10/15, varsayılan 5)** seçer; ayarlar bekleme odasında görünür ve "tekrar oyna" ile yeni odaya taşınır. Ekranda geri sayım çubuğu vardır. Kuran oyunu başlatır, ilk soru 3 sn geri sayımdan sonra açılır.
 - **İpuçları kendiliğinden açılır** (süre içinde eşit aralıklarla; ilk ipucu 0. sn). Oyuncu ipucu açmaz. Tahminini onaylayan oyuncuya **sonradan açılan ipuçları gösterilmez** (tahmin anındaki ipuçlarında kalır).
