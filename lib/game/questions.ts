@@ -4,7 +4,10 @@ import { isRegionHit } from "./geo";
 import { DIFFICULTIES, type Difficulty, type GameMap, totalHints } from "./scoring";
 
 /** Her harita ve zorluk için havuzdaki soru sayısı (oyun bunlardan rastgele 5 tanesini seçer). */
-export const QUESTIONS_PER_DIFFICULTY = 25;
+export const QUESTIONS_PER_DIFFICULTY = 50;
+
+/** Bir bölge (ülke/il) aynı haritada en fazla kaç soruda kullanılabilir: Dünya'da 1, Türkiye'de farklı yer/konuyla 2. */
+export const MAX_QUESTIONS_PER_REGION: Record<GameMap, number> = { world: 1, turkey: 2 };
 
 export const questionSeedSchema = z.object({
   difficulty: z.enum(DIFFICULTIES),
@@ -59,7 +62,7 @@ export function validateQuestionSet(
   const errors: string[] = [];
   const names = new Map(regions.features.map((f) => [String(f.properties?.code), String(f.properties?.name)]));
   const labels = new Set<string>();
-  const regionsUsed = new Set<string>();
+  const regionUses = new Map<string, number>();
   const counts: Record<Difficulty, number> = { easy: 0, medium: 0, hard: 0 };
 
   questions.forEach((q, i) => {
@@ -68,9 +71,12 @@ export function validateQuestionSet(
 
     if (labels.has(q.answer_label)) errors.push(`${id} aynı etiketli soru birden fazla`);
     labels.add(q.answer_label);
-    // Çeşitlilik: her ülke/il bir haritada yalnızca bir kez sorulur.
-    if (regionsUsed.has(q.region_code)) errors.push(`${id} bu bölge (${q.region_code}) başka bir soruda da kullanılmış`);
-    regionsUsed.add(q.region_code);
+    // Çeşitlilik: bir bölge bir haritada en fazla MAX_QUESTIONS_PER_REGION kez sorulur.
+    const uses = (regionUses.get(q.region_code) ?? 0) + 1;
+    regionUses.set(q.region_code, uses);
+    if (uses > MAX_QUESTIONS_PER_REGION[map]) {
+      errors.push(`${id} bu bölge (${q.region_code}) en fazla ${MAX_QUESTIONS_PER_REGION[map]} soruda kullanılabilir`);
+    }
 
     if (q.hints.length !== totalHints(q.difficulty)) {
       errors.push(`${id} ${q.difficulty} için ${totalHints(q.difficulty)} ipucu gerekir, ${q.hints.length} var`);

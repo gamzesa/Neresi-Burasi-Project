@@ -52,6 +52,16 @@ const CITY_TIERS = [
   { minRank: 0, maxRank: 10, minZoom: 6 },
 ];
 
+/**
+ * Türkiye haritasında il adları yalnızca Kolay'da görünür (isimler cevabı kolaylaştırır);
+ * Orta ve Zor'da etiket yoktur. Etiket noktaları `scripts/build-turkey-labels.mjs` ile üretilir.
+ */
+export const TURKEY_PROVINCE_LABELS: Record<Difficulty, boolean> = {
+  easy: true,
+  medium: false,
+  hard: false,
+};
+
 export const HOVER_LAYERS = ["areas-hover-fill", "areas-hover-line"] as const;
 
 /** Yalnızca verilen koda sahip bölgeyi seçen süzgeç; boş kod hiçbir bölgeyle eşleşmez (vurgu kapalı). */
@@ -178,6 +188,24 @@ export function buildMapStyle(map: GameMap, assetBase: string, difficulty?: Diff
         },
       );
     }
+  }
+
+  if (map === "turkey" && difficulty && TURKEY_PROVINCE_LABELS[difficulty]) {
+    common.sources["province-labels"] = { type: "geojson", data: `${geo}/turkey-labels.geojson` };
+    common.layers.push({
+      id: "province-labels",
+      type: "symbol",
+      source: "province-labels",
+      layout: {
+        "text-field": ["get", "name"],
+        "text-font": REGULAR,
+        "text-size": ["interpolate", ["linear"], ["zoom"], 3, 10, 6, 13, 9, 17],
+        "text-max-width": 6,
+        // Çakışmada büyük iller önce etiketlenir; küçükler yakınlaştıkça görünür.
+        "symbol-sort-key": ["-", 0, ["get", "areaKm2"]],
+      },
+      paint: { "text-color": COLORS.label, "text-halo-color": COLORS.labelHalo, "text-halo-width": 1.4 },
+    });
   }
 
   common.layers.push(

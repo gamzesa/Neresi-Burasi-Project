@@ -148,3 +148,21 @@ describe("hesap silme onayı", () => {
     expect(isDeletionConfirmed("gamze", null)).toBe(false);
   });
 });
+
+describe("oda ayarları şeması", () => {
+  it("ayar verilmezse 30 sn ve 5 soru olur", async () => {
+    const { createRoomRequestSchema } = await import("@/lib/validation");
+    const parsed = createRoomRequestSchema.parse({ map: "world", difficulty: "easy" });
+    expect(parsed.secondsPerQuestion).toBe(30);
+    expect(parsed.questionCount).toBe(5);
+  });
+
+  it("yalnızca izin verilen süre ve soru sayıları kabul edilir", async () => {
+    const { createRoomRequestSchema } = await import("@/lib/validation");
+    const base = { map: "turkey", difficulty: "hard" } as const;
+    for (const seconds of [30, 60, 90]) expect(createRoomRequestSchema.safeParse({ ...base, secondsPerQuestion: seconds }).success).toBe(true);
+    for (const count of [5, 10, 15]) expect(createRoomRequestSchema.safeParse({ ...base, questionCount: count }).success).toBe(true);
+    for (const seconds of [0, 20, 45, 120, -30]) expect(createRoomRequestSchema.safeParse({ ...base, secondsPerQuestion: seconds }).success).toBe(false);
+    for (const count of [0, 3, 7, 20, 100]) expect(createRoomRequestSchema.safeParse({ ...base, questionCount: count }).success).toBe(false);
+  });
+});

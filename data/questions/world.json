@@ -1257,6 +1257,1346 @@
         "Eston",
         "Tallinn"
       ]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 51.2085,
+      "answer_lng": 3.2245,
+      "region_code": "BE",
+      "answer_label": "Belçika – Brugge Tarihi Merkezi",
+      "hints": [
+        "Batı Avrupa'da, Kuzey Denizi'ne kıyısı olan; çikolatası, waffle'ı ve biraları dünyaca ünlü küçük bir ülkedir.",
+        "Birden fazla resmî dili vardır ve Avrupa Birliği'nin önemli kurumlarına ev sahipliği yapan bir şehre sahiptir.",
+        "Kuzeyindeki bir şehir, kanalları ve ortaçağ binalarıyla 'Kuzey'in Venedik'i' diye anılır ve UNESCO Dünya Mirası'dır.",
+        "Ana meydandaki yüksek çan kulesi ve kanallarda dolaşan tekneler bu şehrin simgesidir."
+      ],
+      "banned_words": [
+        "Belçika",
+        "Belçikalı",
+        "Brüksel",
+        "Flaman",
+        "Valon",
+        "Brugge",
+        "Bruges"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 43.3372,
+      "answer_lng": 17.815,
+      "region_code": "BA",
+      "answer_label": "Bosna-Hersek – Mostar Köprüsü",
+      "hints": [
+        "Balkanlar'da, Adriyatik Denizi'ne yalnızca çok dar bir kıyı şeridiyle ulaşan, dağlık bir ülkedir.",
+        "Osmanlı döneminden kalma camiler, çarşılar ve köprülerle doludur; Doğu ile Batı kültürlerinin buluştuğu bir yerdir.",
+        "Neretva Nehri'nin yeşil sularının üzerinden geçen, 16. yüzyılda yapılmış tek kemerli bir taş köprü ülkenin simgesidir.",
+        "Cesur gençlerin yüksekten nehre atladığı bu köprü, Mimar Hayreddin'in eseridir; yıkıldıktan sonra aslına uygun olarak yeniden inşa edilmiştir."
+      ],
+      "banned_words": [
+        "Bosna",
+        "Hersek",
+        "Bosna-Hersek",
+        "Saraybosna",
+        "Mostar"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 40.3596,
+      "answer_lng": 49.8265,
+      "region_code": "AZ",
+      "answer_label": "Azerbaycan – Alev Kuleleri (Bakü)",
+      "hints": [
+        "Hazar Denizi kıyısında, Kafkasya'da yer alan; Türkçeyle yakın akraba bir dilin konuşulduğu bir ülkedir.",
+        "Topraklarındaki petrol ve doğal gaz yatakları nedeniyle 'Ateşler Ülkesi' olarak da anılır.",
+        "Başkentinin surlarla çevrili eski mahallesi UNESCO Dünya Mirası Listesi'ndedir; eski ve yeni mimari yan yana durur.",
+        "Geceleri ışıklarla alev gibi görünen üç gökdelen şehrin ufuk çizgisinin simgesidir."
+      ],
+      "banned_words": [
+        "Azerbaycan",
+        "Azeri",
+        "Azerice",
+        "Bakü",
+        "Baku"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 42.1337,
+      "answer_lng": 23.3406,
+      "region_code": "BG",
+      "answer_label": "Bulgaristan – Rila Manastırı",
+      "hints": [
+        "Balkanlar'da, Karadeniz'e kıyısı olan; gül yağıyla ve yoğurduyla ünlü bir ülkedir.",
+        "Ülkenin en yüksek dağ silsilesi güneybatısında yer alır ve karlı zirveleriyle bilinir.",
+        "Orta Çağ'dan beri Ortodoks inancının en önemli merkezlerinden biri sayılan bir manastır bu dağların kucağındadır.",
+        "Kırmızı-beyaz şeritli kemerleri ve freskleriyle süslü avlusu UNESCO Dünya Mirası'dır."
+      ],
+      "banned_words": [
+        "Bulgaristan",
+        "Bulgar",
+        "Sofya",
+        "Rila"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 44.8231,
+      "answer_lng": 20.4504,
+      "region_code": "RS",
+      "answer_label": "Sırbistan – Kalemegdan Kalesi (Belgrad)",
+      "hints": [
+        "Balkanlar'ın kalbinde, denize kıyısı olmayan bir ülkedir.",
+        "Tuna ve Sava nehirlerinin birleştiği noktada kurulmuş bir şehir ülkenin merkezidir.",
+        "Roma, Bizans, Osmanlı ve Avusturya dönemlerinden izler taşıyan eski bir kale iki nehrin birleştiği tepenin üzerindedir.",
+        "Kale parkı halkın yürüyüş yaptığı bir mesire alanıdır; içindeki 'Galip' heykeli şehrin simgelerindendir."
+      ],
+      "banned_words": [
+        "Sırbistan",
+        "Sırp",
+        "Belgrad",
+        "Kalemegdan"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 26.8206,
+      "answer_lng": 37.9532,
+      "region_code": "SA",
+      "answer_label": "Suudi Arabistan – Hegra (Medain Salih)",
+      "hints": [
+        "Arap Yarımadası'nın en büyük ülkesidir; İslam'ın iki kutsal şehrine ev sahipliği yapar.",
+        "Topraklarının büyük bölümü çöldür ve dünyanın en büyük petrol üreticilerinden biridir.",
+        "Kuzeybatısındaki kumtaşı kayalıklarda, Nabatiler tarafından oyulmuş yüzlerce mezar bulunur.",
+        "Petra'nın güneydeki 'kardeşi' sayılan bu antik şehir, ülkenin ilk UNESCO Dünya Mirası alanıdır."
+      ],
+      "banned_words": [
+        "Suudi",
+        "Arabistan",
+        "Riyad",
+        "Hegra",
+        "Medain"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 25.2866,
+      "answer_lng": 51.5337,
+      "region_code": "QA",
+      "answer_label": "Katar – Souq Waqif (Doha)",
+      "hints": [
+        "Basra Körfezi'ne uzanan küçük bir yarımada üzerinde kurulmuş zengin bir ülkedir.",
+        "Kişi başına düşen geliri dünyanın en yüksekleri arasındadır; doğal gaz rezervleri dünyada ilk sıralardadır.",
+        "2022'de dünyanın en büyük futbol turnuvasına ev sahipliği yapmıştır.",
+        "Başkentte, geleneksel kerpiç binaları ve baharat dükkânlarıyla ünlü, yeniden canlandırılmış bir çarşı şehrin eski yaşamını yaşatır."
+      ],
+      "banned_words": [
+        "Katar",
+        "Katarlı",
+        "Doha",
+        "Souq",
+        "Waqif"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 36.865,
+      "answer_lng": 10.33,
+      "region_code": "TN",
+      "answer_label": "Tunus – Sidi Bu Said",
+      "hints": [
+        "Kuzey Afrika'da, Akdeniz'e kıyısı olan; Afrika kıtasının en kuzey ucunu barındıran bir ülkedir.",
+        "Antik çağda Fenikelilerin kurduğu ve Roma'ya meydan okuyan Hannibal'in şehri bu topraklardadır.",
+        "Beyaz badanalı evlerinin mavi kapı ve pencereleriyle bilinen, sanatçıları cezbeden bir tepe köyü başkentin yakınında yer alır.",
+        "Körfezin üzerinde yükselen bu mavi-beyaz köy, kafeleri ve sokaklarında satılan yasemin buketleriyle ünlüdür."
+      ],
+      "banned_words": [
+        "Tunus",
+        "Tunuslu",
+        "Kartaca",
+        "Sidi",
+        "Bu Said"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 34.0069,
+      "answer_lng": 36.2039,
+      "region_code": "LB",
+      "answer_label": "Lübnan – Baalbek Tapınakları",
+      "hints": [
+        "Doğu Akdeniz kıyısında, Orta Doğu'nun en küçük ülkelerinden biridir ve bayrağında bir ağaç bulunur.",
+        "Dağlık topraklarında bir zamanlar çok yüksek bir ihtişam yaşayan Fenike şehirleri kurulmuştur.",
+        "İç kesimdeki verimli vadide, Roma döneminin en büyük tapınak komplekslerinden biri yer alır.",
+        "Jüpiter Tapınağı'nın dev sütunları, UNESCO Dünya Mirası olan bu antik şehrin simgesidir."
+      ],
+      "banned_words": [
+        "Lübnan",
+        "Lübnanlı",
+        "Beyrut",
+        "Baalbek"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 10.4626,
+      "answer_lng": -84.7033,
+      "region_code": "CR",
+      "answer_label": "Kosta Rika – Arenal Yanardağı",
+      "hints": [
+        "Orta Amerika'da, hem Pasifik hem Karayip kıyısı olan; ordusu bulunmayan nadir ülkelerdendir.",
+        "Yağmur ormanları ve çok zengin biyoçeşitliliğiyle ekolojik turizmin öncülerindendir.",
+        "Kuzeyinde, neredeyse kusursuz bir koni biçimindeki aktif bir yanardağ yükselir.",
+        "Yıllarca sürekli lav ve kül püskürten bu yanardağın eteklerinde sıcak su kaynakları ve bir göl bulunur."
+      ],
+      "banned_words": [
+        "Kosta Rika",
+        "Kosta Rikalı",
+        "San Jose",
+        "Arenal"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 8.9961,
+      "answer_lng": -79.5897,
+      "region_code": "PA",
+      "answer_label": "Panama – Panama Kanalı (Miraflores)",
+      "hints": [
+        "Kuzey ve Güney Amerika'yı birbirine bağlayan dar kara şeridinde yer alır.",
+        "Bayrağında kırmızı, beyaz ve mavi bölümler ile iki yıldız bulunur.",
+        "Atlas Okyanusu'nu Pasifik'e bağlayan, 20. yüzyılın başında açılmış dev bir su yolu ülkeyi ikiye böler.",
+        "Gemiler, kapı kapı su dolduran havuzlar gibi çalışan kilitlerle yükseltilir; en bilinen kilitlerden biri Pasifik tarafındadır."
+      ],
+      "banned_words": [
+        "Panama",
+        "Panamalı"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 18.5601,
+      "answer_lng": -68.3725,
+      "region_code": "DO",
+      "answer_label": "Dominik Cumhuriyeti – Punta Cana",
+      "hints": [
+        "Karayipler'de, bir adayı başka bir ülkeyle paylaşan, güneşli bir tatil cenneti.",
+        "Adanın doğu yarısını kaplar; batıdaki komşusu Haiti'dir.",
+        "Beyzbolun en sevilen spor olduğu bu ülke, Amerika'ya çok sayıda yıldız oyuncu yetiştirmiştir.",
+        "Doğu ucundaki, hindistan cevizi palmiyeleri ve beyaz kumlu plajlarıyla tanınan tatil bölgesi her yıl milyonlarca turisti ağırlar."
+      ],
+      "banned_words": [
+        "Dominik",
+        "Dominikli",
+        "Santo Domingo",
+        "Punta Cana"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 18.4062,
+      "answer_lng": -77.1357,
+      "region_code": "JM",
+      "answer_label": "Jamaika – Dunn's River Şelaleleri",
+      "hints": [
+        "Karayipler'de bir ada ülkesidir; reggae müziğinin doğduğu yerdir.",
+        "Bayrağında altın sarısı, siyah ve yeşil renkler bulunur.",
+        "Dünyanın en hızlı sprinterlerinden biri olan atlet bu ülkenin çocuğudur.",
+        "Kuzey kıyısında, denize doğru basamaklar halinde akan bir şelale, turistlerin tırmanarak çıktığı doğal bir merdiven gibidir."
+      ],
+      "banned_words": [
+        "Jamaika",
+        "Jamaikalı",
+        "Kingston"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 17.222,
+      "answer_lng": -89.6237,
+      "region_code": "GT",
+      "answer_label": "Guatemala – Tikal",
+      "hints": [
+        "Orta Amerika'da, bir zamanlar büyük bir medeniyetin merkezi olan bir ülkedir.",
+        "Nüfusunun büyük bir bölümü Maya dillerini konuşan halklardan oluşur.",
+        "Kuzeydeki yoğun yağmur ormanının ortasında, ağaçların üzerinden yükselen taş piramitler bulunur.",
+        "Ormanın tepelerinden görünen yüksek tapınaklarıyla bu antik Maya şehri UNESCO Dünya Mirası'dır."
+      ],
+      "banned_words": [
+        "Guatemala",
+        "Guatemalalı",
+        "Tikal"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": -34.462,
+      "answer_lng": -57.84,
+      "region_code": "UY",
+      "answer_label": "Uruguay – Colonia del Sacramento",
+      "hints": [
+        "Güney Amerika'nın güneydoğusunda, iki büyük komşusunun arasında yer alan küçük bir ülkedir.",
+        "Futbolun beşiklerinden sayılır; ilk Dünya Kupası'nı bu ülke kazanmıştır.",
+        "Nehir kıyısındaki bu ülkenin güneybatısında, Portekiz döneminden kalma, taş döşeli sokaklarıyla ünlü tarihî bir şehir vardır.",
+        "Karşı kıyıdaki büyük şehre feribotla kısa sürede gidilen bu şehrin tarihî mahallesi UNESCO Dünya Mirası'dır."
+      ],
+      "banned_words": [
+        "Uruguay",
+        "Uruguaylı",
+        "Montevideo",
+        "Colonia"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 25.0339,
+      "answer_lng": 121.5645,
+      "region_code": "TW",
+      "answer_label": "Tayvan – Taipei 101",
+      "hints": [
+        "Pasifik'te, bir kıtanın doğusunda yer alan büyük bir adadır; yarı iletken üretimiyle dünyaca öne çıkar.",
+        "Ada, 'Formosa' (güzel ada) adını Portekizli denizcilerden almıştır.",
+        "Kuzeyindeki en büyük şehirde, bir zamanlar dünyanın en yüksek binası olan bir gökdelen yükselir.",
+        "Bambu gövdesini andıran 101 katlı gökdelen, her yılbaşında havai fişek gösterisiyle ışıldar."
+      ],
+      "banned_words": [
+        "Tayvan",
+        "Tayvanlı",
+        "Taipei",
+        "Taipey"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 48.1422,
+      "answer_lng": 17.1,
+      "region_code": "SK",
+      "answer_label": "Slovakya – Bratislava Kalesi",
+      "hints": [
+        "Orta Avrupa'da, denize kıyısı olmayan, dağlık bir ülkedir; bir zamanlar komşusuyla aynı devletin parçasıydı.",
+        "Tuna Nehri ülkenin güney sınırının bir bölümünden geçer.",
+        "Başkenti, iki başka ülkenin sınırına çok yakındır ve büyük bir komşu başkente yaklaşık bir saatlik uzaklıktadır.",
+        "Nehri tepeden gören, dört kuleli, beyaz kale halk arasında 'ters çevrilmiş masa' diye anılır."
+      ],
+      "banned_words": [
+        "Slovakya",
+        "Slovak",
+        "Bratislava"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 46.3625,
+      "answer_lng": 14.0938,
+      "region_code": "SI",
+      "answer_label": "Slovenya – Bled Gölü",
+      "hints": [
+        "Alpler ile Adriyatik arasında, Orta Avrupa'nın küçük ama yemyeşil bir ülkesidir.",
+        "Topraklarının yarısından fazlası ormanla kaplıdır.",
+        "Kuzeybatısındaki bir gölün ortasında, küçük bir adada bir kilise bulunur.",
+        "Adaya geleneksel kayıklarla çıkılır; kilisedeki 'dilek çanı'nı çalmak adettir."
+      ],
+      "banned_words": [
+        "Slovenya",
+        "Slovenyalı",
+        "Slovence",
+        "Bled",
+        "Ljubljana",
+        "Lübiyana"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 56.9496,
+      "answer_lng": 24.1052,
+      "region_code": "LV",
+      "answer_label": "Letonya – Riga Eski Şehir",
+      "hints": [
+        "Baltık Denizi kıyısındaki üç ülkenin ortadakidir.",
+        "Topraklarının yaklaşık yarısı ormanlarla kaplıdır; ülkede şarkı ve dans festivalleri çok eskiden beri düzenlenir.",
+        "Başkenti, dünyanın en çok Art Nouveau (Jugendstil) binasına sahip şehirlerinden biridir.",
+        "Eski şehirdeki Kara Başlar Evi ve yüksek kuleli bir kilise şehrin simgeleridir."
+      ],
+      "banned_words": [
+        "Letonya",
+        "Letonyalı",
+        "Letonca",
+        "Riga"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 54.6526,
+      "answer_lng": 24.9334,
+      "region_code": "LT",
+      "answer_label": "Litvanya – Trakai Adası Kalesi",
+      "hints": [
+        "Baltık ülkelerinin en güneyindeki ve en büyüğüdür.",
+        "Ortaçağ'da Avrupa'nın en büyük devletlerinden biri bu topraklardan çıkmıştır.",
+        "Başkentine yaklaşık yarım saat uzaklıkta, göllerle çevrili bir tarihî kasaba vardır.",
+        "Göl ortasındaki kırmızı tuğlalı bir ada kalesi, ortaçağdan kalan en iyi korunmuş kale yapılarındandır."
+      ],
+      "banned_words": [
+        "Litvanya",
+        "Litvan",
+        "Vilnius",
+        "Trakai"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 23.5859,
+      "answer_lng": 58.3829,
+      "region_code": "OM",
+      "answer_label": "Umman – Sultan Kabus Büyük Camii (Maskat)",
+      "hints": [
+        "Arap Yarımadası'nın güneydoğusunda, Arap Denizi'ne kıyısı olan bir sultanlıktır.",
+        "Tarih boyunca denizcileriyle ünlenmiştir; Sinbad'ın yolculuklarının çıkış noktalarından biri sayılır.",
+        "Tütsü ağacından elde edilen buhurla meşhurdur; bu koku ülkenin güneyinde üretilir.",
+        "Başkentteki, tek parça el dokuması dev bir halının zemini örttüğü büyük cami ülkenin en tanınmış yapısıdır."
+      ],
+      "banned_words": [
+        "Umman",
+        "Ummanlı",
+        "Maskat",
+        "Muskat",
+        "Kabus"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 42.4247,
+      "answer_lng": 18.7712,
+      "region_code": "ME",
+      "answer_label": "Karadağ – Kotor Körfezi",
+      "hints": [
+        "Balkanlar'da, Adriyatik'e kıyısı olan, nüfusu bir milyondan az küçük bir ülkedir.",
+        "Eski ortak devletinden 2006'da bir halk oylamasıyla barışçıl biçimde ayrılarak bağımsızlığını ilan etmiştir.",
+        "Dağların hemen dibinde, fiyorda benzeyen derin bir körfezin kıyısında kurulmuş antik bir şehir vardır.",
+        "Surlarla çevrili eski şehir UNESCO Dünya Mirası'dır ve sokaklarında dolaşan kedileriyle de ünlüdür."
+      ],
+      "banned_words": [
+        "Karadağ",
+        "Karadağlı",
+        "Podgorica",
+        "Kotor",
+        "Boka"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 40.7058,
+      "answer_lng": 19.9522,
+      "region_code": "AL",
+      "answer_label": "Arnavutluk – Berat",
+      "hints": [
+        "Balkanlar'da, hem Adriyatik hem İyon Denizi'ne kıyısı olan, dağlık bir ülkedir.",
+        "Uzun yıllar dünyaya kapalı kalan, dışarıyla bağlantısını neredeyse tamamen kesmiş bir rejim altında yaşamıştır.",
+        "Orta bölgedeki, tepeye dizilmiş beyaz evleriyle 'bin pencereli şehir' diye anılan bir şehir vardır.",
+        "Osum Nehri'nin iki yakasında yer alan bu şehir UNESCO Dünya Mirası'dır; Osmanlı döneminden kalma yapılar da içerir."
+      ],
+      "banned_words": [
+        "Arnavutluk",
+        "Arnavut",
+        "Tiran",
+        "Berat"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 41.1172,
+      "answer_lng": 20.8016,
+      "region_code": "MK",
+      "answer_label": "Kuzey Makedonya – Ohrid Gölü",
+      "hints": [
+        "Balkanlar'da, denize kıyısı olmayan, dağlarla çevrili bir ülkedir.",
+        "Eski bir federasyondan 1991'de bağımsızlığını kazanmıştır.",
+        "Güneybatısında, Avrupa'nın en eski ve en derin göllerinden biri komşu bir ülkeyle paylaşılır.",
+        "Gölün kıyısındaki, ortaçağdan kalma bir kilise sarp bir kayalığın üstünde yükselir."
+      ],
+      "banned_words": [
+        "Makedonya",
+        "Makedon",
+        "Üsküp",
+        "Ohrid"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "answer_lat": 49.6156,
+      "answer_lng": 6.1317,
+      "region_code": "LU",
+      "answer_label": "Lüksemburg – Bock Kazamatları",
+      "hints": [
+        "Batı Avrupa'nın en küçük ülkelerinden biridir; yüzölçümü bir ilçe kadardır.",
+        "Üç farklı resmî dil konuşulur ve kişi başına düşen gelir dünyanın en yüksekleri arasındadır.",
+        "Hâlâ bir 'Büyük Dük'ün hükümdar olduğu, dünyadaki tek büyük dükalıktır.",
+        "Derin bir vadiye kurulmuş eski bir kale şehri, kazamatları ve uçurumlarıyla UNESCO Dünya Mirası'dır."
+      ],
+      "banned_words": [
+        "Lüksemburg",
+        "Lüksemburglu",
+        "Bock"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": 40.2525,
+      "answer_lng": 58.4396,
+      "region_code": "TM",
+      "answer_label": "Türkmenistan – Darvaza Gaz Krateri",
+      "hints": [
+        "Orta Asya'da, topraklarının büyük bölümünü bir çölün kapladığı ve Hazar Denizi'ne kıyısı olan bir ülkedir.",
+        "Ülkenin kuzeyindeki çölde, onlarca yıldır yanan dev bir çukur geceleri uzaktan bile görünür.",
+        "Sovyet dönemindeki bir sondaj kazasından sonra oluşan bu gaz krateri halk arasında 'Cehennem Kapısı' olarak bilinir."
+      ],
+      "banned_words": [
+        "Türkmenistan",
+        "Türkmen",
+        "Aşkabat",
+        "Darvaza"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": 42.6494,
+      "answer_lng": 77.0856,
+      "region_code": "KG",
+      "answer_label": "Kırgızistan – Issık Göl (Çolpon-Ata)",
+      "hints": [
+        "Orta Asya'da, topraklarının büyük çoğunluğu dağlarla kaplı, denize kıyısı olmayan bir ülkedir.",
+        "Göçebe geleneğini yaşatan halkı, yurt adı verilen keçe çadırlarda konaklar ve at sütünden yapılan kımızı içer.",
+        "Kuzeyindeki, dünyanın en büyük ikinci dağ gölü olan ve kışın bile donmayan göl, 'sıcak göl' anlamına gelen adıyla bilinir."
+      ],
+      "banned_words": [
+        "Kırgızistan",
+        "Kırgız",
+        "Bişkek",
+        "Issık",
+        "Çolpon"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": 38.1667,
+      "answer_lng": 73.9667,
+      "region_code": "TJ",
+      "answer_label": "Tacikistan – Pamir Dağları (Murgab)",
+      "hints": [
+        "Orta Asya'da, topraklarının yüzde doksanından fazlası dağlık olan, denize kıyısı olmayan bir ülkedir.",
+        "Doğusundaki yüksek platoya 'Dünyanın Çatısı' denir ve oradaki yollar deniz seviyesinden 4.000 metrenin üzerine çıkar.",
+        "Antik İpek Yolu'nun bir kolunu izleyen ve dünyanın en yüksek karayollarından biri sayılan yol bu platodan geçer."
+      ],
+      "banned_words": [
+        "Tacikistan",
+        "Tacik",
+        "Duşanbe",
+        "Pamir",
+        "Murgab",
+        "Murghob"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": 53.4511,
+      "answer_lng": 26.4727,
+      "region_code": "BY",
+      "answer_label": "Belarus – Mir Kalesi",
+      "hints": [
+        "Doğu Avrupa'da, denize kıyısı olmayan, düz ovalarla ve ormanlarla kaplı bir ülkedir.",
+        "Dünyada en iyi korunmuş ilkel ormanlardan birinin bir bölümünü barındırır; burada Avrupa'nın en büyük kara hayvanı olan bizonlar yaşar.",
+        "Etrafı bir gölle çevrili, köşelerinde kuleleri olan, 16. yüzyıldan kalma bir şato UNESCO Dünya Mirası'dır."
+      ],
+      "banned_words": [
+        "Belarus",
+        "Belarusya",
+        "Minsk",
+        "Mir"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": -17.8419,
+      "answer_lng": 25.8544,
+      "region_code": "ZM",
+      "answer_label": "Zambiya – Livingstone (Victoria Şelalesi)",
+      "hints": [
+        "Güney Afrika'da, denize kıyısı olmayan ve sekiz ülkeyle sınırı bulunan bir ülkedir.",
+        "Ülkenin güney sınırını çizen büyük bir nehir, bir ülkeden ötekine geçerken dev bir basamağa çarpıp aşağı dökülür.",
+        "Yerli dilde 'gürleyen duman' anlamına gelen, dünyanın en büyük şelalelerinden birinin yakınındaki şehir ziyaretçilerin üssüdür."
+      ],
+      "banned_words": [
+        "Zambiya",
+        "Zambiyalı",
+        "Lusaka",
+        "Livingstone"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": -18.6833,
+      "answer_lng": 34.35,
+      "region_code": "MZ",
+      "answer_label": "Mozambik – Gorongosa Ulusal Parkı",
+      "hints": [
+        "Güneydoğu Afrika'da, Hint Okyanusu'na uzun bir kıyı şeridi olan bir ülkedir.",
+        "Uzun bir iç savaş yüzünden vahşi yaşamı neredeyse yok olan büyük bir milli park, sonradan yoğun çabalarla yeniden canlandırılmıştır.",
+        "Doğu Afrika Rift Vadisi'nin güney ucunda yer alan bu parkta aslanlar, filler ve su aygırları yeniden çoğalmıştır."
+      ],
+      "banned_words": [
+        "Mozambik",
+        "Maputo",
+        "Gorongosa"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": -1.467,
+      "answer_lng": 29.536,
+      "region_code": "RW",
+      "answer_label": "Ruanda – Volkanlar Ulusal Parkı",
+      "hints": [
+        "Doğu-Orta Afrika'da, 'bin tepenin ülkesi' olarak anılan küçük ve dağlık bir ülkedir.",
+        "Kuzeybatısındaki sisli yanardağ yamaçlarında, nesli tükenme tehlikesi altındaki iri bir primat türü yaşar.",
+        "Ziyaretçiler izin alarak ormanda yürür ve bu primatları, çok yakından görmeye çalışır."
+      ],
+      "banned_words": [
+        "Ruanda",
+        "Ruandalı",
+        "Kigali"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": 4.2036,
+      "answer_lng": 9.17,
+      "region_code": "CM",
+      "answer_label": "Kamerun – Kamerun Dağı",
+      "hints": [
+        "Orta Afrika'nın Atlas Okyanusu kıyısında, çok çeşitli iklim ve coğrafyayı bir arada barındırdığı için 'Küçük Afrika' diye anılan bir ülkedir.",
+        "Ülkede hem çöller, hem yağmur ormanları hem de yüksek dağlar vardır; futbolda Afrika'nın güçlü takımlarından biridir.",
+        "Batı kıyısındaki, Batı ve Orta Afrika'nın en yüksek zirvesi olan aktif yanardağ 4.000 metreyi aşar."
+      ],
+      "banned_words": [
+        "Kamerun",
+        "Yaounde",
+        "Duala"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": 6.8103,
+      "answer_lng": -5.2884,
+      "region_code": "CI",
+      "answer_label": "Fildişi Sahili – Yamoussoukro Bazilikası",
+      "hints": [
+        "Batı Afrika'da, Gine Körfezi kıyısında yer alan, dünyanın en büyük kakao üreticisidir.",
+        "Adı, kıyısından bir zamanlar çokça ticareti yapılan değerli bir maddeye gönderme yapar.",
+        "Siyasi başkentinde, Roma'daki ünlü bir kilise örnek alınarak yapılmış, dünyanın en büyük kiliselerinden biri yükselir."
+      ],
+      "banned_words": [
+        "Fildişi",
+        "Yamoussoukro",
+        "Abidjan",
+        "Ivoire"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": 13.9054,
+      "answer_lng": -4.5555,
+      "region_code": "ML",
+      "answer_label": "Mali – Djenné Büyük Camii",
+      "hints": [
+        "Batı Afrika'da, denize kıyısı olmayan; topraklarının kuzeyi Sahra Çölü'ne uzanan bir ülkedir.",
+        "Bir zamanlar altın ve tuz ticaretiyle büyük bir imparatorluğun merkezi olmuştur; bu imparatorluğun hükümdarı hac yolculuğunda yanında inanılmaz miktarda altın taşımıştır.",
+        "Nehir kıyısındaki bir kentte, çamurdan örülmüş ve halkın her yıl birlikte sıvadığı dev bir cami dünyanın en büyük kerpiç yapılarından biridir."
+      ],
+      "banned_words": [
+        "Mali",
+        "Bamako",
+        "Djenne",
+        "Timbuktu"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": 16.9383,
+      "answer_lng": 33.75,
+      "region_code": "SD",
+      "answer_label": "Sudan – Meroe Piramitleri",
+      "hints": [
+        "Kuzeydoğu Afrika'da, Nil'in iki ana kolunun birleştiği bir ülkedir.",
+        "Çölün ortasında, Mısır'dakilerden daha dik ve daha küçük, ama sayıca onlardan çok daha fazla piramit vardır.",
+        "Bu piramitleri, Nil kıyısında bir zamanlar Mısır'ı bile yönetmiş bir Afrika krallığının hükümdarları yaptırmıştır."
+      ],
+      "banned_words": [
+        "Sudan",
+        "Hartum",
+        "Meroe"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": 36.3203,
+      "answer_lng": 5.7381,
+      "region_code": "DZ",
+      "answer_label": "Cezayir – Cemile Roma Kalıntıları",
+      "hints": [
+        "Kuzey Afrika'da, yüzölçümü bakımından Afrika kıtasının en büyük ülkesidir.",
+        "Topraklarının yüzde seksenden fazlası Sahra Çölü'dür; kuzeyindeki dar kıyı şeridinde Akdeniz iklimi hüküm sürer.",
+        "İç kesimdeki dağlık bölgede, Romalıların kurduğu, mozaikleri ve forumuyla çok iyi korunmuş bir kentin adı 'güzel' anlamına gelen bir sözcükten türer."
+      ],
+      "banned_words": [
+        "Cezayir",
+        "Cezayirli",
+        "Cemile",
+        "Djemila"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": 32.6389,
+      "answer_lng": 14.2886,
+      "region_code": "LY",
+      "answer_label": "Libya – Leptis Magna",
+      "hints": [
+        "Kuzey Afrika'da, Akdeniz kıyısı çok uzun olan, topraklarının büyük bölümü çöl olan bir ülkedir.",
+        "Antik çağda Fenikeliler, sonra Romalılar kıyısında büyük limanlı şehirler kurmuştur.",
+        "Bir Roma imparatorunun doğduğu, Akdeniz'in en iyi korunmuş Roma kentlerinden sayılan antik şehrin tiyatrosu ve bazilikası denize bakar."
+      ],
+      "banned_words": [
+        "Libya",
+        "Libyalı",
+        "Trablus",
+        "Leptis"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": 32.5363,
+      "answer_lng": 44.4209,
+      "region_code": "IQ",
+      "answer_label": "Irak – Babil Harabeleri",
+      "hints": [
+        "Orta Doğu'da, iki büyük nehrin arasında kalan verimli topraklara sahip bir ülkedir.",
+        "Dünyanın ilk yazısının ve ilk şehir devletlerinin doğduğu bu topraklar 'Bereketli Hilal'in kalbi' olarak bilinir.",
+        "Antik çağın yedi harikasından birinin 'asma bahçeleri'yle anılan, Hammurabi'nin başkenti olan şehrin kalıntıları Fırat kıyısındadır."
+      ],
+      "banned_words": [
+        "Irak",
+        "Iraklı",
+        "Bağdat",
+        "Babil"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": 29.3759,
+      "answer_lng": 47.9774,
+      "region_code": "KW",
+      "answer_label": "Kuveyt – Kuveyt Kuleleri",
+      "hints": [
+        "Basra Körfezi'nin kuzeybatı ucunda yer alan, petrol zengini küçük bir ülkedir.",
+        "Yüzölçümü küçük olsa da dünyanın en yüksek yaşam standartlarından birine sahiptir ve para birimi dünyanın en değerli birimlerinden biridir.",
+        "Körfez kıyısındaki, iki kulesi küre biçimli su depolarıyla süslü üç ince kule ülkenin simgesidir."
+      ],
+      "banned_words": [
+        "Kuveyt",
+        "Kuveytli"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": 4.8903,
+      "answer_lng": 114.9402,
+      "region_code": "BN",
+      "answer_label": "Brunei – Omar Ali Saifuddien Camii",
+      "hints": [
+        "Güneydoğu Asya'da, bir adanın kuzeyinde, iki parçadan oluşan küçük bir sultanlıktır.",
+        "Petrol ve doğal gaz zenginliği sayesinde vatandaşları gelir vergisi ödemez ve sağlık hizmetleri büyük ölçüde ücretsizdir.",
+        "Başkentin ortasında, bir lagünün kıyısında altın kubbesiyle öne çıkan büyük bir cami şehrin simgesidir."
+      ],
+      "banned_words": [
+        "Brunei",
+        "Bandar",
+        "Begawan"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": 14.84,
+      "answer_lng": -89.1417,
+      "region_code": "HN",
+      "answer_label": "Honduras – Copán Harabeleri",
+      "hints": [
+        "Orta Amerika'da, hem Karayip hem Pasifik kıyısı olan bir ülkedir; adı 'derinlikler' anlamına gelir.",
+        "Muz ihracatıyla bilinen bu ülkenin batısında, bir zamanlar parlak bir Maya şehri vardı.",
+        "Üzerinde hiyeroglif yazıların bulunduğu basamaklı bir merdivenle ünlü bu antik şehir UNESCO Dünya Mirası'dır."
+      ],
+      "banned_words": [
+        "Honduras",
+        "Tegucigalpa",
+        "Copán",
+        "Copan"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": 11.9299,
+      "answer_lng": -85.956,
+      "region_code": "NI",
+      "answer_label": "Nikaragua – Granada",
+      "hints": [
+        "Orta Amerika'nın en büyük ülkesidir ve topraklarında bölgenin en büyük gölü bulunur.",
+        "Ülkede çok sayıda aktif yanardağ vardır; büyük gölün içinde bile çift yanardağlı bir ada yükselir.",
+        "Gölün kuzeybatı kıyısında, İspanyol sömürge döneminde kurulmuş, renkli binalarıyla ünlü kent Amerika kıtasının en eski Avrupalı kentlerindendir."
+      ],
+      "banned_words": [
+        "Nikaragua",
+        "Managua",
+        "Granada"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": 13.8533,
+      "answer_lng": -89.63,
+      "region_code": "SV",
+      "answer_label": "El Salvador – Santa Ana Yanardağı",
+      "hints": [
+        "Orta Amerika'nın en küçük ve en yoğun nüfuslu ülkesidir; Karayip kıyısı yoktur.",
+        "Batısındaki yüksek bir yanardağın kraterinde turkuaz renkli bir kükürt gölü bulunur.",
+        "Volkanik topraklar sayesinde çok kaliteli kahve yetişir ve ülke 'yanardağlar diyarı' olarak da anılır."
+      ],
+      "banned_words": [
+        "Salvador",
+        "Santa Ana",
+        "Ilamatepec"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": -27.0667,
+      "answer_lng": -55.7167,
+      "region_code": "PY",
+      "answer_label": "Paraguay – Jesús de Tavarangué Misyonu",
+      "hints": [
+        "Güney Amerika'nın kalbinde, denize kıyısı olmayan, iki dilli bir ülkedir; halkın büyük kısmı yerli bir dili de konuşur.",
+        "Ülke, dünyanın en büyük hidroelektrik santrallerinden birini komşusuyla paylaşır ve ürettiği elektriğin neredeyse tamamı yenilenebilirdir.",
+        "Güneyinde, 17. yüzyılda yerli halk ve Cizvit rahipler tarafından kurulmuş taş misyon kalıntıları UNESCO Dünya Mirası'dır."
+      ],
+      "banned_words": [
+        "Paraguay",
+        "Asunción",
+        "Asuncion",
+        "Tavarangue",
+        "Tavarangué",
+        "Jesús"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": -9.0794,
+      "answer_lng": 16.0006,
+      "region_code": "AO",
+      "answer_label": "Angola – Kalandula Şelalesi",
+      "hints": [
+        "Güneybatı Afrika'da, Atlas Okyanusu kıyısı olan, Portekizce konuşulan bir ülkedir.",
+        "Uzun bir iç savaşın ardından toparlanan ülkede petrol ve elmas önemli gelir kaynaklarıdır.",
+        "Kuzeyindeki bir nehirde, genişliği 400 metreyi bulan ve Afrika'nın en büyük şelalelerinden sayılan bir şelale gürler."
+      ],
+      "banned_words": [
+        "Angola",
+        "Angolalı",
+        "Luanda",
+        "Kalandula"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": 19.5744,
+      "answer_lng": -72.2453,
+      "region_code": "HT",
+      "answer_label": "Haiti – Citadelle Laferrière",
+      "hints": [
+        "Karayipler'de, bir adanın batıdaki üçte birini kaplayan küçük bir ülkedir.",
+        "1804'te köle ayaklanmasıyla Fransa'dan bağımsızlığını kazanmış, dünyanın ilk siyah cumhuriyetidir.",
+        "Dağların tepesinde yükselen, eski sömürgecinin dönüş ihtimaline karşı yapılmış dev bir kale UNESCO Dünya Mirası'dır."
+      ],
+      "banned_words": [
+        "Haiti",
+        "Haitili",
+        "Citadelle"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": 5.175,
+      "answer_lng": -59.4806,
+      "region_code": "GY",
+      "answer_label": "Guyana – Kaieteur Şelalesi",
+      "hints": [
+        "Güney Amerika'nın kuzeyinde, kıtada İngilizcenin resmî dil olduğu tek ülkedir.",
+        "Topraklarının büyük bölümü yağmur ormanıyla kaplıdır ve adı 'çok sayıda suyun ülkesi' anlamına gelir.",
+        "Ormanın ortasında, tek parça yaklaşık 226 metre yükseklikten dökülen, dünyanın en güçlü şelalelerinden biri uçakla ya da uzun bir yürüyüşle görülür."
+      ],
+      "banned_words": [
+        "Guyana",
+        "Georgetown",
+        "Kaieteur"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": 5.825,
+      "answer_lng": -55.165,
+      "region_code": "SR",
+      "answer_label": "Surinam – Paramaribo Tarihî Merkezi",
+      "hints": [
+        "Güney Amerika'nın kuzeyinde, kıtanın en küçük bağımsız ülkesidir.",
+        "Eskiden Hollanda sömürgesi olan ülkede Hollandaca resmî dildir.",
+        "Başkentin ahşap kolonyal binaları, camisi ile sinagogu yan yana duran tarihî merkezi UNESCO Dünya Mirası'dır."
+      ],
+      "banned_words": [
+        "Surinam",
+        "Paramaribo"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "answer_lat": -8.5372,
+      "answer_lng": 125.6155,
+      "region_code": "TL",
+      "answer_label": "Doğu Timor – Cristo Rei Heykeli (Dili)",
+      "hints": [
+        "Güneydoğu Asya'da, bir adanın doğu yarısını kaplayan genç bir ülkedir; 2002'de bağımsızlığını yeniden kazanmıştır.",
+        "Ülke yüzyıllar boyunca Portekiz yönetiminde kalmış, sonra komşusunun işgaline uğramıştır.",
+        "Başkentin doğusundaki bir burunda, denize bakan dev bir İsa heykeli bulunur."
+      ],
+      "banned_words": [
+        "Timor",
+        "Dili",
+        "Cristo Rei"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": -29.8333,
+      "answer_lng": 28.05,
+      "region_code": "LS",
+      "answer_label": "Lesotho – Maletsunyane Şelalesi",
+      "hints": [
+        "Tamamı başka bir ülkenin içinde kalan, tüm topraklarının deniz seviyesinden 1.000 metrenin çok üzerinde olduğu bir krallıktır.",
+        "Dağlık bölgesinde yaklaşık 200 metre yükseklikten dökülen bir şelalenin kenarında, dünyanın en uzun ticari rapel iniş noktalarından biri bulunur."
+      ],
+      "banned_words": [
+        "Lesotho",
+        "Basotho",
+        "Maseru",
+        "Maletsunyane",
+        "Semonkong"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": -26.45,
+      "answer_lng": 31.2,
+      "region_code": "SZ",
+      "answer_label": "Esvatini – Mlilwane Yaban Hayatı Koruma Alanı",
+      "hints": [
+        "Güney Afrika'da, iki ülkeyle çevrili, mutlak monarşiyle yönetilen küçük bir krallıktır.",
+        "Başkentin yakınındaki bir koruma alanında, zebralar ve su aygırları arasında bisikletle gezilebilir."
+      ],
+      "banned_words": [
+        "Esvatini",
+        "Svaziland",
+        "Mbabane",
+        "Lobamba",
+        "Mlilwane"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": -14.02,
+      "answer_lng": 34.82,
+      "region_code": "MW",
+      "answer_label": "Malavi – Cape Maclear (Malavi Gölü)",
+      "hints": [
+        "Güneydoğu Afrika'da, topraklarının yaklaşık beşte biri bir gölle kaplı, denize kıyısı olmayan bir ülkedir.",
+        "Bu göl, dünyada en fazla balık türüne sahip tatlı su gölüdür; kıyısındaki bir milli park renkli çiklit balıklarıyla ünlüdür."
+      ],
+      "banned_words": [
+        "Malavi",
+        "Malawi",
+        "Lilongve",
+        "Maclear"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": 11.0667,
+      "answer_lng": -0.9833,
+      "region_code": "BF",
+      "answer_label": "Burkina Faso – Tiébélé Boyalı Evleri",
+      "hints": [
+        "Batı Afrika'da, denize kıyısı olmayan; adı 'dürüst insanların ülkesi' anlamına gelen bir ülkedir.",
+        "Güneyindeki bir köyde, evlerin duvarları kadınlar tarafından toprak boyalarla geometrik desenlerle süslenir."
+      ],
+      "banned_words": [
+        "Burkina",
+        "Faso",
+        "Wagadugu",
+        "Ouagadougou",
+        "Tiébélé",
+        "Tiebele"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": 10.0333,
+      "answer_lng": 1.1167,
+      "region_code": "TG",
+      "answer_label": "Togo – Koutammakou Kule Evleri",
+      "hints": [
+        "Batı Afrika'da, kuzey-güney yönünde uzun ama doğu-batı yönünde dar bir ülkedir.",
+        "Kuzeyindeki bir bölgede, kerpiçten yapılmış, iki katlı kule biçimli evler Batammariba halkının yaşam biçimini yansıtır ve UNESCO Dünya Mirası'dır."
+      ],
+      "banned_words": [
+        "Togo",
+        "Togolu",
+        "Lome",
+        "Koutammakou"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": 6.4667,
+      "answer_lng": 2.4167,
+      "region_code": "BJ",
+      "answer_label": "Benin – Ganvié Göl Köyü",
+      "hints": [
+        "Batı Afrika'da, Gine Körfezi kıyısında; vudu dininin doğduğu yer olarak bilinen bir ülkedir.",
+        "Güneyindeki bir gölde, tamamen su üstüne kazıklarla kurulmuş evlerden oluşan bir köy 'Afrika'nın Venedik'i' olarak anılır."
+      ],
+      "banned_words": [
+        "Benin",
+        "Beninli",
+        "Porto-Novo",
+        "Cotonou",
+        "Ganvié",
+        "Ganvie"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": -2.2,
+      "answer_lng": 9.8,
+      "region_code": "GA",
+      "answer_label": "Gabon – Loango Ulusal Parkı",
+      "hints": [
+        "Ekvator'dan geçen, Orta Afrika'nın Atlas Okyanusu kıyısındaki, topraklarının yaklaşık yüzde seksen sekizi ormanla kaplı bir ülkedir.",
+        "Kıyısındaki bir milli parkta fillerin, gorillerin ve su aygırlarının kumsalda dolaştığı görülür."
+      ],
+      "banned_words": [
+        "Gabon",
+        "Gabonlu",
+        "Libreville",
+        "Loango"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": -4.2634,
+      "answer_lng": 15.2429,
+      "region_code": "CG",
+      "answer_label": "Kongo Cumhuriyeti – Brazzaville",
+      "hints": [
+        "Orta Afrika'da, Ekvator'un hemen üzerinden geçen, nüfusunun büyük kısmı iki şehirde yaşayan bir cumhuriyettir.",
+        "Başkenti, büyük bir nehrin karşı kıyısındaki başka bir ülkenin başkentine dünyada birbirine en yakın iki başkentten biri olarak bakar."
+      ],
+      "banned_words": [
+        "Kongo",
+        "Brazzaville",
+        "Brazza"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": -1.52,
+      "answer_lng": 29.25,
+      "region_code": "CD",
+      "answer_label": "Kongo Demokratik Cumhuriyeti – Nyiragongo Yanardağı",
+      "hints": [
+        "Orta Afrika'da, yüzölçümü bakımından Afrika'nın ikinci büyük ülkesidir ve dünyanın en büyük yağmur ormanlarından birini barındırır.",
+        "Doğusundaki aktif bir yanardağın kraterinde, dünyanın en büyük lav göllerinden biri kaynar."
+      ],
+      "banned_words": [
+        "Kongo",
+        "Kinşasa",
+        "Kinshasa",
+        "Nyiragongo",
+        "Goma"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": 17.0,
+      "answer_lng": 22.0,
+      "region_code": "TD",
+      "answer_label": "Çad – Ennedi Platosu",
+      "hints": [
+        "Orta Afrika'nın ortasında, hiç denize sınırı olmayan; adını büyük bir gölden alan bir ülkedir.",
+        "Kuzeydoğusundaki çölde, rüzgârın oyduğu kumtaşı kemerleri ve kayalıkları UNESCO Dünya Mirası'dır."
+      ],
+      "banned_words": [
+        "Çad",
+        "Çadlı",
+        "Encamine",
+        "Ennedi"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": 16.9742,
+      "answer_lng": 7.9915,
+      "region_code": "NE",
+      "answer_label": "Nijer – Agadez Büyük Camii",
+      "hints": [
+        "Batı Afrika'da, denize kıyısı olmayan; topraklarının büyük bölümü Sahra Çölü'nde olan bir ülkedir.",
+        "Çöl kenarındaki tarihî bir ticaret şehrinde, 27 metre yüksekliğinde, çamurdan yapılmış bir minare dünyanın en yüksek kerpiç yapılarındandır."
+      ],
+      "banned_words": [
+        "Nijer",
+        "Niamey",
+        "Agadez"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": 20.4569,
+      "answer_lng": -12.3639,
+      "region_code": "MR",
+      "answer_label": "Moritanya – Chinguetti",
+      "hints": [
+        "Batı Afrika'da, Atlas Okyanusu kıyısı olan; topraklarının çoğu Sahra Çölü'nden oluşan bir ülkedir.",
+        "Çölün içindeki bir vahada, kuma gömülen ortaçağ kütüphanelerinde el yazması kitaplar saklanır ve bu eski kervan şehri 'yedinci kutsal şehir' sayılır."
+      ],
+      "banned_words": [
+        "Moritanya",
+        "Muritanya",
+        "Nouakchott",
+        "Chinguetti",
+        "Şinguti"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": 11.3167,
+      "answer_lng": -12.2833,
+      "region_code": "GN",
+      "answer_label": "Gine – Fouta Djallon Platosu",
+      "hints": [
+        "Batı Afrika'da, Nijer ve Senegal gibi büyük nehirlerin kaynağını barındıran bir ülkedir.",
+        "Ülkenin ortasındaki yüksek plato 'Batı Afrika'nın su kulesi' diye anılır ve yağmur mevsiminde şelalelerle dolar."
+      ],
+      "banned_words": [
+        "Gine",
+        "Konakri",
+        "Fouta",
+        "Djallon",
+        "Labé"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": 8.48,
+      "answer_lng": -13.23,
+      "region_code": "SL",
+      "answer_label": "Sierra Leone – Freetown",
+      "hints": [
+        "Batı Afrika'da, Atlas Okyanusu kıyısındaki, adı kıyısındaki dağların görünümüne gönderme yapan bir ülkedir.",
+        "Başkenti, 18. yüzyılda özgürlüğüne kavuşturulmuş eski köleler tarafından kurulmuştur."
+      ],
+      "banned_words": [
+        "Sierra Leone",
+        "Freetown"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": 6.3,
+      "answer_lng": -10.75,
+      "region_code": "LR",
+      "answer_label": "Liberya – Monrovia",
+      "hints": [
+        "Batı Afrika'da, Afrika'nın en eski cumhuriyetlerinden biridir; 19. yüzyılda özgürleştirilmiş Amerikalı eski kölelerce kurulmuştur.",
+        "Başkentinin adı, bu ülkenin kuruluşunu destekleyen bir ABD başkanının adından türemiştir."
+      ],
+      "banned_words": [
+        "Liberya",
+        "Monrovia"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": 13.3833,
+      "answer_lng": -16.65,
+      "region_code": "GM",
+      "answer_label": "Gambiya – Abuko Doğa Rezervi",
+      "hints": [
+        "Batı Afrika'da, tamamen tek bir ülkenin içinde kalan, anakara Afrika'nın en küçük ülkesidir.",
+        "Ülkenin topraklarını, ortasından geçen nehri izleyen dar bir şerit oluşturur."
+      ],
+      "banned_words": [
+        "Gambiya",
+        "Banjul",
+        "Abuko"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": 11.8636,
+      "answer_lng": -15.5977,
+      "region_code": "GW",
+      "answer_label": "Gine-Bissau – Bissau",
+      "hints": [
+        "Batı Afrika'da, Atlas Okyanusu kıyısında; birçok küçük adadan oluşan bir takımadaya ve zengin biyoçeşitliliğe sahip küçük bir ülkedir.",
+        "Uzun bir kurtuluş savaşı vererek Portekiz yönetiminden bağımsız olmuştur."
+      ],
+      "banned_words": [
+        "Bissau",
+        "Gine"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": 15.3333,
+      "answer_lng": 38.9333,
+      "region_code": "ER",
+      "answer_label": "Eritre – Asmara",
+      "hints": [
+        "Kızıldeniz kıyısında, Afrika Boynuzu'nda yer alan; uzun bir bağımsızlık savaşının ardından 1993'te bağımsız olmuş bir ülkedir.",
+        "Başkenti, 20. yüzyılın başındaki İtalyan yönetiminden kalma Art Deco ve modernist binalarıyla 'Küçük Roma' diye anılır ve UNESCO Dünya Mirası'dır."
+      ],
+      "banned_words": [
+        "Eritre",
+        "Asmara"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": 11.65,
+      "answer_lng": 42.4167,
+      "region_code": "DJ",
+      "answer_label": "Cibuti – Assal Gölü",
+      "hints": [
+        "Kızıldeniz'den Aden Körfezi'ne açılan boğazın kıyısında, çok küçük ve çok sıcak bir ülkedir; birçok ülkenin askerî üssü burada bulunur.",
+        "Çölde, deniz seviyesinin yaklaşık 150 metre altında, Afrika'nın en alçak noktasını oluşturan ve dünyanın en tuzlu göllerinden biri olan bir kratergölü uzanır."
+      ],
+      "banned_words": [
+        "Cibuti",
+        "Djibouti",
+        "Assal"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": -3.3822,
+      "answer_lng": 29.3644,
+      "region_code": "BI",
+      "answer_label": "Burundi – Bujumbura",
+      "hints": [
+        "Doğu-Orta Afrika'da, denize kıyısı olmayan, kişi başına gelir bakımından dünyanın en yoksul ülkelerinden biri olan küçük bir ülkedir.",
+        "Ekonomik merkezi, dünyanın en derin ikinci gölünün kıyısında yer alır."
+      ],
+      "banned_words": [
+        "Burundi",
+        "Bujumbura"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": -8.88,
+      "answer_lng": 147.55,
+      "region_code": "PG",
+      "answer_label": "Papua Yeni Gine – Kokoda Patikası",
+      "hints": [
+        "Pasifik'te, dünyanın en büyük ikinci adasının doğu yarısını ve çevresindeki adaları kapsayan, dünyada en çok dilin konuşulduğu ülkedir.",
+        "Güneyindeki sık ormanlı ve çamurlu dağlarda, İkinci Dünya Savaşı'nda ağır çatışmalara sahne olmuş meşhur bir yürüyüş yolu vardır."
+      ],
+      "banned_words": [
+        "Papua",
+        "Yeni Gine",
+        "Moresby",
+        "Kokoda"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": -19.53,
+      "answer_lng": 169.445,
+      "region_code": "VU",
+      "answer_label": "Vanuatu – Yasur Yanardağı (Tanna)",
+      "hints": [
+        "Pasifik'te, yaklaşık seksen adadan oluşan, dünyada kişi başına en çok dilin konuşulduğu ülkelerden biri olan bir takımadadır.",
+        "Güneydeki bir adada, yüzyıllardır neredeyse kesintisiz patlayan, kratere yakından bakılabilen bir yanardağ vardır."
+      ],
+      "banned_words": [
+        "Vanuatu",
+        "Port Vila",
+        "Yasur",
+        "Tanna"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": -9.4333,
+      "answer_lng": 159.95,
+      "region_code": "SB",
+      "answer_label": "Solomon Adaları – Honiara (Guadalcanal)",
+      "hints": [
+        "Pasifik'te, yüzlerce adadan oluşan ve adını efsanevi bir kralın hazinelerinden alan bir ülkedir.",
+        "İkinci Dünya Savaşı sırasında, başkentin bulunduğu ada Pasifik'in en kanlı çatışmalarından birine sahne olmuştur."
+      ],
+      "banned_words": [
+        "Solomon",
+        "Honiara",
+        "Guadalcanal"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": -17.8,
+      "answer_lng": 177.4167,
+      "region_code": "FJ",
+      "answer_label": "Fiji – Nadi (Viti Levu)",
+      "hints": [
+        "Pasifik'te, üç yüzü aşkın adadan oluşan; turistik plajları ve mercan resifleriyle ünlü bir ülkedir.",
+        "Ragbi en sevilen spordur; ülke yedili ragbide Olimpiyat altın madalyası kazanmıştır."
+      ],
+      "banned_words": [
+        "Fiji",
+        "Nadi",
+        "Suva"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "answer_lat": 47.3,
+      "answer_lng": 28.9833,
+      "region_code": "MD",
+      "answer_label": "Moldova – Orheiul Vechi",
+      "hints": [
+        "Doğu Avrupa'da, denize kıyısı olmayan, üzüm bağları ve devasa şarap mahzenleriyle ünlü küçük bir ülkedir.",
+        "Bir nehir vadisindeki kayalıkta, kayalara oyulmuş bir manastır kompleksi bölgenin en önemli kültürel yerlerinden biri sayılır."
+      ],
+      "banned_words": [
+        "Moldova",
+        "Moldovalı",
+        "Kişinev",
+        "Orheiul"
+      ]
     }
   ]
 }

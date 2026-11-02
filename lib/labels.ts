@@ -1,3 +1,4 @@
+import { TURKEY_PROVINCE_LABELS } from "@/components/map/mapStyle";
 import type { Difficulty, GameMap } from "@/lib/game/scoring";
 
 export const MAP_LABELS: Record<GameMap, string> = {
@@ -21,3 +22,12 @@ export const DIFFICULTY_DESCRIPTIONS: Record<Difficulty, string> = {
   medium: "3 ipucu, puan katsayısı ×1,5",
   hard: "2 ipucu, puan katsayısı ×2,0",
 };
+
+/**
+ * Türkiye'de zorluk seçerken seviye adının yanında gösterilen not: il adlarının haritada görünüp görünmediği
+ * (yalnızca Kolay'da görünür). Dünya haritası için not yoktur (null).
+ */
+export function labelNote(map: GameMap, difficulty: Difficulty): string | null {
+  if (map !== "turkey") return null;
+  return TURKEY_PROVINCE_LABELS[difficulty] ? "İl adları haritada görünür" : "İl adları haritada görünmez";
+}

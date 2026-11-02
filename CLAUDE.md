@@ -19,8 +19,8 @@ Arayüz dili Türkçedir. Kod (değişken, fonksiyon, dosya adları) İngilizce 
 
 ### Harita verisi
 - **Dünya:** Natural Earth ülke sınırları (kamu malı), GeoJSON. Ülke adları Türkçe etiketlenir. Kıta adları ayrı bir nokta GeoJSON katmanında tutulur.
-- **Türkiye:** 81 il sınırları GeoJSON; kaynak Natural Earth Admin-1 (1:10m, kamu malı). **Etiket katmanı yoktur**, yalnızca il sınırları çizilir.
-- **Dünya şehir etiketleri:** `public/geo/world-cities.geojson` (Natural Earth 50m Populated Places, Türkçe adlar; `scripts/build-cities.mjs` üretir). Zorluğa göre açılır: Kolay'da tüm şehirler zoom 3'ten, Orta'da yalnızca büyük şehirler zoom 5'ten, Zor'da yok (ayar: `CITY_LABELS`, `components/map/mapStyle.ts`). Türkiye haritasında şehir/il etiketi yoktur.
+- **Türkiye:** 81 il sınırları GeoJSON; kaynak Natural Earth Admin-1 (1:10m, kamu malı). **İl adı etiketleri yalnızca Kolay seviyede görünür** (Orta ve Zor'da yoktur); etiket noktaları `public/geo/turkey-labels.geojson` (`scripts/build-turkey-labels.mjs` üretir), ayar `TURKEY_PROVINCE_LABELS` (`components/map/mapStyle.ts`).
+- **Dünya şehir etiketleri:** `public/geo/world-cities.geojson` (Natural Earth 50m Populated Places, Türkçe adlar; `scripts/build-cities.mjs` üretir). Zorluğa göre açılır: Kolay'da tüm şehirler zoom 3'ten, Orta'da yalnızca büyük şehirler zoom 5'ten, Zor'da yok (ayar: `CITY_LABELS`, `components/map/mapStyle.ts`). Türkiye'de il adları yalnızca Kolay'da gösterilir (yukarıya bak).
 - Altlık (tile) harita kullanılmaz; stil yalnızca arka plan + GeoJSON dolgu/çizgi (+ dünya için etiket) katmanlarından oluşur. Bu sayede ücretli harita servisine gerek kalmaz ve etiketler tamamen kontrol altında olur.
 - Etiket fontları (glyph) kendi sunucumuzda barındırılır ve Türkçe karakterleri (ç, ğ, ı, İ, ö, ş, ü) desteklemelidir.
 - Dosyalar `public/geo/` altında durur ve boyutları küçük tutulur (gerekirse mapshaper ile sadeleştirilir).
@@ -90,15 +90,16 @@ Tüm sabitler tek dosyada (`lib/game/scoring.ts`) tutulur; başka yerde sabit sa
 - Oturum kimliği olmadan veya bitmiş bir oturuma tahmin gönderilemez; aynı soruya ikinci tahmin kabul edilmez.
 
 ## Çok oyunculu mod (arkadaşla karşılıklı)
+- Oda kurma ve koda katılma ekranı (`/oda`) **adım adım** ilerler, her adımda tek soru sorulur: giriş yapmamışsa önce takma ad (diğer sorular görünmez), sonra harita, zorluk, süre, soru sayısı ve bir özet ekranı ("Değiştir" ile adıma dönülür). Giriş yapmış kullanıcıda takma ad adımı atlanır. Adım mantığı `lib/roomLobbySteps.ts`'tedir.
 - Oda kurulur, 5 karakterli oda kodu/bağlantı arkadaşa verilir (`/oda`, `/oda/[kod]`). Oda **2 oyunculudur**; misafir takma adla katılabilir (sıralamaya girmez). Girişli kullanıcı kullanıcı adıyla oynar.
-- İki oyuncu **aynı 5 soruyu aynı anda** görür. Soru başına **30 sn**; ekranda geri sayım çubuğu vardır. Kuran oyunu başlatır, ilk soru 3 sn geri sayımdan sonra açılır.
+- İki oyuncu **aynı soruları aynı anda** görür. Odayı kuran **soru başına süreyi (30/60/90 sn, varsayılan 30)** ve **soru sayısını (5/10/15, varsayılan 5)** seçer; ayarlar bekleme odasında görünür ve "tekrar oyna" ile yeni odaya taşınır. Ekranda geri sayım çubuğu vardır. Kuran oyunu başlatır, ilk soru 3 sn geri sayımdan sonra açılır.
 - **İpuçları kendiliğinden açılır** (süre içinde eşit aralıklarla; ilk ipucu 0. sn). Oyuncu ipucu açmaz. Tahminini onaylayan oyuncuya **sonradan açılan ipuçları gösterilmez** (tahmin anındaki ipuçlarında kalır).
-- **Puan:** `round((mesafePuanı + bölgeBonusu) * zorlukKatsayısı * ipucuKatsayısı * hızKatsayısı)`. `ipucuKatsayısı`, tahmin anında açık olan ipucu sayısına göre tek oyunculudaki tablodan alınır (az ipucu = çok puan); `hızKatsayısı = 0.75 + 0.25 * (kalanSüre / 30)` (anında 1.00, son saniye 0.75). Yani daha yakın, daha az ipucuyla ve daha hızlı tahmin eden daha çok puan alır. Sabitler `lib/game/scoring.ts` içindedir (`DUEL_*`).
+- **Puan:** `round((mesafePuanı + bölgeBonusu) * zorlukKatsayısı * ipucuKatsayısı * hızKatsayısı)`. `ipucuKatsayısı`, tahmin anında açık olan ipucu sayısına göre tek oyunculudaki tablodan alınır (az ipucu = çok puan); `hızKatsayısı = 0.75 + 0.25 * (kalanSüre / soruSüresi)` (anında 1.00, son saniye 0.75; süre seçilen soru süresine göre ölçeklenir). İpuçları da seçilen sürenin içinde eşit aralıklarla açılır. Yani daha yakın, daha az ipucuyla ve daha hızlı tahmin eden daha çok puan alır. Sabitler `lib/game/scoring.ts` içindedir (`DUEL_*`).
 - İkisi de tahmin edince soru hemen biter; süre dolunca tahmin etmeyen 0 alır. Sonuç 8 sn gösterilir, sonraki soru kendiliğinden açılır. Toplam puanı yüksek olan kazanır.
 - **Hile önleme:** doğru cevap ve rakibin tahmini **soru bitene kadar kimseye gönderilmez** (tahmin eden oyuncuya bile yalnızca "kabul edildi" döner). Süre sunucu saatiyle ölçülür; ilerleme arka plan işlemi olmadan her istekte tembelce hesaplanır (`lib/room/service.ts`). Oyuncu kimliği gizli bir anahtardır (gövdede taşınır, veritabanında yalnızca SHA-256 özeti tutulur).
 - Anlık güncelleme için istemci 1 sn'de bir `POST /api/room/state` sorgular (Vercel kalıcı bağlantı tutmaz). Gerekirse Supabase Realtime'a geçilebilir.
 - **Tekrar oyna:** oyun bitince iki tarafa da "Tekrar oyna" düğmesi çıkar. Biri ister, diğeri kabul ya da reddeder (`POST /api/room/rematch`, `action`: request/accept/decline). Kabul edilirse aynı harita/zorluk ve aynı iki oyuncuyla yeni oda açılır, oyun 3 sn geri sayımla kendiliğinden başlar; reddedilirse isteyene "rakip reddetti" gösterilir ve o odada tekrar istenemez. İkisi aynı anda isterse karşılıklı kabul sayılır. Oyuncu anahtarı yeni odada da geçerlidir.
-- Tablolar: `rooms`, `room_players`, `room_guesses` (migration `20261012120000_duel_rooms.sql`, tekrar oyna sütunları `20261012180000_room_rematch.sql`). 3 saatten eski odalar kullanılmaz.
+- Tablolar: `rooms`, `room_players`, `room_guesses` (migration `20261012120000_duel_rooms.sql`, tekrar oyna sütunları `20261012180000_room_rematch.sql`, oda ayarları `20261102130000_room_settings.sql`). 3 saatten eski odalar kullanılmaz.
 
 ## Sıralama (rank) sistemi
 - **Hesap sistemi:** Supabase Auth (e-posta + şifre). Kayıt olurken kullanıcı adı seçilir: 3–20 karakter, yalnızca harf/rakam/alt çizgi, büyük-küçük harf fark etmeksizin benzersiz, küfür filtresinden geçer, ayrılmış adlar (admin vb.) alınamaz. Kullanıcı adı `profiles` tablosunda tutulur ve sıralamada görünür. E-posta doğrulaması şimdilik yok (hesap kayıtta doğrulanmış açılır); yayından önce özel e-posta servisi (SMTP) bağlanıp doğrulama eklenecek.
@@ -240,6 +241,7 @@ NEXT_PUBLIC_GOOGLE_LOGIN=     # Google Supabase'te yapılandırılınca true (de
 - Mobil öncelikli tasarım: dokunmatik hedefler en az 44px, tahmin bir dokunuşla işaretlenir, ayrı "Tahmini onayla" butonuyla gönderilir (yanlışlıkla dokunmaya karşı).
 - Tarayıcıya özgü API'lere (ör. `window`) bağımlılık bileşenlerde izole tutulur ki Capacitor'a geçiş kolay olsun.
 - Soru eklerken: ipucu sayısı zorlukla eşleşmeli, dünya sorularında ülke adı geçmemeli, `region_code` GeoJSON'daki kodla birebir aynı olmalı.
+- Havuz: harita × zorluk başına 50 soru (`QUESTIONS_PER_DIFFICULTY`, toplam 300). Dünya'da her ülke en fazla 1 soruda; Türkiye'de bir il farklı yer/konuyla en fazla 2 soruda kullanılabilir (`MAX_QUESTIONS_PER_REGION`, `lib/game/questions.ts`). Yeni soru dosyaları Supabase'e `npm run seed:questions` ile yüklenir (üretime yazar; onay gerekir).
 
 ## Android uygulaması (Google Play)
 - Uygulama, siteyi sarmalayan bir TWA paketidir (PWABuilder; paket adı `com.neresiburasi.app`). Site güncellenince uygulama da güncellenir.

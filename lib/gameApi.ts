@@ -53,7 +53,13 @@ export const gameApi = {
 };
 
 export const roomApi = {
-  create: (input: { map: GameMap; difficulty: Difficulty; nickname?: string }) =>
+  create: (input: {
+    map: GameMap;
+    difficulty: Difficulty;
+    nickname?: string;
+    secondsPerQuestion?: number;
+    questionCount?: number;
+  }) =>
     post<RoomJoinResponse>("/api/room/create", input),
   join: (input: { code: string; nickname?: string }) => post<RoomJoinResponse>("/api/room/join", input),
   start: (code: string, playerToken: string) => post<{ started: true }>("/api/room/start", { code, playerToken }),

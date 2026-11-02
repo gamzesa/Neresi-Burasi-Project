@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import AuthBar from "@/components/auth/AuthBar";
 import { DIFFICULTIES, MAPS, type Difficulty, type GameMap } from "@/lib/game/scoring";
-import { DIFFICULTY_DESCRIPTIONS, DIFFICULTY_LABELS, MAP_DESCRIPTIONS, MAP_LABELS } from "@/lib/labels";
+import { DIFFICULTY_DESCRIPTIONS, DIFFICULTY_LABELS, MAP_DESCRIPTIONS, MAP_LABELS, labelNote } from "@/lib/labels";
 
 const cardBase =
   "group flex min-h-11 w-full flex-col items-start gap-0.5 rounded-xl border border-line bg-surface px-4 py-3 text-left transition duration-150 hover:-translate-y-0.5 active:scale-[0.99]";
@@ -68,7 +68,14 @@ export default function HomeMenu({ user }: { user: { username: string } | null }
             </div>
             {DIFFICULTIES.map((d) => (
               <Link key={d} href={`/play/${map}?difficulty=${d}`} className={`${cardBase} ${DIFFICULTY_HOVER[d]}`}>
-                <span className="text-base font-bold">{DIFFICULTY_LABELS[d]}</span>
+                <span className="flex flex-wrap items-baseline gap-x-1.5">
+                  <span className="text-base font-bold">{DIFFICULTY_LABELS[d]}</span>
+                  {labelNote(map, d) ? (
+                    <span className="text-sm text-muted group-hover:text-current group-hover:opacity-80 group-focus-visible:text-current">
+                      – {labelNote(map, d)}
+                    </span>
+                  ) : null}
+                </span>
                 <span className={descriptionClass}>{DIFFICULTY_DESCRIPTIONS[d]}</span>
               </Link>
             ))}
