@@ -4,9 +4,9 @@ import {
   DUEL_GRACE_SECONDS,
   DUEL_LEAD_IN_SECONDS,
   DUEL_MAX_PLAYERS,
+  DUEL_DEFAULT_QUESTION_COUNT,
   DUEL_QUESTION_SECONDS,
   DUEL_RESULT_SECONDS,
-  QUESTIONS_PER_GAME,
   calculateDuelScore,
   duelHintsOpened,
   totalHints,
@@ -65,7 +65,7 @@ interface QuestionTimeline {
 
 function timeline(room: RoomRow, guesses: RoomGuessRow[], playerCount: number): QuestionTimeline {
   const startedAt = new Date(room.question_started_at as string).getTime();
-  const closesAt = startedAt + (DUEL_QUESTION_SECONDS + DUEL_GRACE_SECONDS) * SECOND;
+  const closesAt = startedAt + (room.seconds_per_question + DUEL_GRACE_SECONDS) * SECOND;
   const questionId = room.question_ids[room.current_index];
   const current = guesses.filter((g) => g.question_id === questionId);
   const allGuessed = playerCount >= DUEL_MAX_PLAYERS && current.length >= playerCount;
@@ -95,7 +95,7 @@ async function advanceRoom(
   let room = initial;
   // İlerleme tahminleri değiştirmez; liste bir kez okunur ve çağırana da verilir (ikinci okuma gerekmez).
   const guesses = initial.status === "waiting" ? [] : await store.listGuesses(initial.id);
-  for (let step = 0; step <= QUESTIONS_PER_GAME; step++) {
+  for (let step = 0; step <= initial.question_ids.length; step++) {
     if (room.status !== "active" || !room.question_started_at) break;
     const tl = timeline(room, guesses, players.length);
     if (now < tl.nextAt) break;
@@ -115,11 +115,15 @@ async function advanceRoom(
 // Oda kurma, katılma, başlatma
 // ---------------------------------------------------------------------------
 
-/** Rastgele 5 soru seçip benzersiz kodlu bir oda satırı açar (oyuncular ayrıca eklenir). */
-async function openRoomRow(store: RoomStore, map: GameMap, difficulty: Difficulty): Promise<RoomRow> {
+/** Rastgele `questionCount` soru seçip benzersiz kodlu bir oda satırı açar (oyuncular ayrıca eklenir). */
+async function openRoomRow(
+  store: RoomStore,
+  settings: { map: GameMap; difficulty: Difficulty; questionCount: number; secondsPerQuestion: number },
+): Promise<RoomRow> {
+  const { map, difficulty, questionCount, secondsPerQuestion } = settings;
   const ids = await store.listQuestionIds(map, difficulty);
-  if (ids.length < QUESTIONS_PER_GAME) throw new GameError(503, "Bu seçim için yeterli soru yok.");
-  const questionIds = pickRandom(ids, QUESTIONS_PER_GAME);
+  if (ids.length < questionCount) throw new GameError(503, "Bu seçim için yeterli soru yok.");
+  const questionIds = pickRandom(ids, questionCount);
 
   for (let attempt = 0; attempt < CODE_ATTEMPTS; attempt++) {
     const created = await store.createRoom({
@@ -127,6 +131,7 @@ async function openRoomRow(store: RoomStore, map: GameMap, difficulty: Difficult
       map,
       difficulty,
       question_ids: questionIds,
+      seconds_per_question: secondsPerQuestion,
     });
     if (created !== "code_taken") return created;
   }
@@ -135,14 +140,28 @@ async function openRoomRow(store: RoomStore, map: GameMap, difficulty: Difficult
 
 export async function createRoom(
   store: RoomStore,
-  input: { map: GameMap; difficulty: Difficulty; nickname: string; userId?: string | null } & Clock,
+  input: {
+    map: GameMap;
+    difficulty: Difficulty;
+    nickname: string;
+    userId?: string | null;
+    /** Soru başına süre (30/60/90); verilmezse 30. */
+    secondsPerQuestion?: number;
+    /** Oyundaki soru sayısı (5/10/15); verilmezse 5. */
+    questionCount?: number;
+  } & Clock,
 ) {
   // Arka plan işlemi olmadığı için eski odalar, yeni oda kurulurken fırsattan yararlanılarak temizlenir.
   // Temizlik başarısız olsa da oda kurulur.
   const cutoff = new Date(nowOf(input) - ROOM_RETENTION_MS).toISOString();
   await store.deleteStaleRooms(cutoff).catch(() => 0);
 
-  const room = await openRoomRow(store, input.map, input.difficulty);
+  const room = await openRoomRow(store, {
+    map: input.map,
+    difficulty: input.difficulty,
+    questionCount: input.questionCount ?? DUEL_DEFAULT_QUESTION_COUNT,
+    secondsPerQuestion: input.secondsPerQuestion ?? DUEL_QUESTION_SECONDS,
+  });
 
   const token = randomBytes(24).toString("hex");
   const player = await store.addPlayer({
@@ -283,7 +302,13 @@ export async function respondRematch(
     return { ok: true as const };
   }
 
-  const next = await openRoomRow(store, room.map, room.difficulty);
+  // Tekrar oyna: aynı harita, zorluk ve ayarlarla (süre, soru sayısı) yeni oda.
+  const next = await openRoomRow(store, {
+    map: room.map,
+    difficulty: room.difficulty,
+    questionCount: room.question_ids.length,
+    secondsPerQuestion: room.seconds_per_question,
+  });
   for (const player of [...auth.players].sort((a, b) => a.seat - b.seat)) {
     const added = await store.addPlayer({
       room_id: next.id,
@@ -338,13 +363,14 @@ export async function submitRoomGuess(
   const distance = distanceKm(guess, { lat: question.answer_lat, lng: question.answer_lng });
   const regionHit = checkRegion(room.map, guess, question.region_code);
   // Hız, soru açıldığından beri geçen süredir; ağ payında gelen tahmin son saniye sayılır.
-  const elapsedMs = Math.min(Math.max(0, now - tl.startedAt), DUEL_QUESTION_SECONDS * SECOND);
+  const elapsedMs = Math.min(Math.max(0, now - tl.startedAt), room.seconds_per_question * SECOND);
   const score = calculateDuelScore({
     map: room.map,
     difficulty: room.difficulty,
     distanceKm: distance,
     regionHit,
     elapsedSeconds: elapsedMs / SECOND,
+    questionSeconds: room.seconds_per_question,
   });
 
   const inserted = await store.insertGuess({
@@ -407,6 +433,8 @@ export interface RoomState {
   players: RoomPlayerView[];
   questionNumber: number;
   totalQuestions: number;
+  /** Oda ayarları: soru başına süre (sn) ve soru sayısı. */
+  settings: { secondsPerQuestion: number; questionCount: number };
   /** Yalnızca açılmış ipuçları gönderilir; geri sayımda ve bekleme odasında null. */
   question: { hints: string[]; hintsOpened: number; totalHints: number } | null;
   /** Geçerli sorunun açılış ve bitiş anı (ms, sunucu saati); geri sayım çubuğu içindir. */
@@ -466,11 +494,11 @@ export async function getRoomState(
     const mine = currentGuesses.find((g) => g.player_id === auth.me.id);
     const elapsed =
       phase !== "answering" || !tl
-        ? DUEL_QUESTION_SECONDS
+        ? room.seconds_per_question
         : mine
           ? mine.elapsed_ms / SECOND
           : (now - tl.startedAt) / SECOND;
-    const opened = duelHintsOpened(room.difficulty, elapsed);
+    const opened = duelHintsOpened(room.difficulty, elapsed, room.seconds_per_question);
     question = { hints: row.hints.slice(0, opened), hintsOpened: opened, totalHints: totalHints(room.difficulty) };
 
     if (resultsVisible) {
@@ -482,7 +510,7 @@ export async function getRoomState(
         regionHit: g.region_hit,
         score: g.score,
         elapsedSeconds: Math.round(g.elapsed_ms / 100) / 10,
-        hintsOpened: duelHintsOpened(room.difficulty, g.elapsed_ms / SECOND),
+        hintsOpened: duelHintsOpened(room.difficulty, g.elapsed_ms / SECOND, room.seconds_per_question),
       }));
       result = {
         answer: { lat: row.answer_lat, lng: row.answer_lng, label: row.answer_label },
@@ -502,9 +530,10 @@ export async function getRoomState(
     players,
     questionNumber: room.current_index + 1,
     totalQuestions: room.question_ids.length,
+    settings: { secondsPerQuestion: room.seconds_per_question, questionCount: room.question_ids.length },
     question,
     startsAt: tl ? tl.startedAt : null,
-    endsAt: tl ? tl.startedAt + DUEL_QUESTION_SECONDS * SECOND : null,
+    endsAt: tl ? tl.startedAt + room.seconds_per_question * SECOND : null,
     nextAt: phase === "results" && tl ? tl.nextAt : null,
     result,
     winnerSeat: phase === "finished" ? leaderSeat(players.map((p) => ({ seat: p.seat, score: p.totalScore }))) : null,

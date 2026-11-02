@@ -439,3 +439,89 @@ describe("veritabanı okuma sayısı (egress)", () => {
     expect(calls.getRoomByCode).toBe(2);
   });
 });
+
+describe("oda ayarları: süre ve soru sayısı", () => {
+  it("hız katsayısı ve ipucu açılışı seçilen süreye göre ölçeklenir", () => {
+    // 90 sn'de 45. saniye tam ortadır; 30 sn'de 15. saniye ile aynı katsayıyı verir.
+    expect(speedMultiplier(45, 90)).toBeCloseTo(speedMultiplier(15, 30));
+    expect(speedMultiplier(90, 90)).toBeCloseTo(0.75);
+    expect(speedMultiplier(60, 60)).toBeCloseTo(0.75);
+    // Kolay: 4 ipucu; 90 sn'de 0, 22.5, 45, 67.5. saniyede açılır.
+    expect([0, 22, 22.5, 45, 67, 67.5, 90].map((s) => duelHintsOpened("easy", s, 90))).toEqual([1, 1, 2, 3, 3, 4, 4]);
+    expect([0, 29, 30, 60].map((s) => duelHintsOpened("hard", s, 60))).toEqual([1, 1, 2, 2]);
+  });
+
+  it("aynı oransal anda verilen tahmin, süreden bağımsız aynı puanı alır", () => {
+    const base = { map: "world", difficulty: "easy", distanceKm: 100, regionHit: true } as const;
+    const short = calculateDuelScore({ ...base, elapsedSeconds: 10, questionSeconds: 30 });
+    const long = calculateDuelScore({ ...base, elapsedSeconds: 30, questionSeconds: 90 });
+    expect(long).toBe(short);
+  });
+
+  async function settingsRoom(options: { secondsPerQuestion: number; questionCount: number }) {
+    const questions = makeQuestions("world", "easy", 20);
+    const mem = createMemoryRoomStore(questions, T0);
+    const host = await createRoom(mem.store, { map: "world", difficulty: "easy", nickname: "Ayşe", ...options });
+    const guest = await joinRoom(mem.store, { code: host.code, nickname: "Mehmet", now: T0 });
+    await startRoom(mem.store, { code: host.code, playerToken: host.playerToken, now: T0 });
+    const state = (who: { playerToken: string }, now: Date) =>
+      getRoomState(mem.store, { code: host.code, playerToken: who.playerToken, now });
+    const guess = (who: { playerToken: string }, now: Date) =>
+      submitRoomGuess(mem.store, alwaysHit, { code: host.code, playerToken: who.playerToken, lat: 1, lng: 1, now });
+    return { ...mem, host, guest, state, guess };
+  }
+
+  it("varsayılan ayar 30 sn ve 5 soru; seçilen ayar odaya yazılır ve durumda görünür", async () => {
+    const def = await setup();
+    expect((await def.state(def.host, T0)).settings).toEqual({ secondsPerQuestion: 30, questionCount: 5 });
+
+    const room = await settingsRoom({ secondsPerQuestion: 60, questionCount: 10 });
+    const view = await room.state(room.host, T0);
+    expect(view.settings).toEqual({ secondsPerQuestion: 60, questionCount: 10 });
+    expect(view.totalQuestions).toBe(10);
+    expect([...room.rooms.values()][0].question_ids).toHaveLength(10);
+  });
+
+  it("60 sn'lik soruda tahmin 59. saniyede kabul edilir; ağ payından sonra reddedilir; bitiş çizelgesi uzar", async () => {
+    const { state, guess, host, guest } = await settingsRoom({ secondsPerQuestion: 60, questionCount: 5 });
+    expect((await state(host, q1(40))).phase).toBe("answering"); // 30 sn'lik oyunda artık bitmiş olurdu
+    expect((await state(host, q1(40))).endsAt).toBe(q1(60).getTime());
+    await guess(host, q1(59));
+    await expectGameError(guess(guest, q1(60 + DUEL_GRACE_SECONDS + 1)), 409);
+
+    const slot = 60 + DUEL_GRACE_SECONDS + DUEL_RESULT_SECONDS;
+    const done = await state(host, at(DUEL_LEAD_IN_SECONDS + slot * 5 + 1));
+    expect(done.phase).toBe("finished");
+  });
+
+  it("15 soruluk oyun, 15 sorunun tamamı bitince sona erer", async () => {
+    const { state, host } = await settingsRoom({ secondsPerQuestion: 30, questionCount: 15 });
+    const slot = 30 + DUEL_GRACE_SECONDS + DUEL_RESULT_SECONDS;
+    const middle = await state(host, at(DUEL_LEAD_IN_SECONDS + slot * 7 + 1));
+    expect(middle.phase).toBe("answering");
+    expect(middle.questionNumber).toBe(8);
+    const done = await state(host, at(DUEL_LEAD_IN_SECONDS + slot * 15 + 1));
+    expect(done.phase).toBe("finished");
+    expect(done.totalQuestions).toBe(15);
+  });
+
+  it("havuzda yeterli soru yoksa o soru sayısıyla oda kurulamaz", async () => {
+    const mem = createMemoryRoomStore(makeQuestions("world", "easy", 8), T0);
+    await expectGameError(
+      createRoom(mem.store, { map: "world", difficulty: "easy", nickname: "Ayşe", questionCount: 10 }),
+      503,
+    );
+  });
+
+  it("tekrar oyna, süre ve soru sayısını yeni odaya taşır", async () => {
+    const { store, state, host, guest } = await settingsRoom({ secondsPerQuestion: 90, questionCount: 10 });
+    const slot = 90 + DUEL_GRACE_SECONDS + DUEL_RESULT_SECONDS;
+    const end = at(DUEL_LEAD_IN_SECONDS + slot * 10 + 1);
+    expect((await state(host, end)).phase).toBe("finished");
+    await respondRematch(store, { code: (await state(host, end)).code, playerToken: host.playerToken, action: "request", now: end });
+    await respondRematch(store, { code: (await state(guest, end)).code, playerToken: guest.playerToken, action: "accept", now: end });
+    const newCode = (await state(host, end)).rematch.code!;
+    const next = await getRoomState(store, { code: newCode, playerToken: host.playerToken, now: end });
+    expect(next.settings).toEqual({ secondsPerQuestion: 90, questionCount: 10 });
+  });
+});

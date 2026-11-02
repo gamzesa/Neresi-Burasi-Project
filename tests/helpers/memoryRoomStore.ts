@@ -20,6 +20,7 @@ export function createMemoryRoomStore(questions: QuestionRow[], createdAt = new 
       const row: RoomRow = {
         id: randomUUID(),
         ...input,
+        seconds_per_question: input.seconds_per_question ?? 30,
         status: "waiting",
         current_index: 0,
         question_started_at: null,

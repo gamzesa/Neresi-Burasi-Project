@@ -9,6 +9,8 @@ export interface RoomRow {
   map: GameMap;
   difficulty: Difficulty;
   question_ids: string[];
+  /** Soru başına süre (sn): 30, 60 ya da 90. */
+  seconds_per_question: number;
   status: RoomStatus;
   current_index: number;
   /** Geçerli sorunun açılış zamanı (ISO); gelecekte olabilir (geri sayım). Bekleme odasında null. */
@@ -58,7 +60,9 @@ export type RoomPatch = Partial<
 /** Çok oyunculu mantığın veri erişim sınırı. Soru okuma, tek oyunculu GameStore ile ortaktır. */
 export interface RoomStore extends Pick<GameStore, "listQuestionIds" | "getQuestion"> {
   /** Oda kodu başka bir odada kullanılıyorsa "code_taken" döner. */
-  createRoom(input: Pick<RoomRow, "code" | "map" | "difficulty" | "question_ids">): Promise<RoomRow | "code_taken">;
+  createRoom(
+    input: Pick<RoomRow, "code" | "map" | "difficulty" | "question_ids" | "seconds_per_question">,
+  ): Promise<RoomRow | "code_taken">;
   getRoomByCode(code: string): Promise<RoomRow | null>;
   /** `olderThanIso`'dan eski odaları (oyuncu ve tahminleriyle birlikte) siler; silinen oda sayısını döner. */
   deleteStaleRooms(olderThanIso: string): Promise<number>;

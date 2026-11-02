@@ -1,6 +1,13 @@
 import { z } from "zod";
 import { containsProfanity } from "@/lib/game/profanity";
-import { DIFFICULTIES, MAPS } from "@/lib/game/scoring";
+import {
+  DIFFICULTIES,
+  DUEL_DEFAULT_QUESTION_COUNT,
+  DUEL_QUESTION_COUNT_OPTIONS,
+  DUEL_QUESTION_SECONDS,
+  DUEL_SECONDS_OPTIONS,
+  MAPS,
+} from "@/lib/game/scoring";
 
 export const mapSchema = z.enum(MAPS);
 export const difficultySchema = z.enum(DIFFICULTIES);
@@ -100,9 +107,19 @@ const roomCodeSchema = z
 
 const playerTokenSchema = z.string().min(16).max(128);
 
+/** Yalnızca verilen seçeneklerden biri kabul edilir (ör. süre 30/60/90). */
+const oneOf = <T extends number>(options: readonly T[], message: string) =>
+  z.number().refine((value): value is T => (options as readonly number[]).includes(value), message);
+
 export const createRoomRequestSchema = z.object({
   map: mapSchema,
   difficulty: difficultySchema,
+  /** Soru başına süre (sn); varsayılan 30. */
+  secondsPerQuestion: oneOf(DUEL_SECONDS_OPTIONS, "Süre 30, 60 ya da 90 saniye olabilir").default(DUEL_QUESTION_SECONDS),
+  /** Soru sayısı; varsayılan 5. */
+  questionCount: oneOf(DUEL_QUESTION_COUNT_OPTIONS, "Soru sayısı 5, 10 ya da 15 olabilir").default(
+    DUEL_DEFAULT_QUESTION_COUNT,
+  ),
   /** Girişli kullanıcı için kullanıcı adı kullanılır; misafirde zorunludur. */
   nickname: nicknameSchema.optional(),
 });

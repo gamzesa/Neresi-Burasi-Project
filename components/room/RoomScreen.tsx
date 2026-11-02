@@ -7,7 +7,7 @@ import { inputClass, primaryButtonClass } from "@/components/auth/AuthShell";
 import { useDisablePageZoom } from "@/components/game/useDisablePageZoom";
 import GameMapLoader from "@/components/map/GameMapLoader";
 import type { LatLng } from "@/lib/game/geo";
-import { DUEL_QUESTION_SECONDS, HINT_MULTIPLIERS } from "@/lib/game/scoring";
+import { HINT_MULTIPLIERS } from "@/lib/game/scoring";
 import { ApiError, roomApi, type RoomState } from "@/lib/gameApi";
 import { DIFFICULTY_LABELS, MAP_LABELS } from "@/lib/labels";
 import { clearRoomToken, loadRoomToken, saveRoomToken } from "@/lib/roomSession";
@@ -406,6 +406,9 @@ export default function RoomScreen({ code, user }: RoomScreenProps) {
             <p className="text-sm text-muted">
               {MAP_LABELS[view.map]} · {DIFFICULTY_LABELS[view.difficulty]}
             </p>
+            <p className="text-sm text-muted">
+              {view.settings.questionCount} soru · soru başına {view.settings.secondsPerQuestion} sn
+            </p>
             <h1 className="mt-1 text-sm font-semibold text-muted">Oda kodu</h1>
             <p className="text-5xl font-extrabold tracking-[0.25em]">{view.code}</p>
           </div>
@@ -494,7 +497,7 @@ export default function RoomScreen({ code, user }: RoomScreenProps) {
   const countdown = view.phase === "countdown";
   const results = view.phase === "results";
   const timeLeft = seconds(remainingMs);
-  const fraction = Math.min(1, Math.max(0, remainingMs / (DUEL_QUESTION_SECONDS * 1000)));
+  const fraction = Math.min(1, Math.max(0, remainingMs / (view.settings.secondsPerQuestion * 1000)));
   const lowTime = timeLeft <= 5;
   const questionWinner = view.result?.winnerSeat ?? null;
   const nextIn = view.nextAt ? seconds(view.nextAt - serverNow) : 0;

@@ -62,8 +62,16 @@ export function calculateScore(input: ScoreInput): number {
 // --- Çok oyunculu (arkadaşla karşılıklı) mod ---
 
 export const DUEL_MAX_PLAYERS = 2;
-/** Her soru için süre (sn). Süre dolunca tahmin etmeyen 0 alır. */
-export const DUEL_QUESTION_SECONDS = 30;
+/** Odayı kuran, soru başına süreyi bu seçeneklerden seçer (sn). Süre dolunca tahmin etmeyen 0 alır. */
+export const DUEL_SECONDS_OPTIONS = [30, 60, 90] as const;
+export type DuelSeconds = (typeof DUEL_SECONDS_OPTIONS)[number];
+/** Varsayılan soru başına süre (sn). */
+export const DUEL_QUESTION_SECONDS: DuelSeconds = 30;
+/** Odayı kuran, oyundaki soru sayısını bu seçeneklerden seçer. */
+export const DUEL_QUESTION_COUNT_OPTIONS = [5, 10, 15] as const;
+export type DuelQuestionCount = (typeof DUEL_QUESTION_COUNT_OPTIONS)[number];
+/** Varsayılan oyun uzunluğu (soru sayısı). */
+export const DUEL_DEFAULT_QUESTION_COUNT: DuelQuestionCount = QUESTIONS_PER_GAME;
 /** Ağ gecikmesi payı (sn): süre bittikten sonra bu kadar süre içinde gelen tahmin hâlâ kabul edilir. */
 export const DUEL_GRACE_SECONDS = 2;
 /** Oda başladıktan sonra ilk sorunun açılmasına kadar geri sayım (sn). */
@@ -73,17 +81,27 @@ export const DUEL_RESULT_SECONDS = 8;
 /** Son saniyede verilen tahminin hız katsayısı; anında verilen tahmin 1.00 alır. */
 export const DUEL_SPEED_MIN = 0.75;
 
-/** Hız katsayısı: DUEL_SPEED_MIN (süre sonu) ile 1.00 (anında) arasında doğrusal. */
-export function speedMultiplier(elapsedSeconds: number): number {
-  const ratio = Math.min(1, Math.max(0, elapsedSeconds / DUEL_QUESTION_SECONDS));
+/**
+ * Hız katsayısı: DUEL_SPEED_MIN (süre sonu) ile 1.00 (anında) arasında doğrusal.
+ * Süre seçilen soru süresine göre ölçeklenir; yani 90 sn'lik bir soruda 45. saniye tam ortadır.
+ */
+export function speedMultiplier(elapsedSeconds: number, questionSeconds: number = DUEL_QUESTION_SECONDS): number {
+  const ratio = Math.min(1, Math.max(0, elapsedSeconds / questionSeconds));
   return DUEL_SPEED_MIN + (1 - DUEL_SPEED_MIN) * (1 - ratio);
 }
 
-/** Çok oyunculuda ipuçları süre içinde eşit aralıklarla kendiliğinden açılır (ilk ipucu 0. saniyede). */
-export function duelHintsOpened(difficulty: Difficulty, elapsedSeconds: number): number {
+/**
+ * Çok oyunculuda ipuçları, seçilen sürenin içinde eşit aralıklarla kendiliğinden açılır (ilk ipucu 0. saniyede).
+ * Süre uzadıkça aralık da orantılı uzar.
+ */
+export function duelHintsOpened(
+  difficulty: Difficulty,
+  elapsedSeconds: number,
+  questionSeconds: number = DUEL_QUESTION_SECONDS,
+): number {
   const total = totalHints(difficulty);
   const elapsed = Math.max(0, elapsedSeconds);
-  return Math.min(total, 1 + Math.floor((elapsed * total) / DUEL_QUESTION_SECONDS));
+  return Math.min(total, 1 + Math.floor((elapsed * total) / questionSeconds));
 }
 
 export interface DuelScoreInput {
@@ -92,6 +110,8 @@ export interface DuelScoreInput {
   distanceKm: number;
   regionHit: boolean;
   elapsedSeconds: number;
+  /** Soru süresi (sn); verilmezse varsayılan 30. */
+  questionSeconds?: number;
 }
 
 /**
@@ -100,9 +120,10 @@ export interface DuelScoreInput {
  * daha az ipucuyla (ve daha hızlı, daha yakın) tahmin eden daha çok puan alır.
  */
 export function calculateDuelScore(input: DuelScoreInput): number {
+  const seconds = input.questionSeconds ?? DUEL_QUESTION_SECONDS;
   const base = distanceScore(input.distanceKm, input.map) + (input.regionHit ? REGION_BONUS : 0);
-  const hints = hintMultiplier(input.difficulty, duelHintsOpened(input.difficulty, input.elapsedSeconds));
+  const hints = hintMultiplier(input.difficulty, duelHintsOpened(input.difficulty, input.elapsedSeconds, seconds));
   return Math.round(
-    base * DIFFICULTY_MULTIPLIER[input.difficulty] * hints * speedMultiplier(input.elapsedSeconds),
+    base * DIFFICULTY_MULTIPLIER[input.difficulty] * hints * speedMultiplier(input.elapsedSeconds, seconds),
   );
 }

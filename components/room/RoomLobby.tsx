@@ -4,7 +4,16 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { inputClass, primaryButtonClass } from "@/components/auth/AuthShell";
-import { DIFFICULTIES, MAPS, type Difficulty, type GameMap } from "@/lib/game/scoring";
+import {
+  DIFFICULTIES,
+  DUEL_DEFAULT_QUESTION_COUNT,
+  DUEL_QUESTION_COUNT_OPTIONS,
+  DUEL_QUESTION_SECONDS,
+  DUEL_SECONDS_OPTIONS,
+  MAPS,
+  type Difficulty,
+  type GameMap,
+} from "@/lib/game/scoring";
 import { ApiError, roomApi } from "@/lib/gameApi";
 import { DIFFICULTY_LABELS, MAP_LABELS } from "@/lib/labels";
 import { saveRoomToken } from "@/lib/roomSession";
@@ -20,6 +29,8 @@ export default function RoomLobby({ user }: { user: { username: string } | null 
   const [mode, setMode] = useState<"create" | "join">("create");
   const [map, setMap] = useState<GameMap>("world");
   const [difficulty, setDifficulty] = useState<Difficulty>("medium");
+  const [secondsPerQuestion, setSecondsPerQuestion] = useState<number>(DUEL_QUESTION_SECONDS);
+  const [questionCount, setQuestionCount] = useState<number>(DUEL_DEFAULT_QUESTION_COUNT);
   const [nickname, setNickname] = useState("");
   const [code, setCode] = useState("");
   const [busy, setBusy] = useState(false);
@@ -36,7 +47,7 @@ export default function RoomLobby({ user }: { user: { username: string } | null 
     try {
       const joined =
         mode === "create"
-          ? await roomApi.create({ map, difficulty, nickname: nicknameInput })
+          ? await roomApi.create({ map, difficulty, secondsPerQuestion, questionCount, nickname: nicknameInput })
           : await roomApi.join({ code: code.trim().toUpperCase(), nickname: nicknameInput });
       saveRoomToken(joined.code, joined.playerToken);
       router.push(`/oda/${joined.code}`);
@@ -128,6 +139,38 @@ export default function RoomLobby({ user }: { user: { username: string } | null 
                     className={`${chipBase} ${difficulty === d ? chipOn : chipOff}`}
                   >
                     {DIFFICULTY_LABELS[d]}
+                  </button>
+                ))}
+              </div>
+            </fieldset>
+            <fieldset className="flex flex-col gap-1.5">
+              <legend className="mb-1.5 text-sm font-semibold text-muted">Soru başına süre</legend>
+              <div className="flex gap-2">
+                {DUEL_SECONDS_OPTIONS.map((seconds) => (
+                  <button
+                    key={seconds}
+                    type="button"
+                    aria-pressed={secondsPerQuestion === seconds}
+                    onClick={() => setSecondsPerQuestion(seconds)}
+                    className={`${chipBase} ${secondsPerQuestion === seconds ? chipOn : chipOff}`}
+                  >
+                    {seconds} sn
+                  </button>
+                ))}
+              </div>
+            </fieldset>
+            <fieldset className="flex flex-col gap-1.5">
+              <legend className="mb-1.5 text-sm font-semibold text-muted">Soru sayısı</legend>
+              <div className="flex gap-2">
+                {DUEL_QUESTION_COUNT_OPTIONS.map((count) => (
+                  <button
+                    key={count}
+                    type="button"
+                    aria-pressed={questionCount === count}
+                    onClick={() => setQuestionCount(count)}
+                    className={`${chipBase} ${questionCount === count ? chipOn : chipOff}`}
+                  >
+                    {count} soru
                   </button>
                 ))}
               </div>
