@@ -19,8 +19,8 @@ Arayüz dili Türkçedir. Kod (değişken, fonksiyon, dosya adları) İngilizce 
 
 ### Harita verisi
 - **Dünya:** Natural Earth ülke sınırları (kamu malı), GeoJSON. Ülke adları Türkçe etiketlenir. Kıta adları ayrı bir nokta GeoJSON katmanında tutulur.
-- **Türkiye:** 81 il sınırları GeoJSON; kaynak Natural Earth Admin-1 (1:10m, kamu malı). **Etiket katmanı yoktur**, yalnızca il sınırları çizilir.
-- **Dünya şehir etiketleri:** `public/geo/world-cities.geojson` (Natural Earth 50m Populated Places, Türkçe adlar; `scripts/build-cities.mjs` üretir). Zorluğa göre açılır: Kolay'da tüm şehirler zoom 3'ten, Orta'da yalnızca büyük şehirler zoom 5'ten, Zor'da yok (ayar: `CITY_LABELS`, `components/map/mapStyle.ts`). Türkiye haritasında şehir/il etiketi yoktur.
+- **Türkiye:** 81 il sınırları GeoJSON; kaynak Natural Earth Admin-1 (1:10m, kamu malı). **İl adı etiketleri yalnızca Kolay seviyede görünür** (Orta ve Zor'da yoktur); etiket noktaları `public/geo/turkey-labels.geojson` (`scripts/build-turkey-labels.mjs` üretir), ayar `TURKEY_PROVINCE_LABELS` (`components/map/mapStyle.ts`).
+- **Dünya şehir etiketleri:** `public/geo/world-cities.geojson` (Natural Earth 50m Populated Places, Türkçe adlar; `scripts/build-cities.mjs` üretir). Zorluğa göre açılır: Kolay'da tüm şehirler zoom 3'ten, Orta'da yalnızca büyük şehirler zoom 5'ten, Zor'da yok (ayar: `CITY_LABELS`, `components/map/mapStyle.ts`). Türkiye'de il adları yalnızca Kolay'da gösterilir (yukarıya bak).
 - Altlık (tile) harita kullanılmaz; stil yalnızca arka plan + GeoJSON dolgu/çizgi (+ dünya için etiket) katmanlarından oluşur. Bu sayede ücretli harita servisine gerek kalmaz ve etiketler tamamen kontrol altında olur.
 - Etiket fontları (glyph) kendi sunucumuzda barındırılır ve Türkçe karakterleri (ç, ğ, ı, İ, ö, ş, ü) desteklemelidir.
 - Dosyalar `public/geo/` altında durur ve boyutları küçük tutulur (gerekirse mapshaper ile sadeleştirilir).
