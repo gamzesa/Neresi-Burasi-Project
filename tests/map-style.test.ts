@@ -3,6 +3,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { CITY_LABELS, TURKEY_PROVINCE_LABELS, buildMapStyle } from "@/components/map/mapStyle";
 import { DIFFICULTIES } from "@/lib/game/scoring";
+import { labelNote } from "@/lib/labels";
 
 const layerIds = (map: "world" | "turkey", difficulty?: (typeof DIFFICULTIES)[number]) =>
   buildMapStyle(map, "", difficulty).layers.map((layer) => layer.id);
@@ -46,5 +47,26 @@ describe("Dünya şehir etiketleri (değişmedi)", () => {
     expect(CITY_LABELS.hard).toBeNull();
     expect(layerIds("world", "hard").some((id) => id.startsWith("city-labels"))).toBe(false);
     expect(layerIds("world", "easy").some((id) => id.startsWith("city-labels"))).toBe(true);
+  });
+});
+
+describe("zorluk seçimindeki etiket notu", () => {
+  it("Türkiye: il adları yalnızca Kolay'da görünür", () => {
+    expect(labelNote("turkey", "easy")).toBe("İl adları haritada görünür");
+    expect(labelNote("turkey", "medium")).toBe("İl adları haritada görünmez");
+    expect(labelNote("turkey", "hard")).toBe("İl adları haritada görünmez");
+  });
+
+  it("Dünya: Kolay'da tüm şehirler, Orta'da büyük şehirler, Zor'da hiçbiri", () => {
+    expect(labelNote("world", "easy")).toBe("Şehir adları haritada görünür");
+    expect(labelNote("world", "medium")).toBe("Yalnızca büyük şehirlerin adları görünür");
+    expect(labelNote("world", "hard")).toBe("Şehir adları haritada görünmez");
+  });
+
+  it("not, harita stilindeki gerçek ayarla çelişmez", () => {
+    for (const difficulty of DIFFICULTIES) {
+      const shown = layerIds("turkey", difficulty).includes("province-labels");
+      expect(labelNote("turkey", difficulty).endsWith("görünür")).toBe(shown);
+    }
   });
 });

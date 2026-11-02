@@ -15,7 +15,7 @@ import {
   type GameMap,
 } from "@/lib/game/scoring";
 import { ApiError, roomApi } from "@/lib/gameApi";
-import { DIFFICULTY_DESCRIPTIONS, DIFFICULTY_LABELS, MAP_DESCRIPTIONS, MAP_LABELS } from "@/lib/labels";
+import { DIFFICULTY_DESCRIPTIONS, DIFFICULTY_LABELS, MAP_DESCRIPTIONS, MAP_LABELS, labelNote } from "@/lib/labels";
 import {
   isCodeValid,
   isNicknameValid,
@@ -259,7 +259,7 @@ export default function RoomLobby({ user }: { user: { username: string } | null 
                 key={d}
                 selected={difficulty === d}
                 label={DIFFICULTY_LABELS[d]}
-                description={DIFFICULTY_DESCRIPTIONS[d]}
+                description={`${DIFFICULTY_DESCRIPTIONS[d]} · ${labelNote(map, d)}`}
                 onSelect={() => {
                   setDifficulty(d);
                   next();
