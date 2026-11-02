@@ -179,6 +179,12 @@ export default function RoomLobby({ user }: { user: { username: string } | null 
       </div>
 
       <section aria-live="polite" className="flex flex-col gap-4">
+        {!isGuest ? (
+          <p className="rounded-xl border border-accent/30 bg-accent/10 px-3 py-2 text-center text-sm text-muted">
+            <strong className="text-ink">{user.username}</strong> adıyla oynayacaksın
+          </p>
+        ) : null}
+
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between text-xs text-muted">
             {stepIndex > 0 || editing ? (
@@ -186,13 +192,7 @@ export default function RoomLobby({ user }: { user: { username: string } | null 
                 Geri
               </button>
             ) : (
-              <span className="min-h-11 leading-[2.75rem]">
-                {!isGuest ? (
-                  <>
-                    <strong className="text-ink">{user.username}</strong> olarak oynayacaksın
-                  </>
-                ) : null}
-              </span>
+              <span className="min-h-11" />
             )}
             <span>
               Adım {Math.min(stepIndex + 1, steps.length)} / {steps.length}
@@ -331,7 +331,9 @@ export default function RoomLobby({ user }: { user: { username: string } | null 
           <div className="flex flex-col gap-3">
             <dl className="flex flex-col divide-y divide-line rounded-xl border border-line bg-surface">
               {[
-                ...(isGuest ? [{ key: "nickname" as const, label: "Takma ad", value: nickname.trim() }] : []),
+                isGuest
+                  ? { key: "nickname" as const, label: "Takma ad", value: nickname.trim() }
+                  : { key: "player" as const, label: "Oyuncu", value: user.username },
                 { key: "map" as const, label: "Harita", value: MAP_LABELS[map] },
                 { key: "difficulty" as const, label: "Zorluk", value: DIFFICULTY_LABELS[difficulty] },
                 { key: "seconds" as const, label: "Soru başına süre", value: `${secondsPerQuestion} saniye` },
@@ -342,13 +344,17 @@ export default function RoomLobby({ user }: { user: { username: string } | null 
                     <dt className="text-xs text-muted">{row.label}</dt>
                     <dd className="text-sm font-bold">{row.value}</dd>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => edit(row.key)}
-                    className="min-h-11 px-2 text-sm font-semibold text-accent underline"
-                  >
-                    Değiştir
-                  </button>
+                  {row.key === "player" ? (
+                    <span className="px-2 text-xs text-muted">hesabın</span>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => edit(row.key)}
+                      className="min-h-11 px-2 text-sm font-semibold text-accent underline"
+                    >
+                      Değiştir
+                    </button>
+                  )}
                 </div>
               ))}
             </dl>
