@@ -77,7 +77,7 @@ Beklenen sonuç: tüm yaşlar için uygun bir derece (3+/PEGI 3 ya da muadili).
 ```
 İlk sürüm 🎉
 • Dünya ve Türkiye haritaları, üç zorluk seviyesi
-• 150 soru, ipuçlarıyla konum bulma
+• 300 soru, ipuçlarıyla konum bulma
 • Arkadaşınla çevrimiçi yarışma modu
 • Hesap açarak sıralamaya gir veya misafir olarak oyna
 ```

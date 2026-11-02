@@ -35,7 +35,7 @@ Neresi Burası?, Dünya ve Türkiye haritalarında oynanan, Türkçe bir coğraf
 💡 İPUÇLARI GENELDEN ÖZELE
 • İlk ipucu ücretsiz. Daha fazlasını açmak istersen puanından feda edersin.
 • Dünya sorularında ülke adı hiçbir ipucunda geçmez; Türkiye sorularında il adı geçmez.
-• Yapılar, doğa, yemek, tarih ve kültürden oluşan 150 soru.
+• Yapılar, doğa, yemek, tarih ve kültürden oluşan 300 soru.
 
 🤝 ARKADAŞINLA YARIŞ
 • Oda kur, kodu arkadaşınla paylaş; ikiniz aynı soruyu aynı anda görün.
@@ -77,5 +77,5 @@ Geri bildirimlerin için: neresiburasiapp@gmail.com
 ## Notlar
 
 - Metinlerde "en iyi", "No. 1", indirme sayısı gibi karşılaştırma/abartı ifadesi kullanılmadı; Play politikası bunları sevmez.
-- Açıklamada adı geçen bütün özellikler uygulamada gerçekten var (150 soru, 3 zorluk, şehir etiketleri, 30 sn'lik çok oyunculu oda, hesap silme).
+- Açıklamada adı geçen bütün özellikler uygulamada gerçekten var (300 soru, 3 zorluk, şehir etiketleri, 30 sn'lik çok oyunculu oda, hesap silme).
 - Uygulama güncellenip özellik değişirse bu metni de güncelle.

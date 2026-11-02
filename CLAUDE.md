@@ -241,6 +241,7 @@ NEXT_PUBLIC_GOOGLE_LOGIN=     # Google Supabase'te yapılandırılınca true (de
 - Mobil öncelikli tasarım: dokunmatik hedefler en az 44px, tahmin bir dokunuşla işaretlenir, ayrı "Tahmini onayla" butonuyla gönderilir (yanlışlıkla dokunmaya karşı).
 - Tarayıcıya özgü API'lere (ör. `window`) bağımlılık bileşenlerde izole tutulur ki Capacitor'a geçiş kolay olsun.
 - Soru eklerken: ipucu sayısı zorlukla eşleşmeli, dünya sorularında ülke adı geçmemeli, `region_code` GeoJSON'daki kodla birebir aynı olmalı.
+- Havuz: harita × zorluk başına 50 soru (`QUESTIONS_PER_DIFFICULTY`, toplam 300). Dünya'da her ülke en fazla 1 soruda; Türkiye'de bir il farklı yer/konuyla en fazla 2 soruda kullanılabilir (`MAX_QUESTIONS_PER_REGION`, `lib/game/questions.ts`). Yeni soru dosyaları Supabase'e `npm run seed:questions` ile yüklenir (üretime yazar; onay gerekir).
 
 ## Android uygulaması (Google Play)
 - Uygulama, siteyi sarmalayan bir TWA paketidir (PWABuilder; paket adı `com.neresiburasi.app`). Site güncellenince uygulama da güncellenir.

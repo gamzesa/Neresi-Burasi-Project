@@ -18,7 +18,7 @@ Sana bir yerin ipuçları verilir; sen de haritada o yeri bulmaya çalışırsı
 
 - 🌍 **İki harita:** Dünya (ülkeler) ve Türkiye (81 il)
 - 🎚️ **Üç zorluk:** Kolay, Orta, Zor. Zorlaştıkça ipucu azalır ama puan katsayısı artar.
-- 📚 **150 soru:** Yapılar, doğa, yemek, tarih, kültür. Her oyunda rastgele 5 tanesi seçilir.
+- 📚 **300 soru:** Yapılar, doğa, yemek, tarih, kültür. Her oyunda rastgele 5 tanesi seçilir.
 - 🏆 **Sıralama:** Hesabı olan oyuncuların skorları sıralamaya girer. Hesap açmadan da oynayabilirsin.
 - 🤝 **Arkadaşınla yarış:** Oda kodu paylaş, aynı soruları aynı anda oyna; daha yakın, daha az ipucuyla ve daha hızlı bilen kazanır. Oyun bitince "tekrar oyna" diyebilirsin.
 - 🏙️ **Şehir etiketleri:** Dünya haritasında yakınlaştıkça şehir adları görünür (Kolay'da hepsi, Orta'da büyükler, Zor'da yok).
@@ -162,7 +162,7 @@ Oyun kuralları, kararlar ve proje kurallarının tamamı için [`CLAUDE.md`](CL
 ## Yol haritası
 
 - [x] Dünya ve Türkiye haritaları, üç zorluk seviyesi, puanlama
-- [x] 150 soruluk havuz (harita ve zorluk başına 25)
+- [x] 300 soruluk havuz (harita ve zorluk başına 50)
 - [x] Hesaplar ve sıralama
 - [x] Google ile giriş ve şifre sıfırlama
 - [x] Yayın (Vercel), hız sınırı, gizlilik/KVKK sayfası, hesap silme
