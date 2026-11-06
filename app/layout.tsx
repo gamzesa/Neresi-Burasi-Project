@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import CaptureIosPreview from "@/components/ads/CaptureIosPreview";
 import RegisterServiceWorker from "@/components/RegisterServiceWorker";
 import "./globals.css";
 
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-dvh bg-bg text-ink antialiased">
         {children}
         <RegisterServiceWorker />
+        <CaptureIosPreview />
       </body>
     </html>
   );
