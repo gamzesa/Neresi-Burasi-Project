@@ -249,6 +249,13 @@ NEXT_PUBLIC_GOOGLE_LOGIN=     # Google Supabase'te yapılandırılınca true (de
 - İmza anahtarı (`signing.keystore`) ve parolası **depoya asla eklenmez** (`.gitignore` korur); depo dışında yedeklenir.
 - Mağaza metinleri ve form cevapları: `docs/play-store/`.
 
+## iOS uygulaması (App Store)
+- Capacitor kabuğu (`ios/`, `capacitor.config.ts`) canlı siteyi yükler (API route'ları olduğu için). Mac yok: derleme ve TestFlight yüklemesi Codemagic ile (`codemagic.yaml`).
+- **Android TWA'yı etkilememeli:** site her iki uygulamaya da canlı yansır. iOS'a özel davranış yalnızca `lib/platform.ts` (`isNativeIosApp` / `useIsIosContext`) arkasında olur; web ve Android'de hiçbir şey değişmez.
+- **Reklam:** AdMob tam ekran reklamı yalnızca iOS'ta, oyun bitişinde, 2 oyunda bir (`lib/ads/policy.ts`, `components/ads/EndOfGameAd.tsx`). Şimdilik Google test kimlikleri; gerçek kimlik `NEXT_PUBLIC_ADMOB_IOS_INTERSTITIAL_ID` ve `Info.plist` `GADApplicationIdentifier`.
+- iOS'ta Google girişi gizlenir (Apple ile giriş zorunluluğu doğmasın).
+- Önizleme: adrese `?ios=1` eklenince web'de iOS davranışı (Google düğmesi yok, örnek reklam) görülür.
+
 ## Yol haritası
 1. **MVP:** Harita seçimi, Dünya haritası, tek zorluk, puanlama, sıralama
 2. Türkiye haritası, üç zorluk seviyesi

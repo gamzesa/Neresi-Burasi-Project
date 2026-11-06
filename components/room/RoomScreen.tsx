@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import EndOfGameAd from "@/components/ads/EndOfGameAd";
 import { inputClass, primaryButtonClass } from "@/components/auth/AuthShell";
 import { useDisablePageZoom } from "@/components/game/useDisablePageZoom";
 import GameMapLoader from "@/components/map/GameMapLoader";
@@ -455,6 +456,7 @@ export default function RoomScreen({ code, user }: RoomScreenProps) {
     return (
       <Shell>
         <section className="flex flex-col gap-5 text-center">
+          <EndOfGameAd gameKey={`room-${view.code}`} />
           <div>
             <h1 className="text-2xl font-extrabold">
               {draw ? "Berabere!" : won ? "Kazandın!" : `${opponent?.nickname ?? "Rakip"} kazandı`}

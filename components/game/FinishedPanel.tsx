@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import EndOfGameAd from "@/components/ads/EndOfGameAd";
 import type { GameMap } from "@/lib/game/scoring";
 
 interface FinishedPanelProps {
@@ -20,6 +21,7 @@ export default function FinishedPanel({ sessionId, map, totalScore, ranked, user
 
   return (
     <section aria-label="Oyun bitti" className="flex flex-col gap-4">
+      <EndOfGameAd gameKey={sessionId} />
       <div className="rounded-xl border border-gold/50 bg-gold/10 p-4 text-center">
         <p className="text-sm text-muted">Oyun bitti! Toplam puanın</p>
         <p className="text-5xl font-extrabold text-gold">{totalScore.toLocaleString("tr-TR")}</p>

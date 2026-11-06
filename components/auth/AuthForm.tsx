@@ -6,6 +6,7 @@ import { useState, type FormEvent } from "react";
 import { ApiError, authApi, gameApi } from "@/lib/gameApi";
 import { PASSWORD_MIN, USERNAME_MAX, USERNAME_MIN } from "@/lib/validation";
 import AuthShell, { inputClass, primaryButtonClass } from "./AuthShell";
+import { useIsIosContext } from "@/lib/platform";
 import GoogleButton from "./GoogleButton";
 
 interface AuthFormProps {
@@ -21,6 +22,8 @@ interface AuthFormProps {
 }
 
 export default function AuthForm({ mode, next, claimSessionId, googleEnabled = false, initialError }: AuthFormProps) {
+  // iOS'ta Google girişi gizlenir (Apple ile giriş zorunluluğunu doğurmasın); web ve Android aynı kalır.
+  const isIos = useIsIosContext();
   const router = useRouter();
   const isRegister = mode === "register";
   const [email, setEmail] = useState("");
@@ -59,7 +62,7 @@ export default function AuthForm({ mode, next, claimSessionId, googleEnabled = f
 
   return (
     <AuthShell title={isRegister ? "Kayıt ol" : "Giriş yap"} description={description}>
-      {googleEnabled ? (
+      {googleEnabled && !isIos ? (
         <>
           <GoogleButton next={next} claimSessionId={claimSessionId} />
           <div className="flex items-center gap-3 text-xs text-muted" aria-hidden="true">

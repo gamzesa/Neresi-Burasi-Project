@@ -1,0 +1,40 @@
+# Mac olmadan iOS derlemesi: Codemagic bulutta Xcode çalıştırır ve çıktıyı TestFlight'a yükler.
+# Gerekenler (Codemagic > Teams > Integrations): "App Store Connect API key" tanımı, adı: neresi_burasi_asc
+workflows:
+  ios-testflight:
+    name: iOS TestFlight
+    instance_type: mac_mini_m2
+    max_build_duration: 45
+    integrations:
+      app_store_connect: neresi_burasi_asc
+    environment:
+      node: 22
+      xcode: latest
+      vars:
+        APP_STORE_APPLE_ID: "BURAYA_APP_STORE_CONNECT_UYGULAMA_ID"
+        BUNDLE_ID: "com.neresiburasi.app"
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.neresiburasi.app
+    scripts:
+      - name: Bağımlılıkları kur
+        script: npm ci
+      - name: Capacitor eşitle
+        script: npx cap sync ios
+      - name: İmzalama ayarını uygula
+        script: xcode-project use-profiles --project ios/App/App.xcodeproj
+      - name: Derleme numarasını artır
+        script: |
+          cd ios/App
+          agvtool new-version -all $(($(app-store-connect get-latest-testflight-build-number "$APP_STORE_APPLE_ID") + 1))
+      - name: IPA oluştur
+        script: |
+          xcode-project build-ipa \
+            --project ios/App/App.xcodeproj \
+            --scheme App
+    artifacts:
+      - build/ios/ipa/*.ipa
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true

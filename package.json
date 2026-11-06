@@ -13,6 +13,8 @@
     "seed:questions": "node scripts/seed-questions.mjs"
   },
   "dependencies": {
+    "@capacitor-community/admob": "^8.3.0",
+    "@capacitor/core": "^8.6.0",
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.117.2",
     "@turf/turf": "^7.4.0",
@@ -24,6 +26,8 @@
     "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@capacitor/cli": "^8.6.0",
+    "@capacitor/ios": "^8.6.0",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "^26.6.4",
     "@types/react": "^19.3.0",
