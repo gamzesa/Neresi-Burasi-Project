@@ -10,6 +10,13 @@ type Period = "all" | "week";
 
 const PERIOD_LABELS: Record<Period, string> = { all: "Tüm zamanlar", week: "Bu hafta" };
 
+/** İlk üçün madalya renkleri: altın, gümüş, bronz. */
+const MEDAL_CLASSES: Record<number, string> = {
+  1: "border-yellow-200 bg-gradient-to-br from-yellow-300 to-yellow-600 text-yellow-950",
+  2: "border-slate-100 bg-gradient-to-br from-slate-200 to-slate-400 text-slate-900",
+  3: "border-orange-300 bg-gradient-to-br from-orange-300 to-orange-700 text-orange-950",
+};
+
 interface LeaderboardViewProps {
   initialMap: GameMap;
   /** Girişli kullanıcı; misafirde null (sıralamaya girmek için kayıt olmaya davet edilir). */
@@ -128,7 +135,16 @@ export default function LeaderboardView({ initialMap, user }: LeaderboardViewPro
                     entry.isMe ? "border-accent bg-accent/10" : "border-line bg-surface"
                   }`}
                 >
-                  <span className="w-8 text-right font-bold text-muted">{entry.rank}</span>
+                  {MEDAL_CLASSES[entry.rank] ? (
+                    <span
+                      aria-label={`${entry.rank}. sıra`}
+                      className={`flex size-8 shrink-0 items-center justify-center rounded-full border-2 text-sm font-extrabold shadow-sm ${MEDAL_CLASSES[entry.rank]}`}
+                    >
+                      {entry.rank}
+                    </span>
+                  ) : (
+                    <span className="w-8 text-right font-bold text-muted">{entry.rank}</span>
+                  )}
                   <span className="flex-1 truncate font-semibold">{entry.username}</span>
                   <span className="text-xs text-muted">{DIFFICULTY_LABELS[entry.difficulty]}</span>
                   <span className="font-bold">{entry.totalScore.toLocaleString("tr-TR")}</span>
