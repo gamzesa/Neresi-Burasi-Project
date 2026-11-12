@@ -30,12 +30,16 @@ const targets = [
   { file: "public/icons/icon-maskable-512.png", size: 512, scale: 0.5 },
   { file: "app/icon.png", size: 512, scale: 0.62 },
   { file: "app/apple-icon.png", size: 180, scale: 0.62 },
+  // iOS (App Store): 1024px, saydam kanal olmamalı (Apple reddeder).
+  { file: "ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png", size: 1024, scale: 0.62, opaque: true },
 ];
 
-for (const { file, size, scale } of targets) {
+for (const { file, size, scale, opaque } of targets) {
   const out = path.resolve(file);
   mkdirSync(path.dirname(out), { recursive: true });
-  const png = await sharp(Buffer.from(svg(size, scale))).png().toBuffer();
+  let image = sharp(Buffer.from(svg(size, scale)));
+  if (opaque) image = image.flatten({ background: BG });
+  const png = await image.png().toBuffer();
   writeFileSync(out, png);
   console.log("yazıldı:", file);
 }
