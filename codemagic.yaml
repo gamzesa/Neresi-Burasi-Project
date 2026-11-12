@@ -1,5 +1,6 @@
 # Mac olmadan iOS derlemesi: Codemagic bulutta Xcode çalıştırır ve çıktıyı TestFlight'a yükler.
-# Gerekenler (Codemagic > Teams > Integrations): "App Store Connect API key" tanımı, adı: neresi_burasi_asc
+# Gerekenler: Codemagic Integrations'ta "App Store Connect API key" (adı: neresi_burasi_asc) ve
+# "ios_signing" değişken grubunda gizli CERTIFICATE_PRIVATE_KEY (RSA özel anahtar, PEM).
 workflows:
   ios-testflight:
     name: iOS TestFlight
@@ -10,17 +11,22 @@ workflows:
     environment:
       node: 22
       xcode: latest
+      groups:
+        - ios_signing
       vars:
         APP_STORE_APPLE_ID: "6833857031"
         BUNDLE_ID: "com.neresiburasi.app"
-      ios_signing:
-        distribution_type: app_store
-        bundle_identifier: com.neresiburasi.app
     scripts:
       - name: Bağımlılıkları kur
         script: npm ci
       - name: Capacitor eşitle
         script: npx cap sync ios
+      - name: Anahtarlığı hazırla
+        script: keychain initialize
+      - name: İmza dosyalarını Apple'dan al (yoksa oluştur)
+        script: app-store-connect fetch-signing-files "$BUNDLE_ID" --type IOS_APP_STORE --create
+      - name: Sertifikayı anahtarlığa ekle
+        script: keychain add-certificates
       - name: İmzalama ayarını uygula
         script: xcode-project use-profiles --project ios/App/App.xcodeproj
       - name: Derleme numarasını artır
