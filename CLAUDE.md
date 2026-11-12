@@ -252,7 +252,7 @@ NEXT_PUBLIC_GOOGLE_LOGIN=     # Google Supabase'te yapılandırılınca true (de
 ## iOS uygulaması (App Store)
 - Capacitor kabuğu (`ios/`, `capacitor.config.ts`) canlı siteyi yükler (API route'ları olduğu için). Mac yok: derleme ve TestFlight yüklemesi Codemagic ile (`codemagic.yaml`).
 - **Android TWA'yı etkilememeli:** site her iki uygulamaya da canlı yansır. iOS'a özel davranış yalnızca `lib/platform.ts` (`isNativeIosApp` / `useIsIosContext`) arkasında olur; web ve Android'de hiçbir şey değişmez.
-- **Reklam:** AdMob tam ekran reklamı yalnızca iOS'ta, oyun bitişinde, 2 oyunda bir (`lib/ads/policy.ts`, `components/ads/EndOfGameAd.tsx`). Şimdilik Google test kimlikleri; gerçek kimlik `NEXT_PUBLIC_ADMOB_IOS_INTERSTITIAL_ID` ve `Info.plist` `GADApplicationIdentifier`.
+- **Reklam:** AdMob tam ekran reklamı yalnızca iOS'ta, oyun bitişinde, 2 oyunda bir (`lib/ads/policy.ts`, `components/ads/EndOfGameAd.tsx`). Gerçek AdMob kimlikleri: uygulama kimliği `Info.plist` `GADApplicationIdentifier`'da, reklam birimi `lib/ads/interstitial.ts`'te (ortam değişkeni `NEXT_PUBLIC_ADMOB_IOS_INTERSTITIAL_ID` ile ezilebilir; `NEXT_PUBLIC_ADMOB_TEST=true` Google test reklamına geçer — kendi cihazında gerçek reklama dokunma). `public/app-ads.txt` AdMob yayıncı doğrulaması içindir. Android için reklam (Capacitor'a geçince) ayrı AdMob uygulaması/birimi ister.
 - iOS'ta Google girişi gizlenir (Apple ile giriş zorunluluğu doğmasın).
 - Önizleme: adrese `?ios=1` eklenince web'de iOS davranışı (Google düğmesi yok, örnek reklam) görülür.
 
