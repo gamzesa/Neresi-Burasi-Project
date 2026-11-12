@@ -1,4 +1,4 @@
-// App Store Connect başlık (header) görselini üretir: 5244x2950 ve 3840x1646.
+// App Store Connect başlık (header) görselini (5244x2950, 3840x1646) ve arama sonuçları (search results) görselini (3840x2560, 5244x2950) üretir.
 // Kullanım: node scripts/build-app-store-header.mjs
 // Yerel Chrome'u başsız çalıştırır; ortam değişkeni CHROME_PATH ile yol verilebilir.
 import { spawn } from "node:child_process";
@@ -148,6 +148,44 @@ function headerHtml(mapUrl) {
   </div>`;
 }
 
+/** Arama sonuçları görseli: solda başlık ve özellikler, sağda üç telefon. Boyutlar vh ile verilir. */
+function searchHtml(mapUrl, shotUrls) {
+  const phone = (url, extra) => `<div class="phone" style="${extra}"><img src="${url}" alt=""></div>`;
+  return `<!doctype html><html lang="tr"><meta charset="utf-8"><style>
+    * { box-sizing: border-box; margin: 0; }
+    html, body { width: 100vw; height: 100vh; overflow: hidden; background: #050b16; }
+    body { position: relative; font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif; color: #e9eff8; }
+    .map { position: absolute; left: 50%; top: 50%; height: 120vh; transform: translate(-50%, -50%); opacity: .16; }
+    .glow { position: absolute; inset: 0; background: radial-gradient(55% 70% at 62% 50%, rgba(52,211,153,.16), transparent 70%); }
+    .row { position: relative; height: 100%; display: flex; align-items: center; justify-content: center; gap: 7vh; }
+    .text { display: flex; flex-direction: column; gap: 3.4vh; }
+    .pin { width: 8vh; height: 8vh; fill: #34d399; }
+    h1 { font-size: 11.5vh; font-weight: 800; letter-spacing: -.02em; line-height: 1.02; }
+    h1 span { color: #34d399; }
+    .tag { font-size: 4vh; color: #a9bdd6; }
+    .feat { margin-top: 1vh; display: flex; flex-direction: column; gap: 1.8vh; }
+    .f { padding: 1.7vh 3vh; border: .3vh solid #213a5a; border-radius: 999px; background: rgba(12,25,43,.85); font-size: 3.5vh; font-weight: 600; color: #dbe7f5; width: fit-content; }
+    .phones { display: flex; align-items: center; }
+    .phone { width: 26vh; height: 56.5vh; border-radius: 3.4vh; border: .7vh solid #1c2b44; background: #000; overflow: hidden; box-shadow: 0 2vh 6vh rgba(0,0,0,.6); }
+    .phone img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  </style>
+  <img class="map" src="${mapUrl}" alt="">
+  <div class="glow"></div>
+  <div class="row">
+    <div class="text">
+      <svg class="pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg>
+      <h1>Neresi<br><span>Burası?</span></h1>
+      <p class="tag">İpuçlarını oku, haritada yeri bul.</p>
+      <div class="feat"><div class="f">Dünya haritası</div><div class="f">Türkiye haritası</div><div class="f">Arkadaşınla yarış</div></div>
+    </div>
+    <div class="phones">
+      ${phone(shotUrls[0], "margin-right:-4vh; transform: rotate(-4deg) translateY(2vh);")}
+      ${phone(shotUrls[1], "position:relative; z-index:2; transform: translateY(-2vh) scale(1.08);")}
+      ${phone(shotUrls[2], "margin-left:-4vh; transform: rotate(4deg) translateY(2vh);")}
+    </div>
+  </div>`;
+}
+
 mkdirSync(OUT, { recursive: true });
 const browser = await launch();
 
@@ -162,6 +200,22 @@ try {
   for (const { css, file } of sizes) {
     await browser.send("Emulation.setDeviceMetricsOverride", { width: css[0], height: css[1], deviceScaleFactor: 2, mobile: false });
     await browser.goto(pathToFileURL(htmlFile).href, 800);
+    await browser.screenshot(path.join(OUT, file));
+  }
+
+  // Arama sonuçları görseli: App Store Connect'in kabul ettiği boyutlar (görünüm boyutu x yoğunluk 2).
+  const shots = ["01-ana-sayfa.png", "02-dunya-oyun.png", "03-turkiye-oyun.png"].map((f) =>
+    pathToFileURL(path.join(OUT, "screenshots", f)).href,
+  );
+  const searchFile = path.join(os.tmpdir(), "neresi-search.html");
+  writeFileSync(searchFile, searchHtml(pathToFileURL(path.resolve("public/hero-map.svg")).href, shots));
+  const searchSizes = [
+    { css: [1920, 1280], file: "arama-3840x2560.png" },
+    { css: [2622, 1475], file: "arama-5244x2950.png" },
+  ];
+  for (const { css, file } of searchSizes) {
+    await browser.send("Emulation.setDeviceMetricsOverride", { width: css[0], height: css[1], deviceScaleFactor: 2, mobile: false });
+    await browser.goto(pathToFileURL(searchFile).href, 1800);
     await browser.screenshot(path.join(OUT, file));
   }
 } finally {
