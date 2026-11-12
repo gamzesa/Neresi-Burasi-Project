@@ -180,8 +180,8 @@ function searchHtml(mapUrl) {
 }
 
 /**
- * Arama sonuçları görseli (telefonlu). App Store aramada görselin yalnızca ortadaki küçük bölümünü büyütüp gösterir
- * (yaklaşık yatayda %26-69, dikeyde %17-63); bu yüzden tüm düzen küçültülüp o bölgenin ortasına konur.
+ * Arama sonuçları görseli (telefonlu): solda başlık ve özellikler, sağda üç telefon.
+ * 3840x2560 (3:2) dosyası App Store'da kırpılmadan görünür; 16:9 dosyası yanlardan kırpılır, onu yükleme.
  * Boyutlar vh ile verilir.
  */
 function searchPhonesHtml(mapUrl, shotUrls) {
@@ -190,9 +190,9 @@ function searchPhonesHtml(mapUrl, shotUrls) {
     * { box-sizing: border-box; margin: 0; }
     html, body { width: 100vw; height: 100vh; overflow: hidden; background: #050b16; }
     body { position: relative; font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif; color: #e9eff8; }
-    .map { position: absolute; left: 47.5%; top: 40%; height: 150vh; transform: translate(-50%, -50%); opacity: .2; }
-    .glow { position: absolute; inset: 0; background: radial-gradient(40% 50% at 47.5% 40%, rgba(52,211,153,.16), transparent 70%); }
-    .row { position: absolute; left: 47.5%; top: 40%; transform: translate(-50%, -50%) scale(.46); display: flex; align-items: center; gap: 7vh; }
+    .map { position: absolute; left: 50%; top: 50%; height: 120vh; transform: translate(-50%, -50%); opacity: .16; }
+    .glow { position: absolute; inset: 0; background: radial-gradient(55% 70% at 62% 50%, rgba(52,211,153,.16), transparent 70%); }
+    .row { position: relative; height: 100%; display: flex; align-items: center; justify-content: center; gap: 7vh; }
     .text { display: flex; flex-direction: column; gap: 3.4vh; }
     .pin { width: 8vh; height: 8vh; fill: #34d399; }
     h1 { font-size: 11.5vh; font-weight: 800; letter-spacing: -.02em; line-height: 1.02; }
