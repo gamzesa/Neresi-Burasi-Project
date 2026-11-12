@@ -4,7 +4,7 @@ export const metadata = { title: "Gizlilik ve KVKK · Neresi Burası?" };
 
 /** Verilerle ilgili talepler için herkese açık iletişim adresi. */
 const CONTACT_EMAIL = "neresiburasiapp@gmail.com";
-const UPDATED = "12 Ekim 2026";
+const UPDATED = "12 Kasım 2026";
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -32,8 +32,10 @@ export default function PrivacyPage() {
       <Section title="Kısaca">
         <p className={p}>
           Neresi Burası?, hesapsız (misafir) da oynanabilen bir coğrafya oyunudur. Yalnızca oyunun çalışması ve
-          sıralama için gereken en az veriyi tutarız. Verini satmaz, reklam için kullanmaz ve üçüncü kişilerle
-          paylaşmayız (aşağıda sayılan hizmet sağlayıcılar hariç).
+          sıralama için gereken en az veriyi tutarız. Verini satmayız; e-posta adresin ve kullanıcı adın gibi hesap
+          bilgilerini reklam için kullanmaz ve reklam sağlayıcılarla paylaşmayız. Mobil uygulamada gösterilen
+          reklamlar Google AdMob tarafından sunulur (aşağıdaki “Reklamlar” bölümüne bak). Veriler, aşağıda sayılan
+          hizmet sağlayıcılar dışında üçüncü kişilerle paylaşılmaz.
         </p>
       </Section>
 
@@ -70,6 +72,11 @@ export default function PrivacyPage() {
             <strong className="text-ink">Teknik veri:</strong> isteklerin hız sınırı için IP adresin kısa süreliğine
             sunucu belleğinde tutulur; kalıcı olarak kaydedilmez.
           </li>
+          <li>
+            <strong className="text-ink">Reklam verisi (yalnızca mobil uygulamada):</strong> reklam gösterilirken
+            Google AdMob; cihazının reklam kimliğini, IP adresinden çıkarılan yaklaşık konumu ve reklamla
+            etkileşimini işleyebilir (aşağıdaki “Reklamlar” bölümüne bak).
+          </li>
         </ul>
       </Section>
 
@@ -77,14 +84,38 @@ export default function PrivacyPage() {
         <ul className={list}>
           <li>Oyunu sunmak, puanı hesaplamak ve sıralamayı göstermek,</li>
           <li>Hesabına giriş yapmanı ve şifreni sıfırlamanı sağlamak (e-posta yalnızca bunun için kullanılır),</li>
-          <li>Hileyi ve kötüye kullanımı önlemek.</li>
+          <li>Hileyi ve kötüye kullanımı önlemek,</li>
+          <li>Mobil uygulamada reklam göstermek (oyunu ücretsiz sunabilmemizi sağlar).</li>
         </ul>
+      </Section>
+
+      <Section title="Reklamlar (mobil uygulama)">
+        <p className={p}>
+          Mobil uygulamada (iOS) oyun sonlarında, her iki oyunda bir tam ekran reklam gösterilir. Reklamlar Google
+          AdMob tarafından sunulur. Reklam gösterilirken ve ölçülürken AdMob; cihazının reklam kimliğini, IP
+          adresinden çıkarılan yaklaşık konumu, reklamla etkileşimini ve teknik tanılama verilerini işleyebilir.
+          E-posta adresin, kullanıcı adın veya oyun verilerin reklam sağlayıcıyla paylaşılmaz.
+        </p>
+        <p className={p}>
+          iOS’ta reklam kimliğini kullanmadan önce uygulama senden “İzleme” izni ister. İzin vermezsen de oyun aynen
+          çalışır; yalnızca daha az ilgili reklamlar görürsün. Bu tercihi istediğin zaman cihazının{" "}
+          <strong className="text-ink">Ayarlar → Gizlilik ve Güvenlik → İzleme</strong> bölümünden değiştirebilirsin.
+          Google’ın verileri nasıl kullandığı hakkında bilgi için:{" "}
+          <a
+            href="https://policies.google.com/technologies/partner-sites"
+            className="font-semibold text-accent underline"
+          >
+            policies.google.com/technologies/partner-sites
+          </a>
+          . Web sitesinde reklam gösterilmez.
+        </p>
       </Section>
 
       <Section title="Çerezler ve tarayıcı depolaması">
         <p className={p}>
           Giriş yaptığında oturumunu sürdürmek için gerekli çerezler kullanılır. Arkadaşla oyunda sayfayı yenilediğinde
-          odaya geri dönebilmen için tarayıcında bir oda anahtarı saklanır. Reklam veya izleme çerezi kullanmıyoruz.
+          odaya geri dönebilmen için tarayıcında bir oda anahtarı saklanır. Web sitesinde reklam veya izleme çerezi
+          kullanmıyoruz; mobil uygulamadaki reklamlar için yukarıdaki “Reklamlar” bölümüne bak.
         </p>
       </Section>
 
@@ -97,7 +128,8 @@ export default function PrivacyPage() {
             <strong className="text-ink">Vercel</strong> (siteyi barındırma),
           </li>
           <li>
-            <strong className="text-ink">Google</strong> (yalnızca “Google ile giriş”i kullanırsan).
+            <strong className="text-ink">Google</strong> (“Google ile giriş”i kullanırsan; ayrıca mobil uygulamada
+            Google AdMob ile reklam gösterimi).
           </li>
         </ul>
         <p className={p}>
