@@ -118,7 +118,11 @@ async function launch() {
   };
 }
 
-/** Başlık görseli: boyutlar vh/vw ile verildiği için her en-boy oranında aynı görünür. */
+/**
+ * Başlık görseli. App Store telefonda yalnızca orta-üst bölgeyi gösterir (yaklaşık ortadaki %50 genişlik,
+ * üstteki %45 yükseklik); bu yüzden yazı küçük ve bu güvenli alanın içinde tutulur.
+ * Boyutlar vh ile verildiği için her en-boy oranında aynı görünür.
+ */
 function headerHtml(mapUrl) {
   return `<!doctype html><html lang="tr"><meta charset="utf-8"><style>
     * { box-sizing: border-box; margin: 0; }
@@ -127,11 +131,11 @@ function headerHtml(mapUrl) {
     .map { position: absolute; left: 50%; top: 50%; height: 130vh; transform: translate(-50%, -50%); opacity: .24;
       -webkit-mask-image: radial-gradient(closest-side, #000 55%, transparent); mask-image: radial-gradient(closest-side, #000 55%, transparent); }
     .glow { position: absolute; inset: 0; background: radial-gradient(60% 70% at 50% 50%, rgba(52,211,153,.10), transparent 70%); }
-    .content { position: relative; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-    .pin { width: 17vh; height: 17vh; fill: #34d399; margin-bottom: 3vh; }
-    h1 { font-size: 18vh; font-weight: 800; letter-spacing: -.02em; line-height: 1; }
+    .content { position: relative; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding-bottom: 22vh; }
+    .pin { width: 8vh; height: 8vh; fill: #34d399; margin-bottom: 1.6vh; }
+    h1 { font-size: 9.5vh; font-weight: 800; letter-spacing: -.02em; line-height: 1; }
     h1 span { color: #34d399; }
-    p { margin-top: 3.6vh; font-size: 6.4vh; color: #a9bdd6; }
+    p { margin-top: 1.8vh; font-size: 3.6vh; color: #a9bdd6; }
     .chips { margin-top: 6vh; display: flex; gap: 2.8vh; }
     .chip { padding: 1.8vh 4.4vh; border: .3vh solid #213a5a; border-radius: 999px; background: rgba(12,25,43,.85); font-size: 4.4vh; font-weight: 600; color: #dbe7f5; }
   </style>
@@ -141,7 +145,6 @@ function headerHtml(mapUrl) {
     <svg class="pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg>
     <h1>Neresi <span>Burası?</span></h1>
     <p>İpuçlarını oku, haritada yeri bul.</p>
-    <div class="chips"><div class="chip">Dünya</div><div class="chip">Türkiye</div><div class="chip">Arkadaşınla yarış</div></div>
   </div>`;
 }
 
