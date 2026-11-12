@@ -11,7 +11,7 @@ workflows:
       node: 22
       xcode: latest
       vars:
-        APP_STORE_APPLE_ID: "BURAYA_APP_STORE_CONNECT_UYGULAMA_ID"
+        APP_STORE_APPLE_ID: "6833857031"
         BUNDLE_ID: "com.neresiburasi.app"
       ios_signing:
         distribution_type: app_store
