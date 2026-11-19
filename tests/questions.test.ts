@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import type { FeatureCollection, MultiPolygon, Polygon } from "geojson";
 import { describe, expect, it } from "vitest";
-import { containsWord, questionFileSchema, validateQuestionSet } from "@/lib/game/questions";
+import { MAX_QUESTIONS_PER_REGION, containsWord, questionFileSchema, validateQuestionSet } from "@/lib/game/questions";
 
 const root = process.cwd();
 const readJson = <T>(file: string): T => JSON.parse(readFileSync(path.join(root, file), "utf8")) as T;
@@ -26,24 +26,30 @@ describe.each(sets)("$map soru havuzu", ({ map, questions, geo }) => {
 });
 
 describe("bölge tekrarı", () => {
-  const regions = readJson<FeatureCollection<Polygon | MultiPolygon>>("data/geo/turkey-provinces.full.geojson");
-  const sample = questionFileSchema.parse(readJson("data/questions/turkey.json")).questions;
-  const once = new Map<string, number>();
-  for (const q of sample) once.set(q.region_code, (once.get(q.region_code) ?? 0) + 1);
-  const first = sample.find((q) => once.get(q.region_code) === 1) ?? sample[0];
+  const turkeyMax = MAX_QUESTIONS_PER_REGION.turkey;
+  const worldMax = MAX_QUESTIONS_PER_REGION.world;
 
-  it("Türkiye'de aynı il farklı yer/konuyla en fazla iki soruda kullanılabilir", () => {
-    const twice = [...sample, { ...first, answer_label: `${first.answer_label} 2` }];
-    expect(validateQuestionSet("turkey", twice, regions).some((e) => e.includes("en fazla 2 soruda"))).toBe(false);
-    const thrice = [...twice, { ...first, answer_label: `${first.answer_label} 3` }];
-    expect(validateQuestionSet("turkey", thrice, regions).some((e) => e.includes("en fazla 2 soruda"))).toBe(true);
+  it(`Türkiye'de aynı il farklı yer/konuyla en fazla ${turkeyMax} soruda kullanılabilir`, () => {
+    const regions = readJson<FeatureCollection<Polygon | MultiPolygon>>("data/geo/turkey-provinces.full.geojson");
+    const sample = questionFileSchema.parse(readJson("data/questions/turkey.json")).questions;
+    const first = sample[0];
+    const used = sample.filter((q) => q.region_code === first.region_code).length;
+    const within = [...sample];
+    for (let i = used; i < turkeyMax; i++) within.push({ ...first, answer_label: `${first.answer_label} ek${i}` });
+    const message = `en fazla ${turkeyMax} soruda`;
+    expect(validateQuestionSet("turkey", within, regions).some((e) => e.includes(message))).toBe(false);
+    const over = [...within, { ...first, answer_label: `${first.answer_label} fazla` }];
+    expect(validateQuestionSet("turkey", over, regions).some((e) => e.includes(message))).toBe(true);
   });
 
-  it("Dünya'da bir ülke yalnızca bir soruda kullanılabilir", () => {
+  it(`Dünya'da bir ülke en fazla ${worldMax} soruda kullanılabilir`, () => {
     const world = questionFileSchema.parse(readJson("data/questions/world.json")).questions;
     const worldRegions = readJson<FeatureCollection<Polygon | MultiPolygon>>("data/geo/world-countries.full.geojson");
-    const twice = [...world, { ...world[0], answer_label: `${world[0].answer_label} 2` }];
-    expect(validateQuestionSet("world", twice, worldRegions).some((e) => e.includes("en fazla 1 soruda"))).toBe(true);
+    const first = world[0];
+    const used = world.filter((q) => q.region_code === first.region_code).length;
+    const over = [...world];
+    for (let i = used; i <= worldMax; i++) over.push({ ...first, answer_label: `${first.answer_label} ek${i}` });
+    expect(validateQuestionSet("world", over, worldRegions).some((e) => e.includes(`en fazla ${worldMax} soruda`))).toBe(true);
   });
 });
 

@@ -4,10 +4,10 @@ import { isRegionHit } from "./geo";
 import { DIFFICULTIES, type Difficulty, type GameMap, totalHints } from "./scoring";
 
 /** Her harita ve zorluk için havuzdaki soru sayısı (oyun bunlardan rastgele 5 tanesini seçer). */
-export const QUESTIONS_PER_DIFFICULTY = 50;
+export const QUESTIONS_PER_DIFFICULTY = 100;
 
-/** Bir bölge (ülke/il) aynı haritada en fazla kaç soruda kullanılabilir: Dünya'da 1, Türkiye'de farklı yer/konuyla 2. */
-export const MAX_QUESTIONS_PER_REGION: Record<GameMap, number> = { world: 1, turkey: 2 };
+/** Bir bölge (ülke/il) aynı haritada en fazla kaç soruda kullanılabilir: Dünya'da 2, Türkiye'de 5 (her biri farklı yer/konuyla). */
+export const MAX_QUESTIONS_PER_REGION: Record<GameMap, number> = { world: 2, turkey: 5 };
 
 export const questionSeedSchema = z.object({
   difficulty: z.enum(DIFFICULTIES),
