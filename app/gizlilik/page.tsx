@@ -177,6 +177,10 @@ export default function PrivacyPage() {
       </Section>
 
       <footer className="border-t border-line pt-4 text-xs text-muted">
+        <Link href="/destek" className="underline">
+          Destek ve iletişim
+        </Link>
+        <br />
         Bu sayfa bilgilendirme amaçlıdır ve hukuki danışmanlık değildir.
       </footer>
     </main>
